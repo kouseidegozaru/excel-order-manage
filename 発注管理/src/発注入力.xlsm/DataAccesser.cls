@@ -13,133 +13,151 @@ Private MFRE05ConnectionString As String
 Private MFRE06ConnectionString As String
 Private MFREDWHConnectionString As String
 
-MFRE05ConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFRE05;UID=sa;PWD=mefure;"
-MFRE06ConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFRE06;UID=sa;PWD=mefure;"
-MFREDWHConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFREDWH;UID=sa;PWD=mefure;"
+' コンストラクタ代わりの初期化メソッド
+Public Sub Class_Initialize()
+    MFRE05ConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFRE05;UID=sa;PWD=mefure;"
+    MFRE06ConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFRE06;UID=sa;PWD=mefure;"
+    MFREDWHConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFREDWH;UID=sa;PWD=mefure;"
+End Sub
 
-'担当者が存在するか
+' 担当者が存在するか
 Public Function ExistsUser(ByVal UserID As Integer) As Boolean
+    Dim Executor As SqlExecutor
+    Set Executor = New SqlExecutor
+    Executor.SetConnection MFRE05ConnectionString
+    
+    Dim query As String
+    query = "SELECT COUNT(1) FROM dbo.M担当者 WHERE 担当者CD = ?"
+    
+    Dim parameters As Object
+    Set parameters = CreateObject("Scripting.Dictionary")
+    parameters.Add "担当者CD", UserID
 
-    Dim Executor As New SqlExecutor
-    Executor.SetConnection (MFRE05ConnectionString)
+    Dim Result As Object
+    Set Result = Executor.ExecuteSelect(query, parameters)
     
-    Dim Query As String
-    Query = "SELECT COUNT(1) FROM dbo.M担当者 WHERE 担当者CD = @担当者CD"
-    
-    Dim Parameters As New Scripting.Dictionary
-    Parameters.Add "@担当者CD", UserID
-
-    Dim Result As DataTable
-    Result = Executor.ExecuteSelect(Query, Parameters)
-    
-    If Result.Rows.Count > 0 And Convert.ToInt32(Result.Rows(0)(0)) > 0 Then
+    If Not Result.EOF And Result.Fields(0).Value > 0 Then
         ExistsUser = True
     Else
         ExistsUser = False
     End If
     
+    ' Recordsetを閉じる
+    Result.Close
+    Set Result = Nothing
+    Set Executor = Nothing
 End Function
 
-'部門が存在するか
+' 部門が存在するか
 Public Function ExistsBumon(ByVal BumonCD As Integer) As Boolean
+    Dim Executor As SqlExecutor
+    Set Executor = New SqlExecutor
+    Executor.SetConnection MFRE05ConnectionString
+    
+    Dim query As String
+    query = "SELECT COUNT(1) FROM dbo.M部門 WHERE 部門コード = ?"
+    
+    Dim parameters As Object
+    Set parameters = CreateObject("Scripting.Dictionary")
+    parameters.Add "部門コード", BumonCD
 
-    Dim Executor As New SqlExecutor
-    Executor.SetConnection (MFRE05ConnectionString)
+    Dim Result As Object
+    Set Result = Executor.ExecuteSelect(query, parameters)
     
-    Dim Query As String
-    Query = "SELECT COUNT(1) FROM dbo.M部門 WHERE 部門コード = @部門コード"
-    
-    Dim Parameters As New Scripting.Dictionary
-    Parameters.Add "@部門コード", BumonCD
-
-    Dim Result As DataTable
-    Result = Executor.ExecuteSelect(Query, Parameters)
-    
-    If Result.Rows.Count > 0 And Convert.ToInt32(Result.Rows(0)(0)) > 0 Then
+    If Not Result.EOF And Result.Fields(0).Value > 0 Then
         ExistsBumon = True
     Else
         ExistsBumon = False
     End If
     
+    ' Recordsetを閉じる
+    Result.Close
+    Set Result = Nothing
+    Set Executor = Nothing
 End Function
 
-'担当者名取得
+' 担当者名取得
 Public Function GetUserName(ByVal UserID As Integer) As String
+    Dim Executor As SqlExecutor
+    Set Executor = New SqlExecutor
+    Executor.SetConnection MFRE05ConnectionString
+    
+    Dim query As String
+    query = "SELECT 担当者名 FROM dbo.M担当者 WHERE 担当者CD = ?"
+    
+    Dim parameters As Object
+    Set parameters = CreateObject("Scripting.Dictionary")
+    parameters.Add "担当者CD", UserID
 
-    Dim Executor As New SqlExecutor
-    Executor.SetConnection (MFRE05ConnectionString)
+    Dim Result As Object
+    Set Result = Executor.ExecuteSelect(query, parameters)
     
-    Dim Query As String
-    Query = "SELECT 担当者名 FROM dbo.M担当者 WHERE 担当者CD = @担当者CD"
+    If Not Result.EOF Then
+        GetUserName = Result.Fields("担当者名").Value
+    Else
+        GetUserName = ""
+    End If
     
-    Dim Parameters As New Scripting.Dictionary
-    Parameters.Add "@担当者CD", UserID
-
-    Dim Result As DataTable
-    Result = Executor.ExecuteSelect(Query, Parameters)
-    
-    GetUser = Result(0)("担当者CD")
-    
+    ' Recordsetを閉じる
+    Result.Close
+    Set Result = Nothing
+    Set Executor = Nothing
 End Function
 
+' 部門の全ての商品取得
+Public Function GetAllProducts(ByVal BumonCD As Integer) As Object
+    Dim Executor As SqlExecutor
+    Set Executor = New SqlExecutor
+    Executor.SetConnection MFRE05ConnectionString
+    
+    Dim query As String
+    query = "SELECT * FROM HM商品 WHERE 部門CD = ?"
+    
+    Dim parameters As Object
+    Set parameters = CreateObject("Scripting.Dictionary")
+    parameters.Add "部門CD", BumonCD
 
-'部門の全ての商品取得
-Public Function GetAllProducts(BumonCD As Integer) As DataTable
-            
-    Dim Executor As New SqlExecutor
-    Executor.SetConnection (MFRE05ConnectionString)
+    Dim Result As Object
+    Set Result = Executor.ExecuteSelect(query, parameters)
     
-    Dim Query As String
-    Query = "SELECT * FROM HM商品 WHERE 部門CD = @部門CD"
-    
-    Dim Parameters As New Scripting.Dictionary
-    Parameters.Add "@部門CD", BumonCD
-
-    Dim Result As DataTable
-    Result = Executor.ExecuteSelect(Query, Parameters)
-    
-    GetUser = Result
-    
+    Set GetAllProducts = Result
 End Function
 
-'部門の条件に合う商品取得
-Public Function GetAllProducts(BumonCD As Integer, ColumnName As String, Value As String) As DataTable
-            
-    Dim Executor As New SqlExecutor
-    Executor.SetConnection (MFRE05ConnectionString)
+' 部門の条件に合う商品取得
+Public Function GetFilterProducts(ByVal BumonCD As Integer, ByVal ColumnName As String, ByVal Value As String) As Object
+    Dim Executor As SqlExecutor
+    Set Executor = New SqlExecutor
+    Executor.SetConnection MFRE05ConnectionString
     
-    Dim Query As String
-    Query = "SELECT * FROM HM商品 WHERE @列名 IN(@条件) AND 部門CD = @部門CD"
+    Dim query As String
+    query = "SELECT * FROM HM商品 WHERE " & ColumnName & " = ? AND 部門CD = ?"
     
-    Dim Parameters As New Scripting.Dictionary
-    Parameters.Add "@部門CD", BumonCD
-    Parameters.Add "@列名", ColumnName
-    Parameters.Add "@条件", Value
+    Dim parameters As Object
+    Set parameters = CreateObject("Scripting.Dictionary")
+    parameters.Add "条件", Value
+    parameters.Add "部門CD", BumonCD
 
-    Dim Result As DataTable
-    Result = Executor.ExecuteSelect(Query, Parameters)
+    Dim Result As Object
+    Set Result = Executor.ExecuteSelect(query, parameters)
     
-    GetUser = Result
-    
+    Set GetFilterProducts = Result
 End Function
 
-'商品マスターの列名取得
-Public Function GetTableColumn() As DataTable
-            
-    Dim Executor As New SqlExecutor
-    Executor.SetConnection (MFRE05ConnectionString)
+' 商品マスターの列名取得
+Public Function GetTableColumn() As Object
+    Dim Executor As SqlExecutor
+    Set Executor = New SqlExecutor
+    Executor.SetConnection MFRE05ConnectionString
     
-    Dim Query As String
-    Query = "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = HM商品"
+    Dim query As String
+    query = "SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'HM商品'"
     
-    Dim Parameters As New Scripting.Dictionary
+    Dim parameters As Object
+    Set parameters = CreateObject("Scripting.Dictionary")
 
-    Dim Result As DataTable
-    Result = Executor.ExecuteSelect(Query, Parameters)
+    Dim Result As Object
+    Set Result = Executor.ExecuteSelect(query, parameters)
     
-    GetUser = Result
-    
+    Set GetTableColumn = Result
 End Function
-
-
 

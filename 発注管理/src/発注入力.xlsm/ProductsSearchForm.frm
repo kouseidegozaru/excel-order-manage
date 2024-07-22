@@ -13,3 +13,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private Sub UserForm_Activate()
+
+End Sub
+
+Private Sub SetProductsTable(ProductsDataTable As DataTable)
+    Me.ProductsTable
+End Sub
