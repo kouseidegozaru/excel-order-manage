@@ -23,16 +23,33 @@ Private dataStartRowNumber As Long
 Public Sub Initialize(recordSet As ADODB.recordSet)
 
     Set rs = recordSet
-    Set wb = Workbooks.Add
-    Set ws = wb.Sheets(1)
+    Call NewWorkBook
     Set checkBoxes = New Collection
     
-    stateColumnNumber = rs.Fields.Count + 3
-    checkBoxColumnNumber = 1
-    dataStartColumnNumber = 2
-    dataStartRowNumber = 1
+    stateColumnNumber = SearchWb_StateColumnNumber
+    checkBoxColumnNumber = SearchWb_CheckBoxColumnNumber
+    dataStartColumnNumber = SearchWb_DataStartColumnNumber
+    dataStartRowNumber = SearchWb_DataStartRowNumber
 End Sub
+Private Sub NewWorkBook()
+    ' コピー元のワークブックを選択する
+    Dim sourceWb As Workbook
+    Set sourceWb = ThisWorkbook ' 既存のワークブック
+    
+    ' 新規ワークブックの作成
+    Set wb = Application.Workbooks.Add
+    '最大化
+    wb.Windows(1).WindowState = xlMaximized
 
+    ' コピー元のワークシートを選択する
+    Dim sourceWs As Worksheet
+    Set sourceWs = sourceWb.Sheets(SearchWb_SheetName)
+
+    ' ワークシートをコピーする
+    sourceWs.Copy Before:=wb.Sheets(1)
+
+    Set ws = wb.Sheets(1) ' 新しいワークブックの最初のワークシートを選択する
+End Sub
 Public Sub ExportRecordSet()
     Dim i As Long, j As Long
     Dim fld As Object
@@ -58,18 +75,6 @@ Public Sub ExportRecordSet()
     Loop
 End Sub
 
-Public Function GetCheckedValue(ColumnNumber As Integer) As Collection
-    Dim checkedIDs As New Collection
-    Dim i As Long
-    
-    For i = 0 To ws.Cells(ws.Rows.Count, ColumnNumber).End(xlUp).row
-        If ws.Cells(i, stateColumnNumber).Value = True Then
-            checkedIDs.Add ws.Cells(i, ColumnNumber).Value
-        End If
-    Next i
-    
-    Set GetCheckedIDs = checkedIDs
-End Function
 
 Private Sub AddCheckBox(RowNumber As Long, ColumnNumber As Integer, stateColumnNumber As Integer)
     ' チェックボックスの追加
