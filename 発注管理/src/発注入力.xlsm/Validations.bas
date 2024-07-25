@@ -6,8 +6,8 @@ Sub SetValidations()
 End Sub
 
 Private Sub SetBumonCD()
-    Dim rng As Range
-    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).Range(OrderWb_InputBumonCDRange)
+    Dim rng As range
+    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputBumonCDRange)
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
@@ -24,8 +24,8 @@ Private Sub SetBumonCD()
 End Sub
 
 Private Sub SetUserCD()
-    Dim rng As Range
-    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).Range(OrderWb_InputUserCDRange)
+    Dim rng As range
+    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputUserCDRange)
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
@@ -42,8 +42,8 @@ Private Sub SetUserCD()
 End Sub
 
 Private Sub SetDate()
-    Dim rng As Range
-    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).Range(OrderWb_InputDateRange)
+    Dim rng As range
+    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputDateRange)
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除

@@ -57,7 +57,7 @@ Public Sub ExportRecordSet()
     
     ' ヘッダーの書き込み
     For i = 0 To rs.Fields.Count - 1
-        ws.Cells(row, i + dataStartColumnNumber).Value = rs.Fields(i).Name
+        ws.Cells(row, i + dataStartColumnNumber).Value = rs.Fields(i).name
     Next i
     
     ' データの書き込み
