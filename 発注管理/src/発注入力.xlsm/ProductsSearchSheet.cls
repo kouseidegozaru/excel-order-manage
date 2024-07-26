@@ -76,13 +76,13 @@ Public Sub ExportRecordSet()
 End Sub
 
 
-Private Sub AddCheckBox(RowNumber As Long, ColumnNumber As Integer, stateColumnNumber As Integer)
+Private Sub AddCheckBox(RowNumber As Long, columnNumber As Integer, stateColumnNumber As Integer)
     ' チェックボックスの追加
     Dim cb As CheckBox
-    Set cb = ws.checkBoxes.Add(Left:=ws.Cells(RowNumber, ColumnNumber).Left, _
-                               Top:=ws.Cells(RowNumber, ColumnNumber).Top, _
-                               Width:=ws.Cells(RowNumber, ColumnNumber).Width, _
-                               Height:=ws.Cells(RowNumber, ColumnNumber).Height)
+    Set cb = ws.checkBoxes.Add(Left:=ws.Cells(RowNumber, columnNumber).Left, _
+                               Top:=ws.Cells(RowNumber, columnNumber).Top, _
+                               Width:=ws.Cells(RowNumber, columnNumber).Width, _
+                               Height:=ws.Cells(RowNumber, columnNumber).Height)
     cb.Caption = ""
     cb.LinkedCell = ws.Cells(RowNumber, stateColumnNumber).Address
 End Sub

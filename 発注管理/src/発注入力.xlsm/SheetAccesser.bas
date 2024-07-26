@@ -13,12 +13,46 @@ Public Const SearchWb_ProductCodeColumnNumber As Integer = 3
 '発注入力フォームのセル番地の設定
 Public Const OrderWb_SheetName As String = "発注入力"
 Public Const OrderWb_ProductCodeColumnNumber As Integer = 1
+Public Const OrderWb_ProductCodeColumn As String = "A"
+Public Const OrderWb_ProductCodeRowNumber As Integer = 5
 Public Const OrderWb_InputBumonCDRange As String = "A2"
 Public Const OrderWb_OutputBumonNameRange As String = "B2"
 Public Const OrderWb_InputUserCDRange As String = "C2"
 Public Const OrderWb_OutputUserNameRange As String = "D2"
 Public Const OrderWb_InputDateRange As String = "E2"
-Public Const OrderWb_InputProductsRange As String = "A5:A5000"
+Public Function OrderWb_InputProductsRange() As String
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim columnNumber As Long
+    
+    '発注入力に商品データがない場合行範囲をずらす(無いと範囲にヘッダー行も含まれてしまう)
+    lastRow = OrderWb_NextProductsRow - 1
+    If lastRow < OrderWb_ProductCodeRowNumber Then
+        lastRow = OrderWb_ProductCodeRowNumber
+    End If
+    
+    ' 対象のシートを設定
+    Set ws = ThisWorkbook.Sheets(OrderWb_SheetName)
+    columnNumber = OrderWb_ProductCodeColumnNumber
+    
+    OrderWb_InputProductsRange = OrderWb_ProductCodeColumn & _
+                                 OrderWb_ProductCodeRowNumber & _
+                                 ":" & _
+                                 OrderWb_ProductCodeColumn & _
+                                 lastRow
+End Function
+'次に入力する商品情報が空白の行番号
+Public Function OrderWb_NextProductsRow() As Long
+    Dim ws As Worksheet
+    Dim columnNumber As Long
+    
+    ' 対象のシートを設定
+    Set ws = ThisWorkbook.Sheets(OrderWb_SheetName)
+    columnNumber = OrderWb_ProductCodeColumnNumber
+    
+    ' 対象の列で最後の行を取得
+    OrderWb_NextProductsRow = ws.Cells(ws.Rows.Count, columnNumber).End(xlUp).row + 1
+End Function
 
 '部門コードの取得
 Function GetBumonCD() As Integer
@@ -64,6 +98,33 @@ Function GetDate() As Date
     Value = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputDateRange).Value
     
     GetDate = Value
+End Function
+'発注入力に既に入力されている商品コードの取得
+Function GetProductsCD() As Collection
+    ' 対象のシートを設定
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets(OrderWb_SheetName)
+    
+    Dim rng As range
+    Set rng = ws.range(OrderWb_InputProductsRange)
+    
+    Set GetProductsCD = GetRangeValue(rng)
+End Function
+
+Private Function GetRangeValue(rng As range) As Collection
+    Dim cell As range
+    Dim col As New Collection
+    
+    ' 範囲内の各セルをループ
+    For Each cell In rng
+        ' 空白でないセルの場合、Collectionに追加
+        If cell.Value <> "" Then
+            col.Add cell.Value
+        End If
+    Next cell
+    
+    Set GetRangeValue = col
+    
 End Function
 
 '担当者名の表示
