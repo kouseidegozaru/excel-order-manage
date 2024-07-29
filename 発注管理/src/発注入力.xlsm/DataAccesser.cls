@@ -36,7 +36,7 @@ Public Function ExistsUser(ByVal UserID As Integer) As Boolean
     Dim Result As Object
     Set Result = Executor.ExecuteSelect(query, parameters)
     
-    If Not Result.EOF And Result.Fields(0).Value > 0 Then
+    If Not Result.EOF And Result.Fields(0).value > 0 Then
         ExistsUser = True
     Else
         ExistsUser = False
@@ -64,7 +64,7 @@ Public Function ExistsBumon(ByVal BumonCD As Integer) As Boolean
     Dim Result As Object
     Set Result = Executor.ExecuteSelect(query, parameters)
     
-    If Not Result.EOF And Result.Fields(0).Value > 0 Then
+    If Not Result.EOF And Result.Fields(0).value > 0 Then
         ExistsBumon = True
     Else
         ExistsBumon = False
@@ -93,7 +93,7 @@ Public Function ExistsProducts(ByVal BumonCD As Integer, ByVal ProductsCD As Lon
     Dim Result As Object
     Set Result = Executor.ExecuteSelect(query, parameters)
     
-    If Not Result.EOF And Result.Fields(0).Value > 0 Then
+    If Not Result.EOF And Result.Fields(0).value > 0 Then
         ExistsProducts = True
     Else
         ExistsProducts = False
@@ -122,7 +122,7 @@ Public Function GetUserName(ByVal UserID As Integer) As String
     Set Result = Executor.ExecuteSelect(query, parameters)
     
     If Not Result.EOF Then
-        GetUserName = Result.Fields("’S“–ŽÒ–¼").Value
+        GetUserName = Result.Fields("’S“–ŽÒ–¼").value
     Else
         GetUserName = ""
     End If
@@ -150,7 +150,7 @@ Public Function GetBumonName(ByVal BumonCD As Integer) As String
     Set Result = Executor.ExecuteSelect(query, parameters)
     
     If Not Result.EOF Then
-        GetBumonName = Result.Fields("•”–å–¼").Value
+        GetBumonName = Result.Fields("•”–å–¼").value
     Else
         GetBumonName = ""
     End If

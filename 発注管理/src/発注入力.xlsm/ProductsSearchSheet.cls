@@ -8,6 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+'商品検索シートの表示処理クラス
 
 Private rs As ADODB.recordSet
 Private wb As Workbook
@@ -23,7 +24,7 @@ Private dataStartRowNumber As Long
 Public Sub Initialize(recordSet As ADODB.recordSet)
 
     Set rs = recordSet
-    Call NewWorkBook
+    Call newWorkbook
     Set checkBoxes = New Collection
     
     stateColumnNumber = SearchWb_StateColumnNumber
@@ -31,7 +32,7 @@ Public Sub Initialize(recordSet As ADODB.recordSet)
     dataStartColumnNumber = SearchWb_DataStartColumnNumber
     dataStartRowNumber = SearchWb_DataStartRowNumber
 End Sub
-Private Sub NewWorkBook()
+Private Sub newWorkbook()
     ' コピー元のワークブックを選択する
     Dim sourceWb As Workbook
     Set sourceWb = ThisWorkbook ' 既存のワークブック
@@ -57,7 +58,7 @@ Public Sub ExportRecordSet()
     
     ' ヘッダーの書き込み
     For i = 0 To rs.Fields.Count - 1
-        ws.Cells(row, i + dataStartColumnNumber).Value = rs.Fields(i).name
+        ws.Cells(row, i + dataStartColumnNumber).value = rs.Fields(i).name
     Next i
     
     ' データの書き込み
@@ -65,7 +66,7 @@ Public Sub ExportRecordSet()
     Do While Not rs.EOF
         row = row + 1
         For i = 0 To rs.Fields.Count - 1
-            ws.Cells(row, i + dataStartColumnNumber).Value = rs.Fields(i).Value
+            ws.Cells(row, i + dataStartColumnNumber).value = rs.Fields(i).value
         Next i
         
         ' チェックボックスの追加

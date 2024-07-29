@@ -7,12 +7,24 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
+'行削除を検知するための変更前の行数
+Private lastUpdatedRowCnt As Long
+
 Private Sub Worksheet_Activate()
     SetValidations
 End Sub
 
-Private Sub Worksheet_Change(ByVal Target As range)
+Private Sub Worksheet_Change(ByVal target As range)
 
+    'セルの変更をフック
+    HookCellChange target
+
+    '最終行数を更新
+    lastUpdatedRowCnt = OrderWb_NextProductsRow
+    
+End Sub
+
+Private Sub HookCellChange(ByVal target As range)
     'データアクセス
     Dim DataStorage As New dataAccesser
 
@@ -21,27 +33,74 @@ Private Sub Worksheet_Change(ByVal Target As range)
 
     ' セルの変更を監視
     Dim events As New ChangeEvents
-    events.Initialize targetWs
-    events.SetRange targetWs.range(Target.Address)
-
-
-    ' 担当者コードの変更を監視
-    If events.IsChanged(OrderWb_InputUserCDRange) Then
-        ' 担当者名の表示
-        SetUserName DataStorage.GetUserName(GetUserCD)
-    End If
-
-    '部門コードの変更を監視
-    If events.IsChanged(OrderWb_InputBumonCDRange) Then
-        ' 部門名の表示
-        SetBumonName DataStorage.GetBumonName(GetBumonCD)
-    End If
-
-    If events.IsChanged(OrderWb_InputProductsRange) Then
-        ' 商品情報の表示
-        DisplayProductsInfo Target
-    End If
+    With events
+    
+        '監視するシートを指定
+        .Initialize targetWs
+        '変更された範囲をセット
+        .SetRange targetWs.range(target.Address)
+        '監視の有無
+        .Ignore GetIgnoreState
     
     
+        ' 担当者コードの変更を監視
+        If .IsChanged(OrderWb_InputUserCDRange) Then
+            SetIgnoreState (True)
+            ' 担当者名の表示
+            SetUserName DataStorage.GetUserName(GetUserCD)
+            SetIgnoreState (False)
+        End If
     
+        '部門コードの変更を監視
+        If .IsChanged(OrderWb_InputBumonCDRange) Then
+            SetIgnoreState (True)
+            ' 部門名の表示
+            SetBumonName DataStorage.GetBumonName(GetBumonCD)
+            SetIgnoreState (False)
+        End If
+    
+        '商品コードの変更を監視
+        If .IsChanged(OrderWb_InputProductsRange) Then
+            SetIgnoreState (True)
+            ' 商品情報の表示
+            DisplayProductsInfo target
+            
+            '保存
+            SaveData
+            SetIgnoreState (False)
+        Else
+        
+          '数量の変更を監視
+          If .IsChanged(OrderWb_InpuQtyRange) Then
+              SetIgnoreState (True)
+              '保存
+              SaveData
+              SetIgnoreState (False)
+          End If
+        
+        End If
+        
+
+        
+        '日付の変更を監視
+        If .IsChanged(OrderWb_InputDateRange) Then
+            SetIgnoreState (True)
+            ' 発注データの読み込み
+            LoadData
+            SetIgnoreState (False)
+        End If
+        
+        
+        '行の削除を監視
+        If .IsDeleted(lastUpdatedRowCnt, OrderWb_NextProductsRow) Then
+            SetIgnoreState (True)
+            
+            '保存
+            SaveData
+            SetIgnoreState (False)
+        End If
+        
+
+    End With
 End Sub
+
