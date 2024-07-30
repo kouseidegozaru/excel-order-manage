@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "DataAccesser"
+Attribute VB_Name = "DataBaseAccesser"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -31,7 +31,7 @@ Public Function ExistsUser(ByVal UserID As Integer) As Boolean
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.Add "’S“–ŽÒCD", UserID
+    parameters.add "’S“–ŽÒCD", UserID
 
     Dim Result As Object
     Set Result = Executor.ExecuteSelect(query, parameters)
@@ -59,7 +59,7 @@ Public Function ExistsBumon(ByVal BumonCD As Integer) As Boolean
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.Add "•”–åCD", BumonCD
+    parameters.add "•”–åCD", BumonCD
 
     Dim Result As Object
     Set Result = Executor.ExecuteSelect(query, parameters)
@@ -87,8 +87,8 @@ Public Function ExistsProducts(ByVal BumonCD As Integer, ByVal ProductsCD As Lon
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.Add "•”–åCD", BumonCD
-    parameters.Add "•iCD", ProductsCD
+    parameters.add "•”–åCD", BumonCD
+    parameters.add "•iCD", ProductsCD
 
     Dim Result As Object
     Set Result = Executor.ExecuteSelect(query, parameters)
@@ -116,7 +116,7 @@ Public Function GetUserName(ByVal UserID As Integer) As String
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.Add "’S“–ŽÒCD", UserID
+    parameters.add "’S“–ŽÒCD", UserID
 
     Dim Result As Object
     Set Result = Executor.ExecuteSelect(query, parameters)
@@ -144,7 +144,7 @@ Public Function GetBumonName(ByVal BumonCD As Integer) As String
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.Add "•”–åCD", BumonCD
+    parameters.add "•”–åCD", BumonCD
 
     Dim Result As Object
     Set Result = Executor.ExecuteSelect(query, parameters)
@@ -195,7 +195,7 @@ Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.Add "•”–åCD", BumonCD
+    parameters.add "•”–åCD", BumonCD
 
     Dim Result As ADODB.recordSet
     Set Result = Executor.ExecuteSelect(query, parameters)
@@ -237,8 +237,8 @@ Public Function GetProduct(ByVal BumonCD As Integer, ProductsCD As Long) As ADOD
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.Add "•”–åCD", BumonCD
-    parameters.Add "•iCD", ProductsCD
+    parameters.add "•”–åCD", BumonCD
+    parameters.add "•iCD", ProductsCD
 
     Dim Result As ADODB.recordSet
     Set Result = Executor.ExecuteSelect(query, parameters)

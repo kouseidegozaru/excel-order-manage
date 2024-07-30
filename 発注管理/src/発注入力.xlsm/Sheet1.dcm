@@ -26,7 +26,7 @@ End Sub
 
 Private Sub HookCellChange(ByVal target As range)
     'データアクセス
-    Dim DataStorage As New dataAccesser
+    Dim DataStorage As New DataBaseAccesser
 
     Dim targetWs As Worksheet
     Set targetWs = ThisWorkbook.Sheets(OrderWb_SheetName)

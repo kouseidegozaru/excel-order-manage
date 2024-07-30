@@ -16,29 +16,29 @@ Private ws As Worksheet
 Private checkBoxes As Collection
 
 Private stateColumnNumber As Integer
-Private checkBoxColumnNumber As Integer
-Private dataStartColumnNumber As Integer
-Private dataStartRowNumber As Long
+Private CheckBoxColumnNumber As Integer
+Private DataStartColumnNumber As Integer
+Private DataStartRowNumber As Long
 
 
 Public Sub Initialize(recordSet As ADODB.recordSet)
 
     Set rs = recordSet
-    Call newWorkbook
+    Call NewWorkbook
     Set checkBoxes = New Collection
     
     stateColumnNumber = SearchWb_StateColumnNumber
-    checkBoxColumnNumber = SearchWb_CheckBoxColumnNumber
-    dataStartColumnNumber = SearchWb_DataStartColumnNumber
-    dataStartRowNumber = SearchWb_DataStartRowNumber
+    CheckBoxColumnNumber = SearchWb_CheckBoxColumnNumber
+    DataStartColumnNumber = SearchWb_DataStartColumnNumber
+    DataStartRowNumber = SearchWb_DataStartRowNumber
 End Sub
-Private Sub newWorkbook()
+Private Sub NewWorkbook()
     ' コピー元のワークブックを選択する
     Dim sourceWb As Workbook
     Set sourceWb = ThisWorkbook ' 既存のワークブック
     
     ' 新規ワークブックの作成
-    Set wb = Application.Workbooks.Add
+    Set wb = Application.Workbooks.add
     '最大化
     wb.Windows(1).WindowState = xlMaximized
 
@@ -54,11 +54,11 @@ End Sub
 Public Sub ExportRecordSet()
     Dim i As Long, j As Long
     Dim fld As Object
-    Dim row As Long: row = dataStartRowNumber
+    Dim row As Long: row = DataStartRowNumber
     
     ' ヘッダーの書き込み
     For i = 0 To rs.Fields.Count - 1
-        ws.Cells(row, i + dataStartColumnNumber).value = rs.Fields(i).name
+        ws.Cells(row, i + DataStartColumnNumber).value = rs.Fields(i).name
     Next i
     
     ' データの書き込み
@@ -66,11 +66,11 @@ Public Sub ExportRecordSet()
     Do While Not rs.EOF
         row = row + 1
         For i = 0 To rs.Fields.Count - 1
-            ws.Cells(row, i + dataStartColumnNumber).value = rs.Fields(i).value
+            ws.Cells(row, i + DataStartColumnNumber).value = rs.Fields(i).value
         Next i
         
         ' チェックボックスの追加
-        Call AddCheckBox(row, checkBoxColumnNumber, stateColumnNumber)
+        Call AddCheckBox(row, CheckBoxColumnNumber, stateColumnNumber)
         
         rs.MoveNext
     Loop
@@ -78,13 +78,16 @@ End Sub
 
 
 Private Sub AddCheckBox(RowNumber As Long, columnNumber As Integer, stateColumnNumber As Integer)
+
     ' チェックボックスの追加
     Dim cb As CheckBox
-    Set cb = ws.checkBoxes.Add(Left:=ws.Cells(RowNumber, columnNumber).Left, _
+    Set cb = ws.checkBoxes.add(Left:=ws.Cells(RowNumber, columnNumber).Left, _
                                Top:=ws.Cells(RowNumber, columnNumber).Top, _
                                Width:=ws.Cells(RowNumber, columnNumber).Width, _
                                Height:=ws.Cells(RowNumber, columnNumber).Height)
     cb.Caption = ""
     cb.LinkedCell = ws.Cells(RowNumber, stateColumnNumber).Address
 End Sub
+
+
 

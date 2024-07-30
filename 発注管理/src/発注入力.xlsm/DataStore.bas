@@ -7,8 +7,8 @@ Sub SaveData()
     Dim savePath As String
     
     ' 新しいワークブックを作成
-    Dim newWorkbook As Workbook
-    Set newWorkbook = Workbooks.Add
+    Dim NewWorkbook As Workbook
+    Set NewWorkbook = Workbooks.add
     
     
     ' 新しいワークブックの値を入力
@@ -18,11 +18,11 @@ Sub SaveData()
     '商品コードデータ
     Dim productsData As Collection
     Set productsData = GetRangeValue(ws.range(OrderWb_InputProductsRange))
-    writeData newWorkbook.Sheets(DataWb_SheetName), DataWb_ProductCodeRowNumber, DataWb_ProductCodeColumnNumber, productsData
+    writeData NewWorkbook.Sheets(DataWb_SheetName), DataWb_ProductCodeRowNumber, DataWb_ProductCodeColumnNumber, productsData
     '数量データ
     Dim qtyData As Collection
     Set qtyData = GetRangeValue(ws.range(OrderWb_InpuQtyRange))
-    writeData newWorkbook.Sheets(DataWb_SheetName), DataWb_ProductCodeRowNumber, DataWb_ProductQtyColumnNumber, qtyData
+    writeData NewWorkbook.Sheets(DataWb_SheetName), DataWb_ProductCodeRowNumber, DataWb_ProductQtyColumnNumber, qtyData
     
     
     ' 保存パスを指定（例：デスクトップに保存）
@@ -32,10 +32,10 @@ Sub SaveData()
     Application.DisplayAlerts = False
     
     ' ワークブックを保存（既存のファイルがあれば上書き保存）
-    newWorkbook.SaveAs Filename:=savePath, FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    NewWorkbook.SaveAs Filename:=savePath, FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
     
     ' ワークブックを閉じる
-    newWorkbook.Close
+    NewWorkbook.Close
         
     ' 警告メッセージを再度有効にする
     Application.DisplayAlerts = True

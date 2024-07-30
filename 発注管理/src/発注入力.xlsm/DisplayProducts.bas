@@ -3,7 +3,7 @@ Attribute VB_Name = "DisplayProducts"
 
 Sub DisplayProductsInfo(targetRng As range)
 
-    Dim DataStorage As New dataAccesser
+    Dim DataStorage As New DataBaseAccesser
     Dim BumonCD As Integer
     BumonCD = GetBumonCD
     Dim cell As range

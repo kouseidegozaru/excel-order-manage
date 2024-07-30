@@ -87,7 +87,7 @@ Function GetBumonCD() As Integer
     value = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputBumonCDRange).value
     
     '部門コードが存在するか
-    Dim DataStorage As New dataAccesser
+    Dim DataStorage As New DataBaseAccesser
     If DataStorage.ExistsBumon(value) Then
         GetBumonCD = value
     Else
@@ -106,7 +106,7 @@ Function GetUserCD() As Integer
     value = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputUserCDRange).value
     
      '担当者コードが存在するか
-    Dim DataStorage As New dataAccesser
+    Dim DataStorage As New DataBaseAccesser
     If DataStorage.ExistsUser(value) Then
         GetUserCD = value
     Else

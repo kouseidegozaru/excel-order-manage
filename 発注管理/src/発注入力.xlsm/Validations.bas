@@ -11,7 +11,7 @@ Private Sub SetBumonCD()
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
-        .Add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=1, Formula2:=10000 ' 数値型のバリデーションを追加
+        .add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=1, Formula2:=10000 ' 数値型のバリデーションを追加
         .IgnoreBlank = True ' 空白セルを無視
         .InCellDropdown = True ' ドロップダウンリストを表示
         .InputTitle = "部門コード"
@@ -29,7 +29,7 @@ Private Sub SetUserCD()
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
-        .Add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=1, Formula2:=10000 ' 数値型のバリデーションを追加
+        .add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=1, Formula2:=10000 ' 数値型のバリデーションを追加
         .IgnoreBlank = True ' 空白セルを無視
         .InCellDropdown = True ' ドロップダウンリストを表示
         .InputTitle = "担当者コード"
@@ -47,7 +47,7 @@ Private Sub SetDate()
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
-        .Add Type:=xlValidateDate, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:="1/1/1900", Formula2:="12/31/2100" ' 日付型のバリデーションを追加
+        .add Type:=xlValidateDate, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:="1/1/1900", Formula2:="12/31/2100" ' 日付型のバリデーションを追加
         .IgnoreBlank = True ' 空白セルを無視
         .InCellDropdown = True ' ドロップダウンリストを表示
         .InputTitle = "発注日付"

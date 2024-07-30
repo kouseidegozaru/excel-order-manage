@@ -36,7 +36,7 @@ Public Function GetCheckedValue(columnNumber As Integer, stateColumnNumber As In
     
     For i = 1 To ws.Cells(ws.Rows.Count, columnNumber).End(xlUp).row
         If ws.Cells(i, stateColumnNumber).value = True Then
-            checkedIDs.Add ws.Cells(i, columnNumber).value
+            checkedIDs.add ws.Cells(i, columnNumber).value
         End If
     Next i
     
@@ -86,7 +86,7 @@ Function FilterCollection(baseCol As Collection, filterCol As Collection) As Col
             End If
         Next itemFilter
         If Not exists Then
-            resultCol.Add itemBase
+            resultCol.add itemBase
         End If
     Next itemBase
     
