@@ -60,6 +60,8 @@ Private Sub HookCellChange(ByVal target As range)
              
             ' 担当者名の表示
             order.UserName = DataStorage.GetUserName(order.UserCode)
+            ' 発注データの読み込み
+            LoadData
             
             IsIgnoreChangeEvents = False
         End If
@@ -72,6 +74,8 @@ Private Sub HookCellChange(ByVal target As range)
             
             ' 部門名の表示
             order.BumonName = DataStorage.GetBumonName(order.BumonCode)
+            ' 発注データの読み込み
+            LoadData
             
             IsIgnoreChangeEvents = False
         End If

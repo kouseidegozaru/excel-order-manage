@@ -48,6 +48,9 @@ End Sub
 '発注入力シートに関する処理
 '検索フォーム呼び出し
 Sub search()
+
+    Application.ScreenUpdating = False
+    
     Dim order As New OrderSheetAccesser
     Dim search As New SearchSheetAccesser
     
@@ -84,5 +87,6 @@ Sub search()
         rs.MoveNext
     Loop
 
+    Application.ScreenUpdating = True
     
 End Sub
