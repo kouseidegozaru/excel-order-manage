@@ -18,89 +18,105 @@ Private Sub Worksheet_Change(ByVal target As range)
 
     'セルの変更をフック
     HookCellChange target
-
-    '最終行数を更新
-    lastUpdatedRowCnt = OrderWb_NextProductsRow
     
 End Sub
 
 Private Sub HookCellChange(ByVal target As range)
+    'IsIgnoreChangeEventsはシートの変更を検知するかどうかの状態を設定
+    'events.Ignoreはシートの変更があっても無視する
+
     'データアクセス
     Dim DataStorage As New DataBaseAccesser
 
-    Dim targetWs As Worksheet
-    Set targetWs = ThisWorkbook.Sheets(OrderWb_SheetName)
+    Dim order As New OrderSheetAccesser
 
     ' セルの変更を監視
-    Dim events As New ChangeEvents
+    Dim events As New HookChange
     With events
     
-        '監視するシートを指定
-        .Initialize targetWs
         '変更された範囲をセット
-        .SetRange targetWs.range(target.Address)
-        '監視の有無
-        .Ignore GetIgnoreState
-    
-    
-        ' 担当者コードの変更を監視
-        If .IsChanged(OrderWb_InputUserCDRange) Then
-            SetIgnoreState (True)
+        .SetRange target
+        '監視の有無をセット
+        .Ignore IsIgnoreChangeEvents
+        
+        
+        
+'行の削除を監視
+        If .IsDeleted(lastUpdatedRowCnt, order.DataNextRowNumber) Then
+            IsIgnoreChangeEvents = True
+            
+            '保存
+            SaveData
+            
+            IsIgnoreChangeEvents = False
+            .Ignore True
+        End If
+        
+          
+          
+' 担当者コードの変更を監視
+        If .IsChanged(order.UserCodeRange) Then
+            IsIgnoreChangeEvents = True
+             
             ' 担当者名の表示
-            SetUserName DataStorage.GetUserName(GetUserCD)
-            SetIgnoreState (False)
+            order.UserName = DataStorage.GetUserName(order.UserCode)
+            
+            IsIgnoreChangeEvents = False
         End If
-    
-        '部門コードの変更を監視
-        If .IsChanged(OrderWb_InputBumonCDRange) Then
-            SetIgnoreState (True)
+        
+      
+      
+'部門コードの変更を監視
+        If .IsChanged(order.BumonCodeRange) Then
+            IsIgnoreChangeEvents = True
+            
             ' 部門名の表示
-            SetBumonName DataStorage.GetBumonName(GetBumonCD)
-            SetIgnoreState (False)
+            order.BumonName = DataStorage.GetBumonName(order.BumonCode)
+            
+            IsIgnoreChangeEvents = False
         End If
-    
-        '商品コードの変更を監視
-        If .IsChanged(OrderWb_InputProductsRange) Then
-            SetIgnoreState (True)
+        
+        
+      
+'商品コードの変更を監視
+        If .IsChanged(order.ProductsCodeRange) Then
+            IsIgnoreChangeEvents = True
+            
             ' 商品情報の表示
             DisplayProductsInfo target
+            '保存
+            SaveData
+            
+            IsIgnoreChangeEvents = False
+        End If
+        
+        
+    
+'数量の変更を監視
+        If .IsChanged(order.QtyRange) Then
+            IsIgnoreChangeEvents = True
             
             '保存
             SaveData
-            SetIgnoreState (False)
-        Else
-        
-          '数量の変更を監視
-          If .IsChanged(OrderWb_InpuQtyRange) Then
-              SetIgnoreState (True)
-              '保存
-              SaveData
-              SetIgnoreState (False)
-          End If
-        
+            
+            IsIgnoreChangeEvents = False
         End If
         
-
         
-        '日付の変更を監視
-        If .IsChanged(OrderWb_InputDateRange) Then
-            SetIgnoreState (True)
+
+'日付の変更を監視
+        If .IsChanged(order.TargetDateRange) Then
+            IsIgnoreChangeEvents = True
+            
             ' 発注データの読み込み
             LoadData
-            SetIgnoreState (False)
-        End If
-        
-        
-        '行の削除を監視
-        If .IsDeleted(lastUpdatedRowCnt, OrderWb_NextProductsRow) Then
-            SetIgnoreState (True)
             
-            '保存
-            SaveData
-            SetIgnoreState (False)
+            IsIgnoreChangeEvents = False
         End If
-        
-
+      
+              
     End With
+    
+    '最終行数を更新
+    lastUpdatedRowCnt = order.DataNextRowNumber
 End Sub
-

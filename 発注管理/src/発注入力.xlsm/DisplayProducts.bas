@@ -4,13 +4,16 @@ Attribute VB_Name = "DisplayProducts"
 Sub DisplayProductsInfo(targetRng As range)
 
     Dim DataStorage As New DataBaseAccesser
-    Dim BumonCD As Integer
-    BumonCD = GetBumonCD
-    Dim cell As range
+    Dim order As New OrderSheetAccesser
     
+    ' 処理する部門の指定
+    Dim BumonCD As Integer
+    BumonCD = order.BumonCode
     ' 処理する列の指定
     Dim targetColumn As Integer
-    targetColumn = OrderWb_ProductCodeColumnNumber
+    targetColumn = order.ProductCodeColumnNumber
+    
+    Dim cell As range
     
     ' 範囲内の指定した列の各行を処理
     For Each cell In targetRng.Columns(targetColumn).Cells

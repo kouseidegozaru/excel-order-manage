@@ -19,7 +19,6 @@ Private DataStartColumnNumber_ As Integer
 Private CheckStateColumnNumber_ As Integer
 Private CheckBoxColumnNumber_ As Integer
 
-
 Private Sub Class_Initialize()
 
     WorkSheetName_ = "商品マスターフォーマット"
@@ -32,9 +31,9 @@ Private Sub Class_Initialize()
     
 End Sub
 
-Private Sub NewWorkbook()
+Public Sub NewWorkbook()
     ' 新規ワークブックの作成
-    Me.Workbook = Application.Workbooks.add
+    Set Me.Workbook = Application.Workbooks.add
 End Sub
 
 Property Set Workbook(wb As Workbook)
@@ -46,7 +45,6 @@ Property Get Workbook() As Workbook
 End Property
 
 Public Sub CopyWorkSheet(baseWorkSheet As Worksheet)
-
     '最大化
     Me.Workbook.Windows(1).WindowState = xlMaximized
     
@@ -55,47 +53,55 @@ Public Sub CopyWorkSheet(baseWorkSheet As Worksheet)
     
     InitWorkSheet
 End Sub
+
 Public Sub InitWorkSheet()
     Set WorkSheet_ = Me.Workbook.Sheets(WorkSheetName_)
 End Sub
+
 Property Get Worksheet() As Worksheet
     Set Worksheet = WorkSheet_
 End Property
+
 Property Get ProductCodeColumnNumber() As Integer
-    ProductCodeColumnNumber = ProductCDColumnNumber_
+    ProductCodeColumnNumber = ProductCodeColumnNumber_
 End Property
+
 Property Get DataStartRowNumber() As Long
     DataStartRowNumber = DataStartRowNumber_
 End Property
+
 Property Get DataStartColumnNumber() As Integer
     DataStartColumnNumber = DataStartColumnNumber_
 End Property
+
 Property Get CheckStateColumnNumber() As Integer
     CheckStateColumnNumber = CheckStateColumnNumber_
 End Property
+
 Property Get CheckBoxColumnNumber() As Integer
     CheckBoxColumnNumber = CheckBoxColumnNumber_
 End Property
-Public Sub AddCheckBox(rowIndex As Long)
 
+Public Sub AddCheckBox(rowIndex As Long)
     Dim columnIndex As Integer
     Dim stateColumnIndex As Integer
     
-    columnNumber = Me.CheckBoxColumnNumber
-    stateColumnNumber = Me.CheckStateColumnNumber
+    columnIndex = Me.CheckBoxColumnNumber
+    stateColumnIndex = Me.CheckStateColumnNumber
     
     Dim ws As Worksheet
     Set ws = Me.Worksheet
     
     ' チェックボックスの追加
     Dim cb As CheckBox
-    Set cb = Me.Worksheet.checkBoxes.add(Left:=ws.Cells(rowIndex, columnIndex).Left, _
+    Set cb = ws.checkBoxes.add(Left:=ws.Cells(rowIndex, columnIndex).Left, _
                                Top:=ws.Cells(rowIndex, columnIndex).Top, _
                                Width:=ws.Cells(rowIndex, columnIndex).Width, _
                                Height:=ws.Cells(rowIndex, columnIndex).Height)
     cb.Caption = ""
     cb.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
 End Sub
+
 '検索フォームの選択された行の商品コードを取得
 Public Function GetCheckedProductsCode() As Collection
     Dim wb As Workbook
@@ -109,16 +115,20 @@ Public Function GetCheckedProductsCode() As Collection
     Dim checkedProductsCode As New Collection
     Dim i As Long
     
+    productsColumnIndex = Me.ProductCodeColumnNumber
+    checkedStateColumnIndex = Me.CheckStateColumnNumber
+    
     For i = 1 To ws.Cells(ws.Rows.Count, productsColumnIndex).End(xlUp).row
         If ws.Cells(i, checkedStateColumnIndex).value = True Then
             checkedProductsCode.add ws.Cells(i, productsColumnIndex).value
         End If
     Next i
     
-    Set GetCheckedValue = checkedProductsCode
+    Set GetCheckedProductsCode = checkedProductsCode
 End Function
 
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
-    Me.Worksheet.Cells(rowIndex, columnIndex) = value
+    Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
+
 

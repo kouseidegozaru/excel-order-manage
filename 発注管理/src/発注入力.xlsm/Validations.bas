@@ -6,8 +6,9 @@ Sub SetValidations()
 End Sub
 
 Private Sub SetBumonCD()
+    Dim order As New OrderSheetAccesser
     Dim rng As range
-    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputBumonCDRange)
+    Set rng = order.BumonCodeRange
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
@@ -24,8 +25,9 @@ Private Sub SetBumonCD()
 End Sub
 
 Private Sub SetUserCD()
+    Dim order As New OrderSheetAccesser
     Dim rng As range
-    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputUserCDRange)
+    Set rng = order.UserCodeRange
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
@@ -42,8 +44,9 @@ Private Sub SetUserCD()
 End Sub
 
 Private Sub SetDate()
+    Dim order As New OrderSheetAccesser
     Dim rng As range
-    Set rng = ThisWorkbook.Sheets(OrderWb_SheetName).range(OrderWb_InputDateRange)
+    Set rng = order.TargetDateRange
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
@@ -52,7 +55,7 @@ Private Sub SetDate()
         .InCellDropdown = True ' ドロップダウンリストを表示
         .InputTitle = "発注日付"
         .ErrorTitle = "入力エラー"
-        .InputMessage = "有効な日付を入力してください。"
+        .InputMessage = "日付を入力してください。"
         .ErrorMessage = "入力値が有効な日付ではありません。"
         .ShowInput = True ' 入力メッセージを表示
         .ShowError = True ' エラーメッセージを表示

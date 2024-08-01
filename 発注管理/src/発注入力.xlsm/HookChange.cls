@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "ChangeEvents"
+Attribute VB_Name = "HookChange"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -11,29 +11,20 @@ Option Explicit
 
 'セルの変更を検知するための汎用クラス
 
-Private ws As Worksheet
 Private targetRange As range
 Private isIgnore As Boolean
-Private lastUpdatedRowCnt As Long
 
-Public Sub Initialize(targetWs As Worksheet)
-    If targetWs Is Nothing Then
-        MsgBox "Invalid worksheet provided.", vbCritical
-        Exit Sub
-    End If
-    Set ws = targetWs
+Public Sub Class_Initialize()
     isIgnore = False
 End Sub
 
+'変更されたシートの範囲をセット
 Public Sub SetRange(targetRng As range)
-    If targetRng Is Nothing Then
-        MsgBox "Invalid range provided.", vbCritical
-        Exit Sub
-    End If
     Set targetRange = targetRng
 End Sub
 
-Public Function IsChanged(strRange As String) As Boolean
+'シートの特定の範囲の変更があったか
+Public Function IsChanged(rng As range) As Boolean
     IsChanged = False
     
     '監視しない
@@ -41,27 +32,18 @@ Public Function IsChanged(strRange As String) As Boolean
         Exit Function
     End If
     
-    If ws Is Nothing Then
-        MsgBox "Worksheet is not initialized.", vbCritical
-        Exit Function
-    End If
-    
-    If Not Intersect(targetRange, ws.range(strRange)) Is Nothing Then
+    If Not Intersect(targetRange, rng) Is Nothing Then
         IsChanged = True
     End If
 
 End Function
 
+'行が削除されたか
 Public Function IsDeleted(lastRowCnt As Long, currentRowCnt As Long) As Boolean
     IsDeleted = False
 
     '監視しない
     If isIgnore Then
-        Exit Function
-    End If
-    
-    If ws Is Nothing Then
-        MsgBox "Worksheet is not initialized.", vbCritical
         Exit Function
     End If
     
@@ -72,6 +54,7 @@ Public Function IsDeleted(lastRowCnt As Long, currentRowCnt As Long) As Boolean
 
 End Function
 
+'シートの変更があっても無視する
 Public Sub Ignore(isChangeIgnore As Boolean)
     isIgnore = isChangeIgnore
 End Sub
