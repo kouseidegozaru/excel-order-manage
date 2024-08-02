@@ -5,6 +5,7 @@ Sub LoadFileProperty()
     Dim dataStorage As New DataBaseAccesser
     Dim fileProperty As New FilePropertyManager
     Dim filter As New fileFilter
+    Dim users As New UserCodeAccesser
     
     Dim BumonCodeFilter As String
     Dim UserCodeFilter As String
@@ -20,12 +21,18 @@ Sub LoadFileProperty()
     '探索するディレクトリの設定
     filter.DirPath = data.DataDirPath
     
-    Dim rs As ADODB.Recordset
-    Set rs = dataStorage.GetUserCodes(load.BumonCode)
+    Dim UserCodes As Collection
+    Set UserCodes = users.GetEmployeeCodes(load.BumonCode)
     
-    Do Until rs.EOF
+    
+    For Each UserCode In UserCodes
+    
+        '従業員名の取得
+        Dim userName As String
+        userName = dataStorage.GetUserName(UserCode)
+        
         'ファイルの抽出条件文字列の設定
-        UserCodeFilter = fileProperty.UserCodeIdentifier & rs.Fields("担当者CD").value & fileProperty.BreakIdentifier
+        UserCodeFilter = fileProperty.UserCodeIdentifier & UserCode & fileProperty.BreakIdentifier
         
         'フィルターの実行
         Dim filePathCollection As Collection
@@ -34,24 +41,13 @@ Sub LoadFileProperty()
         'フィルターの結果が存在する場合
         If filePathCollection.Count > 0 Then
             fileProperty.filePath = data.DataDirPath & "\" & filePathCollection(1)
-            load.AddFileProperty rs.Fields("担当者名").value, True, fileProperty.UpdatedDate
+            load.AddFileProperty userName, True, fileProperty.UpdatedDate
         Else
-            load.AddFileProperty rs.Fields("担当者名").value, False, Date
+            load.AddFileProperty userName, False, Date
         End If
         
-        rs.MoveNext
-    Loop
+        
+    Next UserCode
     
-    
-    
-    
-End Sub
-
-Sub LoadFilePropertys()
-Dim filter As New fileFilter
-filter.DirPath = "C:\Users\mfh077_user.MEFUREDMN\Desktop\excel-order-manage\発注管理\data"
-
-Dim c As Collection
-Set c = filter.AndFilter("b40-", "d20240725-", "u30-")
 End Sub
 

@@ -32,7 +32,7 @@ Private FilePropertyUpdateTimeRowNumber_ As Integer
 
 Private CompleteString_ As String
 
-Private Sub Class_Initialize()
+Private Sub class_initialize()
     WorkBookName_ = "発注確認.xlsm"
     WorkSheetName_ = "発注確認"
     
@@ -123,7 +123,7 @@ Public Sub ClearFileProperty()
     Me.FilePropertyRange.Delete Shift:=xlToLeft
 End Sub
 
-Public Sub AddFileProperty(UserName As String, IsCompleted As Boolean, updatedTime As Date)
+Public Sub AddFileProperty(userName As String, IsCompleted As Boolean, updatedTime As Date)
     Dim lastColumn As Integer
     lastColumn = FilePropertyNextColumnNumber
     
@@ -136,7 +136,7 @@ Public Sub AddFileProperty(UserName As String, IsCompleted As Boolean, updatedTi
         Me.Worksheet.Cells(FilePropertyUpdateTimeRowNumber_, lastColumn) = updatedTime
     End If
     
-    Me.Worksheet.Cells(FilePropertyUserNameRowNumber_, lastColumn) = UserName
+    Me.Worksheet.Cells(FilePropertyUserNameRowNumber_, lastColumn) = userName
     Me.Worksheet.Cells(FilePropertyCompleteRowNumber_, lastColumn) = writeCompleteString
 End Sub
 
@@ -226,7 +226,7 @@ Property Get Qty() As Collection
 End Property
 
 '担当者名の表示
-Property Let UserName(name As String)
+Property Let userName(name As String)
     Me.Worksheet.Range(OutputUserNameRange_).value = name
 End Property
 

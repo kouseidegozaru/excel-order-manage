@@ -14,7 +14,7 @@ Private MFRE06ConnectionString As String
 Private MFREDWHConnectionString As String
 
 ' コンストラクタ代わりの初期化メソッド
-Public Sub Class_Initialize()
+Public Sub class_initialize()
     MFRE05ConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFRE05;UID=sa;PWD=mefure;"
     MFRE06ConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFRE06;UID=sa;PWD=mefure;"
     MFREDWHConnectionString = "PROVIDER=SQLOLEDB;Data Source=MFH006-MFRE;Initial Catalog=MFREDWH;UID=sa;PWD=mefure;"

@@ -22,7 +22,7 @@ Private ProductCodeColumnNumber_ As Integer
 Private QtyColumnNumber_ As Integer
 Private DataStartRowNumber_ As Long
 
-Private Sub Class_Initialize()
+Private Sub class_initialize()
 
     OrderDataDirPath = "C:\Users\mfh077_user.MEFUREDMN\Desktop\excel-order-manage\î≠íçä«óù\data"
 

@@ -14,7 +14,7 @@ Option Explicit
 Private targetRange As Range
 Private isIgnore As Boolean
 
-Public Sub Class_Initialize()
+Public Sub class_initialize()
     isIgnore = False
 End Sub
 

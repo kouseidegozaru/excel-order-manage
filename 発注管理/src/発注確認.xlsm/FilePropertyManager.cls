@@ -15,7 +15,7 @@ Dim UserCodeIdentifier_ As String
 Dim DateIdentifier_ As String
 Dim BreakIdentifier_ As String
 
-Private Sub Class_Initialize()
+Private Sub class_initialize()
     BumonCodeIdentifier_ = "b"
     UserCodeIdentifier_ = "u"
     DateIdentifier_ = "d"

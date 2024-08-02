@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Private dirPath_ As String
 
-Private Sub Class_Initialize()
+Private Sub class_initialize()
     ' ‰Šú‰»‚És‚¤ˆ—‚ª‚ ‚ê‚Î‚±‚±‚É‹Lq
 End Sub
 
