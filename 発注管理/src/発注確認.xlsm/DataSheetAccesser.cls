@@ -34,14 +34,8 @@ Private Sub Class_Initialize()
     
 End Sub
 
-'•Û‘¶ƒtƒ@ƒCƒ‹–¼
-Property Get SaveFileName() As String
-    Dim order As New OrderSheetAccesser
-    
-    SaveFileName = "b" & order.BumonCode & "-" & _
-                  "u" & order.UserCode & "-" & _
-                  "d" & Format(order.TargetDate, "yyyymmdd") & "-" & _
-                  ".xlsx"
+Property Get DataDirPath()
+    DataDirPath = OrderDataDirPath
 End Property
 
 Public Sub InitWorkSheet()

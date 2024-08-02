@@ -10,16 +10,16 @@ Attribute VB_Exposed = False
 Dim filePath_ As String
 Dim fileName_ As String
 
-Dim BumonCodeIdentifier As String
-Dim UserCodeIdentifier As String
-Dim DateIdentifier As String
-Dim BreakIdentifier As String
+Dim BumonCodeIdentifier_ As String
+Dim UserCodeIdentifier_ As String
+Dim DateIdentifier_ As String
+Dim BreakIdentifier_ As String
 
 Private Sub Class_Initialize()
-    BumonCodeIdentifier = "b"
-    UserCodeIdentifier = "u"
-    DateIdentifier = "d"
-    BreakIdentifier = "-"
+    BumonCodeIdentifier_ = "b"
+    UserCodeIdentifier_ = "u"
+    DateIdentifier_ = "d"
+    BreakIdentifier_ = "-"
 End Sub
 
 Property Let filePath(targetFilePath As String)
@@ -27,19 +27,25 @@ Property Let filePath(targetFilePath As String)
     fileName_ = GetFileName(filePath_)
 End Property
 
-Property Get BumonCode() As String
-    BumonCode = ExtractBetweenCharacters(fileName_, BumonCodeIdentifier, BreakIdentifier)
+Property Get BumonCode() As Integer
+    BumonCode = CInt(ExtractBetweenCharacters(fileName_, BumonCodeIdentifier_, BreakIdentifier_))
+End Property
+Property Get BumonCodeIdentifier() As String
+    BumonCodeIdentifier = BumonCodeIdentifier_
 End Property
 
-Property Get UserCode() As String
-    UserCode = ExtractBetweenCharacters(fileName_, UserCodeIdentifier, BreakIdentifier)
+Property Get UserCode() As Integer
+    UserCode = CInt(ExtractBetweenCharacters(fileName_, UserCodeIdentifier_, BreakIdentifier_))
+End Property
+Property Get UserCodeIdentifier() As String
+    UserCodeIdentifier = UserCodeIdentifier_
 End Property
 
 Property Get TargetDate() As Date
     Dim strDate As String
     Dim year As Integer, month As Integer, day As Integer
     
-    strDate = ExtractBetweenCharacters(fileName_, DateIdentifier, BreakIdentifier)
+    strDate = ExtractBetweenCharacters(fileName_, DateIdentifier_, BreakIdentifier_)
     
     If Len(strDate) = 8 Then
         year = CInt(Left(strDate, 4))
@@ -49,6 +55,12 @@ Property Get TargetDate() As Date
     Else
         TargetDate = #1/1/1900# ' デフォルト値
     End If
+End Property
+Property Get DateIdentifier() As String
+    DateIdentifier = DateIdentifier_
+End Property
+Property Get BreakIdentifier() As String
+    BreakIdentifier = BreakIdentifier_
 End Property
 
 Property Get UpdatedDate() As Date
