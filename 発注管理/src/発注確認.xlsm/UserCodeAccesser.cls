@@ -20,7 +20,7 @@ Private Sub Class_Initialize()
     EmployeeCodeColumnIndex = 1
     departmentCodeHeaderName = "部門コード"
     departmentCodeColumnIndex = 0
-    pFilePath = "C:\Users\mfh077_user.MEFUREDMN\Desktop\excel-order-manage\発注管理\data\従業員コード.csv"
+    pFilePath = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\従業員コード.csv"
     
     Set pData = New Collection
     LoadData
