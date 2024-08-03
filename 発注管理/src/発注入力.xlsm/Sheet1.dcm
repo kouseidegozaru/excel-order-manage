@@ -10,10 +10,6 @@ Attribute VB_Exposed = True
 '行削除を検知するための変更前の行数
 Private lastUpdatedRowCnt As Long
 
-Private Sub Worksheet_Activate()
-    SetValidations
-End Sub
-
 Private Sub Worksheet_Change(ByVal target As range)
 
     'セルの変更をフック
