@@ -65,34 +65,32 @@ Function MergeDictionaries(dict1 As Scripting.Dictionary, dict2 As Scripting.Dic
 
     ' dict1の内容をresultDictにコピー
     For Each key In dict1.Keys
-        If IsNumeric(dict1(key)) Then
-            resultDict(key) = dict1(key)
-        Else
-            resultDict(key) = "" ' 無効な文字の場合は空文字
-        End If
+        resultDict(key) = dict1(key)
     Next key
 
     ' dict2の内容をresultDictに追加
     For Each key In dict2.Keys
         If resultDict.exists(key) Then
-            If IsNumeric(dict2(key)) Then
-                resultDict(key) = dict2(key)
+            ' 両方の値が数値の場合は加算
+            If IsNumeric(resultDict(key)) And IsNumeric(dict2(key)) Then
+                resultDict(key) = resultDict(key) + dict2(key)
+            ' 片方が数値で片方が数値でない場合は数値の方を結果に反映
             ElseIf IsNumeric(resultDict(key)) Then
-                ' resultDictの値が数値の場合、変更しない
+                resultDict(key) = resultDict(key)
+            ElseIf IsNumeric(dict2(key)) Then
+                resultDict(key) = dict2(key)
+            ' 両方とも数値でない場合は空文字を結果に反映
             Else
-                resultDict(key) = "" ' 両方無効な文字の場合は空文字
+                resultDict(key) = ""
             End If
         Else
-            If IsNumeric(dict2(key)) Then
-                resultDict(key) = dict2(key)
-            Else
-                resultDict(key) = "" ' 無効な文字の場合は空文字
-            End If
+            resultDict(key) = dict2(key) ' キーが存在しない場合、新しく追加
         End If
     Next key
 
     Set MergeDictionaries = resultDict
 End Function
+
 
 
 
