@@ -58,3 +58,26 @@ Function FilterCollection(baseCol As Collection, filterCol As Collection) As Col
     Set FilterCollection = resultCol
 End Function
 
+'辞書を比較しキーが同じものは加算
+Function MergeDictionaries(dict1 As Scripting.Dictionary, dict2 As Scripting.Dictionary) As Scripting.Dictionary
+    Dim resultDict As New Scripting.Dictionary
+    Dim key As Variant
+
+    ' dict1の内容をresultDictにコピー
+    For Each key In dict1.Keys
+        resultDict(key) = dict1(key)
+    Next key
+
+    ' dict2の内容をresultDictに追加
+    For Each key In dict2.Keys
+        If resultDict.exists(key) Then
+            resultDict(key) = resultDict(key) + dict2(key) ' キーが存在する場合、値を加算
+        Else
+            resultDict(key) = dict2(key) ' キーが存在しない場合、新しく追加
+        End If
+    Next key
+
+    Set MergeDictionaries = resultDict
+End Function
+
+

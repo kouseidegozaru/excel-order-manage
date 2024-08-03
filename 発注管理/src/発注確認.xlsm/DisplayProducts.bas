@@ -3,15 +3,15 @@ Attribute VB_Name = "DisplayProducts"
 
 Sub DisplayProductsInfo(targetRng As Range)
 
-    Dim dataStorage As New DataBaseAccesser
-    Dim order As New OrderSheetAccesser
+    Dim DataStorage As New DataBaseAccesser
+    Dim load As New LoadSheetAccesser
     
     ' 処理する部門の指定
     Dim BumonCD As Integer
-    BumonCD = order.BumonCode
+    BumonCD = load.BumonCode
     ' 処理する列の指定
     Dim targetColumn As Integer
-    targetColumn = order.ProductCodeColumnNumber
+    targetColumn = load.ProductCodeColumnNumber
     
     Dim cell As Range
     
@@ -19,12 +19,12 @@ Sub DisplayProductsInfo(targetRng As Range)
     For Each cell In targetRng.Columns(targetColumn).Cells
         ' 空白でないセルを処理
         If cell.value <> "" Then
-            If dataStorage.ExistsProducts(BumonCD, cell.value) Then
+            If DataStorage.ExistsProducts(BumonCD, cell.value) Then
                 '背景を白に
                 Call ChangeBackColor(cell, 255, 255, 255)
                 
                 Dim rs As ADODB.Recordset
-                Set rs = dataStorage.GetProduct(BumonCD, cell.value)
+                Set rs = DataStorage.GetProduct(BumonCD, cell.value)
                 
                 ' レコードセットをセルに貼り付ける
                 If Not rs.EOF Then

@@ -15,14 +15,14 @@ Dim UserCodeIdentifier_ As String
 Dim DateIdentifier_ As String
 Dim BreakIdentifier_ As String
 
-Private Sub class_initialize()
+Private Sub Class_Initialize()
     BumonCodeIdentifier_ = "b"
     UserCodeIdentifier_ = "u"
     DateIdentifier_ = "d"
     BreakIdentifier_ = "-"
 End Sub
 
-Property Let filePath(targetFilePath As String)
+Property Let FilePath(targetFilePath As String)
     filePath_ = targetFilePath
     fileName_ = GetFileName(filePath_)
 End Property
@@ -89,9 +89,9 @@ Private Function ExtractBetweenCharacters(ByVal str As String, ByVal startChar A
     End If
 End Function
 
-Private Function GetFileName(filePath As String) As String
-    Dim fileName As String
-    fileName = Mid(filePath, InStrRev(filePath, "\") + 1)
-    GetFileName = fileName
+Private Function GetFileName(FilePath As String) As String
+    Dim FileName As String
+    FileName = Mid(FilePath, InStrRev(FilePath, "\") + 1)
+    GetFileName = FileName
 End Function
 

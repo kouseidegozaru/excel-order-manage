@@ -15,7 +15,7 @@ Private EmployeeCodeColumnIndex As Integer
 Private departmentCodeHeaderName As String
 Private departmentCodeColumnIndex As Integer
 
-Private Sub class_initialize()
+Private Sub Class_Initialize()
     EmployeeCodeHeaderName = "社員コード"
     EmployeeCodeColumnIndex = 1
     departmentCodeHeaderName = "部門コード"
@@ -65,7 +65,7 @@ Private Sub LoadData()
     Next i
 End Sub
 
-Private Function ReadFileContent(filePath As String) As String
+Private Function ReadFileContent(FilePath As String) As String
     Dim fileContent As String
     Dim stream As New ADODB.stream
     
@@ -75,7 +75,7 @@ Private Function ReadFileContent(filePath As String) As String
         .Type = 2 ' adTypeText
         .Charset = "utf-8"
         .Open
-        .LoadFromFile filePath
+        .LoadFromFile FilePath
         fileContent = .ReadText(-1) ' -1 = 全テキスト読み込み
         .Close
     End With

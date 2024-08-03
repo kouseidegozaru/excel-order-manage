@@ -1,0 +1,56 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Private Sub Worksheet_Change(ByVal target As Range)
+
+    'セルの変更をフック
+    HookCellChange target
+    
+End Sub
+
+Private Sub HookCellChange(ByVal target As Range)
+
+    'データアクセス
+    Dim DataStorage As New DataBaseAccesser
+
+    Dim load As New LoadSheetAccesser
+
+    ' セルの変更を監視
+    Dim events As New HookChange
+    With events
+    
+        '変更された範囲をセット
+        .SetRange target
+        
+      
+      
+'部門コードの変更を監視
+        If .IsChanged(load.BumonCodeRange) Then
+            
+            ' 部門名の表示
+            load.BumonName = DataStorage.GetBumonName(load.BumonCode)
+            ' 発注データの読み込み
+            Loads
+            
+        End If
+        
+
+'日付の変更を監視
+        If .IsChanged(load.TargetDateRange) Then
+            
+            ' 発注データの読み込み
+            Loads
+            
+        End If
+      
+              
+    End With
+    
+End Sub
+

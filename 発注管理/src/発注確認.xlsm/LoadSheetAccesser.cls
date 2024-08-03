@@ -32,7 +32,7 @@ Private FilePropertyUpdateTimeRowNumber_ As Integer
 
 Private CompleteString_ As String
 
-Private Sub class_initialize()
+Private Sub Class_Initialize()
     WorkBookName_ = "発注確認.xlsm"
     WorkSheetName_ = "発注確認"
     
@@ -123,6 +123,10 @@ Public Sub ClearFileProperty()
     Me.FilePropertyRange.Delete Shift:=xlToLeft
 End Sub
 
+Public Sub ClearData()
+    Me.ProductsCodeRange.EntireRow.Delete Shift:=xlToup
+End Sub
+
 Public Sub AddFileProperty(userName As String, IsCompleted As Boolean, updatedTime As Date)
     Dim lastColumn As Integer
     lastColumn = FilePropertyNextColumnNumber
@@ -189,8 +193,8 @@ Property Get BumonCode() As Integer
     value = Me.Worksheet.Range(InputBumonCodeRange_).value
     
     '部門コードが存在するか
-    Dim dataStorage As New DataBaseAccesser
-    If dataStorage.ExistsBumon(value) Then
+    Dim DataStorage As New DataBaseAccesser
+    If DataStorage.ExistsBumon(value) Then
         BumonCode = value
     Else
         BumonCode = 0
@@ -216,8 +220,8 @@ Property Get TargetDateRange() As Range
 End Property
 
 '発注入力に既に入力されている商品コードの取得
-Property Get ProductsCode() As Collection
-    Set ProductsCode = GetRangeValue(Me.ProductsCodeRange)
+Property Get productsCode() As Collection
+    Set productsCode = GetRangeValue(Me.ProductsCodeRange)
 End Property
 
 '発注入力に既に入力されている数量の取得
@@ -239,12 +243,5 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
 
-Public Sub WriteProductsCode(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
-End Sub
-
-Public Sub WriteQty(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
-End Sub
 
 

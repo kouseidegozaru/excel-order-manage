@@ -18,11 +18,13 @@ Private WorkBook_ As Workbook
 Private WorkSheetName_ As String
 Private WorkSheet_ As Worksheet
 
+Private fileName_ As String
+
 Private ProductCodeColumnNumber_ As Integer
 Private QtyColumnNumber_ As Integer
 Private DataStartRowNumber_ As Long
 
-Private Sub class_initialize()
+Private Sub Class_Initialize()
 
     OrderDataDirPath = "C:\Users\mfh077_user.MEFUREDMN\Desktop\excel-order-manage\発注管理\data"
 
@@ -38,13 +40,23 @@ Property Get DataDirPath()
     DataDirPath = OrderDataDirPath
 End Property
 
-Public Sub InitWorkSheet()
-    Set WorkSheet_ = Me.Workbook.Sheets(WorkSheetName_)
+Property Get FilePath()
+    FilePath = Me.DataDirPath & "\" & fileName_
+End Property
+
+Property Let FileName(targetFileName As String)
+    fileName_ = targetFileName
+    
+    InitWorkBook
+    InitWorkSheet
+End Property
+
+Public Sub InitWorkBook()
+    Set WorkBook_ = Workbooks.Open(Me.FilePath)
 End Sub
 
-Public Sub NewWorkbook()
-    ' 新規ワークブックの作成
-    Set Me.Workbook = Application.Workbooks.Add
+Public Sub InitWorkSheet()
+    Set WorkSheet_ = Me.Workbook.Sheets(WorkSheetName_)
 End Sub
 
 Property Get Workbook() As Workbook
@@ -118,14 +130,31 @@ Property Get QtyRange() As Range
 End Property
 
 '発注入力に既に入力されている商品コードの取得
-Property Get ProductsCode() As Collection
-    Set ProductsCode = GetRangeValue(Me.ProductsCodeRange)
+Property Get productsCode() As Collection
+    Set productsCode = GetRangeValue(Me.ProductsCodeRange)
 End Property
 
 '発注入力に既に入力されている数量の取得
 Property Get Qty() As Collection
     Set Qty = GetRangeValue(Me.QtyRange)
 End Property
+
+'商品コードと数量の辞書型データ
+Public Function DataDict() As Scripting.Dictionary
+    Dim ProductsCodeData As Collection
+    Dim QtyData As Collection
+    Dim dict As New Scripting.Dictionary
+    
+    Set ProductsCodeData = Me.productsCode
+    Set QtyData = Me.Qty
+    
+    For i = 1 To ProductsCodeData.Count
+        dict.Add ProductsCodeData(i), QtyData(i)
+    Next
+    
+    Set DataDict = dict
+        
+End Function
 
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
@@ -139,21 +168,12 @@ Public Sub WriteQty(writeCollection As Collection)
     writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
 End Sub
 
-'保存ファイルパス
-Property Get SaveFilePath() As String
-    SaveFilePath = OrderDataDirPath & "\" & SaveFileName
-End Property
-
-Public Sub OpenWorkBook()
-    Set Me.Workbook = Workbooks.Open(SaveFilePath)
-End Sub
-
 Public Sub Save()
     ' 上書き保存のために警告メッセージをオフにする
     Application.DisplayAlerts = False
     
     ' ワークブックを保存（既存のファイルがあれば上書き保存）
-    Me.Workbook.SaveAs fileName:=Me.SaveFilePath, FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    Me.Workbook.SaveAs FileName:=Me.SaveFilePath, FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
     
     ' 警告メッセージを再度有効にする
     Application.DisplayAlerts = True
