@@ -24,7 +24,7 @@ Private DataStartRowNumber_ As Long
 
 Private Sub Class_Initialize()
 
-    OrderDataDirPath = "C:\Users\mfh077_user.MEFUREDMN\Desktop\excel-order-manage\発注管理\data"
+    OrderDataDirPath = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data"
 
     WorkSheetName_ = "Sheet1"
     
