@@ -21,10 +21,10 @@ Private CheckBoxColumnNumber_ As Integer
 
 Private Sub Class_Initialize()
 
-    WorkSheetName_ = "商品マスターフォーマット"
+    WorkSheetName_ = "商品マスターシート"
     
     ProductCodeColumnNumber_ = 3
-    DataStartRowNumber_ = 2
+    DataStartRowNumber_ = 3
     DataStartColumnNumber_ = 2
     CheckStateColumnNumber_ = 19
     CheckBoxColumnNumber_ = 1
@@ -64,6 +64,10 @@ End Property
 
 Property Get ProductCodeColumnNumber() As Integer
     ProductCodeColumnNumber = ProductCodeColumnNumber_
+End Property
+
+Property Get ProductCodeColumn() As String
+    ProductCodeColumn = NumberToLetter(Me.ProductCodeColumnNumber)
 End Property
 
 Property Get DataStartRowNumber() As Long
@@ -130,5 +134,33 @@ End Function
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
+
+'次に入力する商品情報が空白の行番号
+Public Function DataNextRowNumber() As Long
+    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).row + 1
+End Function
+'情報が記載されている最後の行番号
+Property Get DataEndRowNumber() As Long
+    Dim lastRow As Long
+    '商品データがない場合行範囲をずらす(無いと範囲にヘッダー行も含まれてしまう)
+    lastRow = Me.DataNextRowNumber - 1
+    If lastRow < Me.DataStartRowNumber Then
+        lastRow = Me.DataStartRowNumber
+    End If
+    DataEndRowNumber = lastRow
+End Property
+'商品コードがあるデータの範囲
+Property Get DataRange() As range
+    Dim strRng As String
+    strRng = Me.ProductCodeColumn & _
+             Me.DataStartRowNumber & _
+             ":" & _
+             Me.ProductCodeColumn & _
+             Me.DataEndRowNumber
+    Set DataRange = Me.Worksheet.range(strRng)
+End Property
+Public Sub Clear()
+    DataRange.EntireRow.Delete
+End Sub
 
 

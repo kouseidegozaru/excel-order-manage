@@ -5,16 +5,16 @@ Attribute VB_Name = "ButtonEvents"
 Sub Decide()
 
     Dim order As New OrderSheetAccesser
-    Dim search As New SearchSheetAccesser
-    Set search.Workbook = ActiveWorkbook
-    search.InitWorkSheet
+    Dim Search As New SearchSheetAccesser
+    Set Search.Workbook = ActiveWorkbook
+    Search.InitWorkSheet
     
     '変更のイベントを無視
     IsIgnoreChangeEvents = True
     
     '重複する商品コードを排除
     Dim writeData As Collection
-    Set writeData = FilterCollection(search.GetCheckedProductsCode, _
+    Set writeData = FilterCollection(Search.GetCheckedProductsCode, _
                                      order.ProductsCode)
                                      
     Dim startRowIndex As Long
@@ -46,16 +46,17 @@ Sub Decide()
 End Sub
 
 '発注入力シートに関する処理
-'検索フォーム呼び出し
-Sub search()
+'検索フォーム更新
+Sub Update()
 
     Application.ScreenUpdating = False
     
     Dim order As New OrderSheetAccesser
-    Dim search As New SearchSheetAccesser
+    Dim Search As New SearchSheetAccesser
     
-    search.NewWorkbook
-    search.CopyWorkSheet order.FormatSheet
+    Set Search.Workbook = order.Workbook
+    Search.InitWorkSheet
+    Search.Clear
     
     Dim DataBaseAccesser As New DataBaseAccesser
     Dim rs As ADODB.recordSet
@@ -65,27 +66,25 @@ Sub search()
     Dim rowIndex As Long
     Dim columnIndex As Integer
     
-    rowIndex = search.DataStartRowNumber
-    columnIndex = search.DataStartColumnNumber
-    
-    'ヘッダー書き込み
-    For i = 0 To rs.Fields.Count - 1
-        search.Cells(rowIndex, i + columnIndex) = rs.Fields(i).name
-    Next i
+    rowIndex = Search.DataStartRowNumber
+    columnIndex = Search.DataStartColumnNumber
     
     ' データの書き込み
     rs.MoveFirst
     Do While Not rs.EOF
-        rowIndex = rowIndex + 1
+        
         For i = 0 To rs.Fields.Count - 1
-            search.Cells(rowIndex, i + columnIndex) = rs.Fields(i).value
+            Search.Cells(rowIndex, i + columnIndex) = rs.Fields(i).value
         Next i
         
         ' チェックボックスの追加
-        search.AddCheckBox rowIndex
+        Search.AddCheckBox rowIndex
         
+        rowIndex = rowIndex + 1
         rs.MoveNext
     Loop
+    
+    Search.Worksheet.Activate
 
     Application.ScreenUpdating = True
     
