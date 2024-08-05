@@ -30,7 +30,7 @@ Private InputTargetDateRange_ As String
 Private Sub Class_Initialize()
     WorkBookName_ = "発注入力.xlsm"
     WorkSheetName_ = "発注入力"
-    FormatSheetName_ = "商品マスターフォーマット"
+    FormatSheetName_ = "商品マスターシート"
     
     ProductCodeColumnNumber_ = 1
     QtyColumnNumber_ = 10
