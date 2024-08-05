@@ -160,7 +160,32 @@ Property Get DataRange() As range
     Set DataRange = Me.Worksheet.range(strRng)
 End Property
 Public Sub Clear()
+    Me.DeleteAllCheckboxes
     DataRange.EntireRow.Delete
 End Sub
 
+Sub DeleteAllCheckboxes()
+    Dim ws As Worksheet
+    Dim cb As OLEObject
+    Dim shp As Shape
+
+    Set ws = Me.Worksheet
+
+    ' Form Controlsのチェックボックスを削除
+    For Each shp In ws.Shapes
+        If shp.Type = msoFormControl Then
+            If shp.FormControlType = xlCheckBox Then
+                shp.Delete
+            End If
+        End If
+    Next shp
+
+    ' ActiveX Controlsのチェックボックスを削除
+    For Each cb In ws.OLEObjects
+        If TypeName(cb.Object) = "CheckBox" Then
+            cb.Delete
+        End If
+    Next cb
+
+End Sub
 

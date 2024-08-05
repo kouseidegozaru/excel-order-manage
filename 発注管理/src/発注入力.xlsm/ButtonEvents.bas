@@ -89,3 +89,9 @@ Sub Update()
     Application.ScreenUpdating = True
     
 End Sub
+
+'商品検索シートの表示
+Sub Search()
+    Dim order As New OrderSheetAccesser
+    order.FormatSheet.Activate
+End Sub
