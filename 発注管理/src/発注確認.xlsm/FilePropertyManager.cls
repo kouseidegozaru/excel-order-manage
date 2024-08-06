@@ -22,7 +22,7 @@ Private Sub Class_Initialize()
     BreakIdentifier_ = "-"
 End Sub
 
-Property Let FilePath(targetFilePath As String)
+Property Let filePath(targetFilePath As String)
     filePath_ = targetFilePath
     fileName_ = GetFileName(filePath_)
 End Property
@@ -89,9 +89,9 @@ Private Function ExtractBetweenCharacters(ByVal str As String, ByVal startChar A
     End If
 End Function
 
-Private Function GetFileName(FilePath As String) As String
+Private Function GetFileName(filePath As String) As String
     Dim FileName As String
-    FileName = Mid(FilePath, InStrRev(FilePath, "\") + 1)
+    FileName = Mid(filePath, InStrRev(filePath, "\") + 1)
     GetFileName = FileName
 End Function
 
