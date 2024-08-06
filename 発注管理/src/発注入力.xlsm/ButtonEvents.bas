@@ -41,7 +41,7 @@ Sub Decide()
     
     IsIgnoreChangeEvents = False
     
-    order.Workbook.Activate
+    order.Worksheet.Activate
     
 End Sub
 
@@ -88,6 +88,16 @@ Sub Update()
 
     Application.ScreenUpdating = True
     
+End Sub
+
+'チェックボックスのクリア
+Sub ClearCheckBoxes()
+    Dim order As New OrderSheetAccesser
+    Dim Search As New SearchSheetAccesser
+    
+    Set Search.Workbook = order.Workbook
+    Search.InitWorkSheet
+    Search.ClearCheckBoxes
 End Sub
 
 '商品検索シートの表示

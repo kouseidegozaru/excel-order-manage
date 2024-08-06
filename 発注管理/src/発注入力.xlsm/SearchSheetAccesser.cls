@@ -98,7 +98,7 @@ Public Sub AddCheckBox(rowIndex As Long)
     
     ' チェックボックスの追加
     Dim cb As CheckBox
-    Set cb = ws.checkBoxes.add(Left:=ws.Cells(rowIndex, columnIndex).Left, _
+    Set cb = ws.CheckBoxes.add(Left:=ws.Cells(rowIndex, columnIndex).Left, _
                                Top:=ws.Cells(rowIndex, columnIndex).Top, _
                                Width:=ws.Cells(rowIndex, columnIndex).Width, _
                                Height:=ws.Cells(rowIndex, columnIndex).Height)
@@ -187,5 +187,21 @@ Sub DeleteAllCheckboxes()
         End If
     Next cb
 
+End Sub
+
+Sub ClearCheckBoxes()
+    Dim ws As Worksheet
+    Dim chkBox As CheckBox
+
+    Set ws = Me.Worksheet
+    
+    ' 各ワークシートのフォームコントロールチェックボックスをループ
+    For Each chkBox In ws.CheckBoxes
+        ' チェックボックスがTrueの場合
+        If chkBox.value = xlOn Then
+            chkBox.value = xlOff
+        End If
+    Next chkBox
+    
 End Sub
 
