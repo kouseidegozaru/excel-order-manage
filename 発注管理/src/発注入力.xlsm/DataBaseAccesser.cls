@@ -169,29 +169,30 @@ Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
     
     Dim query As String
     query = "SELECT " & _
-           "dbo.HM商品.入荷時間帯, " & _
-           "dbo.HM商品.品CD, " & _
-           "dbo.M仕入先.仕入先名 AS 発注先名, " & _
-           "Mメーカー.仕入先名 AS メーカー名, " & _
-           "dbo.HM商品.品名, " & _
-           "dbo.HM商品.規格, " & _
-           "dbo.HM商品.計区, " & _
-           "dbo.HM商品.入数, " & _
-           "dbo.HM商品.合わせ数, " & _
-           "'' AS 数量, " & _
-           "dbo.HM商品.[ケス単位] AS 荷姿, " & _
-           "dbo.HM商品.仕入単価, " & _
-           "'' AS 仕入金額, " & _
-           "dbo.HM商品.LT, " & _
-           "dbo.HM商品.商品備考, " & _
-           "Mメーカー.仕入先ヨミガナ AS メーカー読み " & _
-           "FROM " & _
-           "dbo.HM商品 " & _
-           "INNER JOIN dbo.M仕入先 ON dbo.HM商品.仕入先CD = dbo.M仕入先.仕入先CD " & _
-           "INNER JOIN dbo.M仕入先 AS Mメーカー ON dbo.HM商品.[メーカーCD] = Mメーカー.仕入先CD " & _
-           "WHERE " & _
-           "dbo.HM商品.部門CD = ? " & _
-           "AND dbo.HM商品.廃盤日付 IS NULL;"
+       "dbo.HM商品.入荷時間帯, " & _
+       "dbo.HM商品.品CD, " & _
+       "dbo.M仕入先.仕入先名 AS 発注先名, " & _
+       "Mメーカー.仕入先名 AS メーカー名, " & _
+       "dbo.HM商品.品名, " & _
+       "dbo.HM商品.規格, " & _
+       "dbo.HM商品.計区, " & _
+       "dbo.HM商品.入数, " & _
+       "dbo.HM商品.合わせ数, " & _
+       "'' AS 数量, " & _
+       "dbo.HM商品.[ケス単位] AS 荷姿, " & _
+       "dbo.HM商品.仕入単価, " & _
+       "'' AS 仕入金額, " & _
+       "dbo.HM商品.LT, " & _
+       "dbo.HM商品.商品備考, " & _
+       "Mメーカー.仕入先ヨミガナ AS メーカー読み " & _
+       "FROM " & _
+       "dbo.HM商品 " & _
+       "INNER JOIN dbo.M仕入先 ON dbo.HM商品.仕入先CD = dbo.M仕入先.仕入先CD " & _
+       "INNER JOIN dbo.M仕入先 AS Mメーカー ON dbo.HM商品.[メーカーCD] = Mメーカー.仕入先CD " & _
+       "WHERE " & _
+       "dbo.HM商品.部門CD = ? " & _
+       "AND dbo.HM商品.廃盤日付 IS NULL " & _
+       "ORDER BY Mメーカー.仕入先名 ASC, dbo.HM商品.品名 ASC;"
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
