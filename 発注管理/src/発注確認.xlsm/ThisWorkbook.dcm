@@ -10,4 +10,5 @@ Attribute VB_Exposed = True
 Private Sub Workbook_Open()
     SetValidations
     Loads
+    DeleteDataFiles
 End Sub

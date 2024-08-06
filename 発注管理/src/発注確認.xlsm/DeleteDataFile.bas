@@ -1,5 +1,5 @@
 Attribute VB_Name = "DeleteDataFile"
-Sub DeleteDataFilles()
+Sub DeleteDataFiles()
     
     Dim data As New DataSheetAccesser
     Dim fileProperty As New FilePropertyManager
