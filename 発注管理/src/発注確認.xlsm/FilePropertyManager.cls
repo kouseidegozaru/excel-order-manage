@@ -53,7 +53,7 @@ Property Get TargetDate() As Date
         day = CInt(Right(strDate, 2))
         TargetDate = DateSerial(year, month, day)
     Else
-        TargetDate = #1/1/1900# ' デフォルト値
+        TargetDate = Date ' デフォルト値
     End If
 End Property
 Property Get DateIdentifier() As String
