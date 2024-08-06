@@ -90,6 +90,16 @@ Sub Update()
     
 End Sub
 
+'チェックボックスのクリア
+Sub ClearCheckBoxes()
+    Dim order As New OrderSheetAccesser
+    Dim Search As New SearchSheetAccesser
+    
+    Set Search.Workbook = order.Workbook
+    Search.InitWorkSheet
+    Search.ClearCheckBoxes
+End Sub
+
 '商品検索シートの表示
 Sub Search()
     Dim order As New OrderSheetAccesser
