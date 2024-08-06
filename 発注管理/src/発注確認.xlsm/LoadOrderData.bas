@@ -49,7 +49,7 @@ Sub LoadFileProperty()
         'フィルターの結果が存在する場合
         If filePathCollection.Count > 0 Then
             'ファイル情報の取得準備
-            fileProperty.FilePath = data.DataDirPath & "\" & filePathCollection(1)
+            fileProperty.filePath = data.DataDirPath & "\" & filePathCollection(1)
             'ファイルプロパティの表示
             load.AddFileProperty userName, True, fileProperty.UpdatedDate
         Else
@@ -91,7 +91,7 @@ Sub LoadData()
         'データの取得準備
         data.FileName = FileName
         'ファイル情報の取得準備
-        fileProperty.FilePath = data.FilePath
+        fileProperty.filePath = data.filePath
         '商品コードと数量の合計を取得(辞書型)
         Set resultDict = MergeDictionaries(resultDict, data.DataDict)
         'データワークブックを閉じる

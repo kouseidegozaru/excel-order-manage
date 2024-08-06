@@ -40,8 +40,8 @@ Property Get DataDirPath()
     DataDirPath = OrderDataDirPath
 End Property
 
-Property Get FilePath()
-    FilePath = Me.DataDirPath & "\" & fileName_
+Property Get filePath()
+    filePath = Me.DataDirPath & "\" & fileName_
 End Property
 
 Property Let FileName(targetFileName As String)
@@ -52,7 +52,7 @@ Property Let FileName(targetFileName As String)
 End Property
 
 Public Sub InitWorkBook()
-    Set WorkBook_ = Workbooks.Open(Me.FilePath)
+    Set WorkBook_ = Workbooks.Open(Me.filePath)
 End Sub
 
 Public Sub InitWorkSheet()
