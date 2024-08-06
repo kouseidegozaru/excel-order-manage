@@ -11,7 +11,7 @@ Sub LoadFileProperty()
     Dim data As New DataSheetAccesser
     Dim DataStorage As New DataBaseAccesser
     Dim fileProperty As New FilePropertyManager
-    Dim filter As New fileFilter
+    Dim filter As New FileFilter
     Dim users As New UserCodeAccesser
     
     Dim BumonCodeFilter As String
@@ -66,7 +66,7 @@ Sub LoadData()
     Dim load As New LoadSheetAccesser
     Dim data As New DataSheetAccesser
     Dim fileProperty As New FilePropertyManager
-    Dim filter As New fileFilter
+    Dim filter As New FileFilter
     
     load.ClearData
     

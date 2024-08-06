@@ -39,13 +39,7 @@ Private Sub HookCellChange(ByVal target As range)
         
 '行の削除を監視
         If .IsDeleted(lastUpdatedRowCnt, order.DataNextRowNumber) Then
-            IsIgnoreChangeEvents = True
-            
-            '保存
-            SaveData
-            
-            IsIgnoreChangeEvents = False
-            .Ignore True
+
         End If
         
           
@@ -84,8 +78,6 @@ Private Sub HookCellChange(ByVal target As range)
             
             ' 商品情報の表示
             DisplayProductsInfo target
-            '保存
-            SaveData
             
             IsIgnoreChangeEvents = False
         End If
@@ -94,12 +86,7 @@ Private Sub HookCellChange(ByVal target As range)
     
 '数量の変更を監視
         If .IsChanged(order.QtyRange) Then
-            IsIgnoreChangeEvents = True
-            
-            '保存
-            SaveData
-            
-            IsIgnoreChangeEvents = False
+
         End If
         
         
