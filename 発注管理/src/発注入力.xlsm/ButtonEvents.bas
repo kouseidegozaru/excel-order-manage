@@ -41,7 +41,7 @@ Sub Decide()
     
     IsIgnoreChangeEvents = False
     
-    order.Workbook.Activate
+    order.Worksheet.Activate
     
 End Sub
 
