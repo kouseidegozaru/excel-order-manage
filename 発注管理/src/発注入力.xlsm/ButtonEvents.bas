@@ -95,3 +95,9 @@ Sub Search()
     Dim order As New OrderSheetAccesser
     order.FormatSheet.Activate
 End Sub
+
+'送信
+Sub Post()
+    SaveData
+    MsgBox "データを送信しました"
+End Sub
