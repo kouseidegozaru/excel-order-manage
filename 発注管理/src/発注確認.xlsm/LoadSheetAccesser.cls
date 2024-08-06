@@ -9,7 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 '発注入力フォームのセル番地の設定
 
-Private WorkBookName_ As String
 Private WorkBook_ As Workbook
 
 Private WorkSheetName_ As String
@@ -33,7 +32,6 @@ Private FilePropertyUpdateTimeRowNumber_ As Integer
 Private CompleteString_ As String
 
 Private Sub Class_Initialize()
-    WorkBookName_ = "発注確認.xlsm"
     WorkSheetName_ = "発注確認"
     
     CompleteString_ = "◎"
@@ -57,7 +55,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Private Sub InitWorkBook()
-    Set WorkBook_ = Workbooks(WorkBookName_)
+    Set WorkBook_ = ThisWorkbook
 End Sub
 
 Private Sub InitWorkSheet()
