@@ -189,3 +189,22 @@ Sub DeleteAllCheckboxes()
 
 End Sub
 
+Sub ClearCheckBoxes()
+    Dim ws As Worksheet
+    Dim cb As OLEObject
+
+    Set ws = Me.Worksheet
+    
+    ' 各ワークシートのOLEObjectをループ
+    For Each cb In ws.OLEObjects
+        ' OLEObjectがチェックボックスの場合
+        If TypeName(cb.Object) = "CheckBox" Then
+            ' チェックボックスがTrueの場合
+            If cb.Object.value = True Then
+                cb.Object.value = False
+            End If
+        End If
+    Next cb
+    
+End Sub
+
