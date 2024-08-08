@@ -77,8 +77,8 @@ Property Get QtyColumnNumber() As Integer
     QtyColumnNumber = QtyColumnNumber_
 End Property
 
-Property Get qtyColumn() As String
-    qtyColumn = NumberToLetter(Me.QtyColumnNumber)
+Property Get QtyColumn() As String
+    QtyColumn = NumberToLetter(Me.QtyColumnNumber)
 End Property
 
 Property Get DataStartRowNumber() As Long
@@ -115,10 +115,10 @@ End Property
 '”­’“ü—Í‚É‚ ‚é¤•i‚Ì”—Ê‚Ì”ÍˆÍ
 Property Get QtyRange() As range
     Dim strRng As String
-    strRng = Me.qtyColumn & _
+    strRng = Me.QtyColumn & _
              Me.DataStartRowNumber & _
              ":" & _
-             Me.qtyColumn & _
+             Me.QtyColumn & _
              Me.DataEndRowNumber
     Set QtyRange = Me.Worksheet.range(strRng)
 End Property
