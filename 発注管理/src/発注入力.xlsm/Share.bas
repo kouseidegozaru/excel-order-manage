@@ -58,3 +58,13 @@ Function FilterCollection(baseCol As Collection, filterCol As Collection) As Col
     Set FilterCollection = resultCol
 End Function
 
+'Number‚ª MultipleOf‚Ì”{”‚Ìê‡‚ÉTrue‚ğ•Ô‚·
+Function IsMultiple(Number As Long, MultipleOf As Long) As Boolean
+    If MultipleOf = 0 Then
+        IsMultiple = False
+    Else
+        IsMultiple = (Number Mod MultipleOf = 0)
+    End If
+End Function
+
+
