@@ -71,3 +71,13 @@ Private Sub ChangeBackColor(cell As Object, r As Integer, g As Integer, b As Int
         cell.Borders(xlInsideHorizontal).LineStyle = xlContinuous
 End Sub
 
+'Žd“ü‹àŠz‚ÌŒvŽZŽ®‚ð•Ô‚·
+Private Function GetAmountCalcFormula(priceColumnIndex As Integer, priceRowIndex As Long, qtyColumnIndex As Integer, qtyRowIndex As Long) As String
+    GetAmountCalcFormula = "=IFERROR(" & _
+                            NumberToLetter(priceColumnIndex) & _
+                            priceRowIndex & _
+                            "*" & _
+                            NumberToLetter(qtyColumnIndex) & _
+                            qtyRowIndex & _
+                            ",0)"
+End Function
