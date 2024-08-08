@@ -16,6 +16,8 @@ Private WorkSheet_ As Worksheet
 
 Private ProductCodeColumnNumber_ As Integer
 Private QtyColumnNumber_ As Integer
+Private PriceColumnNumber_ As Integer
+Private AmountColumnNumber_ As Integer
 Private DataStartRowNumber_ As Long
 
 Private InputBumonCodeRange_ As String
@@ -38,6 +40,8 @@ Private Sub Class_Initialize()
     
     ProductCodeColumnNumber_ = 1
     QtyColumnNumber_ = 11
+    PriceColumnNumber_ = 13
+    AmountColumnNumber_ = 14
     DataStartRowNumber_ = 9
     
     FilePropertyStartColumnNumber_ = 2
@@ -84,6 +88,14 @@ End Property
 
 Property Get QtyColumn() As String
     QtyColumn = NumberToLetter(Me.QtyColumnNumber)
+End Property
+
+Property Get AmountColumnNumber() As Integer
+    AmountColumnNumber = AmountColumnNumber_
+End Property
+
+Property Get PriceColumnNumber() As Integer
+    PriceColumnNumber = PriceColumnNumber_
 End Property
 
 Property Get FilePropertyStartColumnNumber() As Integer

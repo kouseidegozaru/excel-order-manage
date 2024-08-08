@@ -12,6 +12,15 @@ Sub DisplayProductsInfo(targetRng As Range)
     ' 処理する列の指定
     Dim targetColumn As Integer
     targetColumn = load.ProductCodeColumnNumber
+    '数量の列の指定
+    Dim QtyColumn As Integer
+    QtyColumn = load.QtyColumnNumber
+    '仕入単価の列の指定
+    Dim priceColumn As Integer
+    priceColumn = load.PriceColumnNumber
+    '仕入金額の列の指定
+    Dim amountColumn As Integer
+    amountColumn = load.AmountColumnNumber
     
     Dim cell As Range
     
@@ -28,13 +37,8 @@ Sub DisplayProductsInfo(targetRng As Range)
                 
                 ' レコードセットをセルに貼り付ける
                 If Not rs.EOF Then
-                    Dim startRow As Long
-                    Dim startCol As Long
                     Dim i As Integer
                     
-                    ' 貼り付け開始セルを指定（セルの行と同じ行に）
-                    startRow = cell.Row
-                    startCol = cell.Column + 1 ' 左のセルから1列右に貼り付け
                     
                     ' レコードセットをワークシートに貼り付け
 '                    rs.MoveFirst
@@ -42,6 +46,9 @@ Sub DisplayProductsInfo(targetRng As Range)
                         For i = 0 To rs.Fields.Count - 1
                             cell.Offset(0, i + 1).value = rs.Fields(i).value
                         Next i
+                        '仕入金額の計算式を設定
+                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(QtyColumn, cell.Row, priceColumn, cell.Row)
+                        
                         rs.MoveNext
                     Loop
                 End If
@@ -71,4 +78,14 @@ Private Sub ChangeBackColor(cell As Object, r As Integer, g As Integer, b As Int
         cell.Borders(xlInsideHorizontal).LineStyle = xlContinuous
 End Sub
 
+'仕入金額の計算式を返す
+Private Function GetAmountCalcFormula(qtyColumnIndex As Integer, qtyRowIndex As Long, priceColumnIndex As Integer, priceRowIndex As Long) As String
+    GetAmountCalcFormula = "=IFERROR(" & _
+                            NumberToLetter(qtyColumnIndex) & _
+                            qtyRowIndex & _
+                            "*" & _
+                            NumberToLetter(priceColumnIndex) & _
+                            priceRowIndex & _
+                            ",0)"
+End Function
 
