@@ -31,7 +31,7 @@ Private Sub Class_Initialize()
     FormatSheetName_ = "商品マスターシート"
     
     ProductCodeColumnNumber_ = 1
-    QtyColumnNumber_ = 10
+    QtyColumnNumber_ = 11
     DataStartRowNumber_ = 5
     
     InputBumonCodeRange_ = "A2"
