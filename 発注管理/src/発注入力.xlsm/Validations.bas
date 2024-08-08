@@ -61,3 +61,27 @@ Private Sub SetDate()
         .ShowError = True ' エラーメッセージを表示
     End With
 End Sub
+
+'合わせ数のバリデーションチェック
+Public Function IsMatchQty() As Boolean
+    Dim order As New OrderSheetAccesser
+    Dim i As Long
+    
+    '数量
+    Dim qtyCol As Collection
+    '合わせ数
+    Dim matchCol As Collection
+    
+    Set qtyCol = order.Qty
+    Set matchCol = order.Match
+    
+    IsMatchQty = True
+    
+    For i = 1 To matchCol.Count
+        If Not IsMultiple(qtyCol(i), matchCol(i)) Then
+            IsMatchQty = False
+            Exit For
+        End If
+    Next i
+    
+End Function
