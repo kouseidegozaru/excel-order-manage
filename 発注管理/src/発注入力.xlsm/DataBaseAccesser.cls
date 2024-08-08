@@ -33,18 +33,18 @@ Public Function ExistsUser(ByVal UserID As Integer) As Boolean
     Set parameters = CreateObject("Scripting.Dictionary")
     parameters.add "担当者CD", UserID
 
-    Dim Result As Object
-    Set Result = Executor.ExecuteSelect(query, parameters)
+    Dim result As Object
+    Set result = Executor.ExecuteSelect(query, parameters)
     
-    If Not Result.EOF And Result.Fields(0).value > 0 Then
+    If Not result.EOF And result.Fields(0).value > 0 Then
         ExistsUser = True
     Else
         ExistsUser = False
     End If
     
     ' Recordsetを閉じる
-    Result.Close
-    Set Result = Nothing
+    result.Close
+    Set result = Nothing
     Set Executor = Nothing
 End Function
 
@@ -61,18 +61,18 @@ Public Function ExistsBumon(ByVal BumonCD As Integer) As Boolean
     Set parameters = CreateObject("Scripting.Dictionary")
     parameters.add "部門CD", BumonCD
 
-    Dim Result As Object
-    Set Result = Executor.ExecuteSelect(query, parameters)
+    Dim result As Object
+    Set result = Executor.ExecuteSelect(query, parameters)
     
-    If Not Result.EOF And Result.Fields(0).value > 0 Then
+    If Not result.EOF And result.Fields(0).value > 0 Then
         ExistsBumon = True
     Else
         ExistsBumon = False
     End If
     
     ' Recordsetを閉じる
-    Result.Close
-    Set Result = Nothing
+    result.Close
+    Set result = Nothing
     Set Executor = Nothing
 End Function
 
@@ -90,18 +90,18 @@ Public Function ExistsProducts(ByVal BumonCD As Integer, ByVal ProductsCD As Lon
     parameters.add "部門CD", BumonCD
     parameters.add "品CD", ProductsCD
 
-    Dim Result As Object
-    Set Result = Executor.ExecuteSelect(query, parameters)
+    Dim result As Object
+    Set result = Executor.ExecuteSelect(query, parameters)
     
-    If Not Result.EOF And Result.Fields(0).value > 0 Then
+    If Not result.EOF And result.Fields(0).value > 0 Then
         ExistsProducts = True
     Else
         ExistsProducts = False
     End If
     
     ' Recordsetを閉じる
-    Result.Close
-    Set Result = Nothing
+    result.Close
+    Set result = Nothing
     Set Executor = Nothing
 End Function
 
@@ -118,18 +118,18 @@ Public Function GetUserName(ByVal UserID As Integer) As String
     Set parameters = CreateObject("Scripting.Dictionary")
     parameters.add "担当者CD", UserID
 
-    Dim Result As Object
-    Set Result = Executor.ExecuteSelect(query, parameters)
+    Dim result As Object
+    Set result = Executor.ExecuteSelect(query, parameters)
     
-    If Not Result.EOF Then
-        GetUserName = Result.Fields("担当者名").value
+    If Not result.EOF Then
+        GetUserName = result.Fields("担当者名").value
     Else
         GetUserName = ""
     End If
     
     ' Recordsetを閉じる
-    Result.Close
-    Set Result = Nothing
+    result.Close
+    Set result = Nothing
     Set Executor = Nothing
 End Function
 
@@ -146,18 +146,18 @@ Public Function GetBumonName(ByVal BumonCD As Integer) As String
     Set parameters = CreateObject("Scripting.Dictionary")
     parameters.add "部門CD", BumonCD
 
-    Dim Result As Object
-    Set Result = Executor.ExecuteSelect(query, parameters)
+    Dim result As Object
+    Set result = Executor.ExecuteSelect(query, parameters)
     
-    If Not Result.EOF Then
-        GetBumonName = Result.Fields("部門名").value
+    If Not result.EOF Then
+        GetBumonName = result.Fields("部門名").value
     Else
         GetBumonName = ""
     End If
     
     ' Recordsetを閉じる
-    Result.Close
-    Set Result = Nothing
+    result.Close
+    Set result = Nothing
     Set Executor = Nothing
 End Function
 
@@ -198,10 +198,10 @@ Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
     Set parameters = CreateObject("Scripting.Dictionary")
     parameters.add "部門CD", BumonCD
 
-    Dim Result As ADODB.recordSet
-    Set Result = Executor.ExecuteSelect(query, parameters)
+    Dim result As ADODB.recordSet
+    Set result = Executor.ExecuteSelect(query, parameters)
     
-    Set GetAllProducts = Result
+    Set GetAllProducts = result
 End Function
 
 ' 部門の条件に合う商品取得
@@ -242,10 +242,10 @@ Public Function GetProduct(ByVal BumonCD As Integer, ProductsCD As Long) As ADOD
     parameters.add "部門CD", BumonCD
     parameters.add "品CD", ProductsCD
 
-    Dim Result As ADODB.recordSet
-    Set Result = Executor.ExecuteSelect(query, parameters)
+    Dim result As ADODB.recordSet
+    Set result = Executor.ExecuteSelect(query, parameters)
     
-    Set GetProduct = Result
+    Set GetProduct = result
 End Function
 
 ' 商品マスターの列名取得
@@ -260,9 +260,9 @@ Public Function GetTableColumn() As ADODB.recordSet
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
 
-    Dim Result As ADODB.recordSet
-    Set Result = Executor.ExecuteSelect(query, parameters)
+    Dim result As ADODB.recordSet
+    Set result = Executor.ExecuteSelect(query, parameters)
     
-    Set GetTableColumn = Result
+    Set GetTableColumn = result
 End Function
 

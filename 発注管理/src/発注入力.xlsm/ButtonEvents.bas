@@ -108,6 +108,16 @@ End Sub
 
 '送信
 Sub Post()
+
+    Dim result As VbMsgBoxResult
+    '合わせ数と数量のチェック
+    If Not IsMatchQty Then
+        result = MsgBox("合わせ数と一致しない数量があります。送信しますか?", vbYesNo + vbQuestion, "確認")
+        If result = vbNo Then
+            End
+        End If
+    End If
+        
     SaveData
     MsgBox "データを送信しました"
 End Sub
