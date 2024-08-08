@@ -26,7 +26,7 @@ Private Sub Class_Initialize()
     ProductCodeColumnNumber_ = 3
     DataStartRowNumber_ = 3
     DataStartColumnNumber_ = 2
-    CheckStateColumnNumber_ = 19
+    CheckStateColumnNumber_ = 20
     CheckBoxColumnNumber_ = 1
     
 End Sub

@@ -171,7 +171,8 @@ Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
     query = "SELECT " & _
        "dbo.HM商品.入荷時間帯, " & _
        "dbo.HM商品.品CD, " & _
-       "dbo.M仕入先.仕入先名 AS 発注先名, " & _
+       "dbo.M仕入先.仕入先名 AS 仕入先名, " & _
+       "M発注先.仕入先名 AS 発注先名, " & _
        "Mメーカー.仕入先名 AS メーカー名, " & _
        "dbo.HM商品.品名, " & _
        "dbo.HM商品.規格, " & _
@@ -185,12 +186,11 @@ Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
        "dbo.HM商品.LT, " & _
        "dbo.HM商品.商品備考, " & _
        "Mメーカー.仕入先ヨミガナ AS メーカー読み " & _
-       "FROM " & _
-       "dbo.HM商品 " & _
+       "FROM dbo.HM商品 " & _
        "INNER JOIN dbo.M仕入先 ON dbo.HM商品.仕入先CD = dbo.M仕入先.仕入先CD " & _
        "INNER JOIN dbo.M仕入先 AS Mメーカー ON dbo.HM商品.[メーカーCD] = Mメーカー.仕入先CD " & _
-       "WHERE " & _
-       "dbo.HM商品.部門CD = ? " & _
+       "INNER JOIN dbo.M仕入先 AS M発注先 ON dbo.HM商品.[発注先CD] = M発注先.仕入先CD " & _
+       "WHERE dbo.HM商品.部門CD = ? " & _
        "AND dbo.HM商品.廃盤日付 IS NULL " & _
        "ORDER BY Mメーカー.仕入先名 ASC, dbo.HM商品.品名 ASC;"
     
@@ -213,7 +213,8 @@ Public Function GetProduct(ByVal BumonCD As Integer, ProductsCD As Long) As ADOD
     Dim query As String
     query = "SELECT " & _
            "dbo.HM商品.入荷時間帯, " & _
-           "dbo.M仕入先.仕入先名 AS 発注先名, " & _
+           "dbo.M仕入先.仕入先名 AS 仕入先名, " & _
+           "M発注先.仕入先名 AS 発注先名, " & _
            "Mメーカー.仕入先名 AS メーカー名, " & _
            "dbo.HM商品.品名, " & _
            "dbo.HM商品.規格, " & _
@@ -227,10 +228,10 @@ Public Function GetProduct(ByVal BumonCD As Integer, ProductsCD As Long) As ADOD
            "dbo.HM商品.LT, " & _
            "dbo.HM商品.商品備考, " & _
            "Mメーカー.仕入先ヨミガナ AS メーカー読み " & _
-           "FROM " & _
-           "dbo.HM商品 " & _
+           "FROM dbo.HM商品 " & _
            "INNER JOIN dbo.M仕入先 ON dbo.HM商品.仕入先CD = dbo.M仕入先.仕入先CD " & _
            "INNER JOIN dbo.M仕入先 AS Mメーカー ON dbo.HM商品.[メーカーCD] = Mメーカー.仕入先CD " & _
+           "INNER JOIN dbo.M仕入先 AS M発注先 ON dbo.HM商品.[発注先CD] = M発注先.仕入先CD " & _
            "WHERE " & _
            "dbo.HM商品.部門CD = ? " & _
            "AND dbo.HM商品.品CD = ? " & _

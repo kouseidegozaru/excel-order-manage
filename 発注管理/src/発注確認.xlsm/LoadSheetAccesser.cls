@@ -37,7 +37,7 @@ Private Sub Class_Initialize()
     CompleteString_ = "Åù"
     
     ProductCodeColumnNumber_ = 1
-    QtyColumnNumber_ = 10
+    QtyColumnNumber_ = 11
     DataStartRowNumber_ = 9
     
     FilePropertyStartColumnNumber_ = 2
