@@ -18,6 +18,8 @@ Private FormatSheet_ As Worksheet
 
 Private ProductCodeColumnNumber_ As Integer
 Private QtyColumnNumber_ As Integer
+Private PriceColumnNumber_ As Integer
+Private AmountColumnNumber_ As Integer
 Private DataStartRowNumber_ As Long
 
 Private InputBumonCodeRange_ As String
@@ -32,6 +34,8 @@ Private Sub Class_Initialize()
     
     ProductCodeColumnNumber_ = 1
     QtyColumnNumber_ = 11
+    PriceColumnNumber_ = 13
+    AmountColumnNumber_ = 14
     DataStartRowNumber_ = 5
     
     InputBumonCodeRange_ = "A2"
@@ -83,8 +87,14 @@ Property Get QtyColumnNumber() As Integer
     QtyColumnNumber = QtyColumnNumber_
 End Property
 
-Property Get QtyColumn() As String
-    QtyColumn = NumberToLetter(Me.QtyColumnNumber)
+Property Get qtyColumn() As String
+    qtyColumn = NumberToLetter(Me.QtyColumnNumber)
+End Property
+Property Get AmountColumnNumber() As Integer
+    AmountColumnNumber = AmountColumnNumber_
+End Property
+Property Get PriceColumnNumber() As Integer
+    PriceColumnNumber = PriceColumnNumber_
 End Property
 
 Property Get DataStartRowNumber() As Long
@@ -93,7 +103,7 @@ End Property
 
 '次に入力する商品情報が空白の行番号
 Public Function DataNextRowNumber() As Long
-    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).row + 1
+    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
 End Function
 
 '商品情報が記載されている最後の行番号
@@ -121,10 +131,10 @@ End Property
 '発注入力にある商品の数量の範囲
 Property Get QtyRange() As range
     Dim strRng As String
-    strRng = Me.QtyColumn & _
+    strRng = Me.qtyColumn & _
              Me.DataStartRowNumber & _
              ":" & _
-             Me.QtyColumn & _
+             Me.qtyColumn & _
              Me.DataEndRowNumber
     Set QtyRange = Me.Worksheet.range(strRng)
 End Property

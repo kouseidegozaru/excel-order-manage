@@ -122,7 +122,7 @@ Public Function GetCheckedProductsCode() As Collection
     productsColumnIndex = Me.ProductCodeColumnNumber
     checkedStateColumnIndex = Me.CheckStateColumnNumber
     
-    For i = 1 To ws.Cells(ws.Rows.Count, productsColumnIndex).End(xlUp).row
+    For i = 1 To ws.Cells(ws.Rows.Count, productsColumnIndex).End(xlUp).Row
         If ws.Cells(i, checkedStateColumnIndex).value = True Then
             checkedProductsCode.add ws.Cells(i, productsColumnIndex).value
         End If
@@ -137,7 +137,7 @@ End Property
 
 '次に入力する商品情報が空白の行番号
 Public Function DataNextRowNumber() As Long
-    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).row + 1
+    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
 End Function
 '情報が記載されている最後の行番号
 Property Get DataEndRowNumber() As Long
