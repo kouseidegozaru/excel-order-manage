@@ -121,4 +121,3 @@ Sub Post()
     SaveData
     MsgBox "データを送信しました"
 End Sub
-

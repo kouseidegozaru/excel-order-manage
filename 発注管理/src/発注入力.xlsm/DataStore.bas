@@ -7,18 +7,18 @@ Sub SaveData()
     Application.ScreenUpdating = False
 
     Dim order As New OrderSheetAccesser
-    Dim data As New DataSheetAccesser
-    data.NewWorkbook
-    data.InitWorkSheet
+    Dim Data As New DataSheetAccesser
+    Data.NewWorkbook
+    Data.InitWorkSheet
     
     '商品コードデータ
-    data.WriteProductsCode order.ProductsCode
+    Data.WriteProductsCode order.ProductsCode
     '数量データ
-    data.WriteQty order.Qty
+    Data.WriteQty order.Qty
     
     '保存
-    data.Save
-    data.CloseWorkBook
+    Data.Save
+    Data.CloseWorkBook
     
     Application.ScreenUpdating = True
     
@@ -30,28 +30,28 @@ Sub LoadData()
     Application.ScreenUpdating = False
     
     Dim order As New OrderSheetAccesser
-    Dim data As New DataSheetAccesser
+    Dim Data As New DataSheetAccesser
     
     '発注入力の商品情報を全て削除
     order.ProductsCodeRange.EntireRow.Delete
     
     'ファイルが存在しない場合は処理終了
-    If Dir(data.SaveFilePath) = "" Then
+    If Dir(Data.SaveFilePath) = "" Then
         End
     End If
     
-    data.OpenWorkBook
-    data.InitWorkSheet
+    Data.OpenWorkBook
+    Data.InitWorkSheet
     
     '商品コードを入力
-    order.WriteProductsCode data.ProductsCode
+    order.WriteProductsCode Data.ProductsCode
     '商品情報表示
     DisplayProductsInfo order.ProductsCodeRange
     '数量を入力
-    order.WriteQty data.Qty
+    order.WriteQty Data.Qty
     
     'データワークブックを閉じる
-    data.CloseWorkBook
+    Data.CloseWorkBook
     
     Application.ScreenUpdating = True
 End Sub
