@@ -21,6 +21,8 @@ Private MatchColumnNumber_ As Integer
 Private QtyColumnNumber_ As Integer
 Private PriceColumnNumber_ As Integer
 Private AmountColumnNumber_ As Integer
+
+Private DataHeaderRowNumber_ As Long
 Private DataStartRowNumber_ As Long
 
 Private InputBumonCodeRange_ As String
@@ -38,6 +40,8 @@ Private Sub Class_Initialize()
     QtyColumnNumber_ = 11
     PriceColumnNumber_ = 13
     AmountColumnNumber_ = 14
+    
+    DataHeaderRowNumber_ = 4
     DataStartRowNumber_ = 5
     
     InputBumonCodeRange_ = "A2"
@@ -77,6 +81,10 @@ Property Get FormatSheet() As Worksheet
     Set FormatSheet = FormatSheet_
 End Property
 
+Property Get DataHeaderRowNumber() As Long
+    DataHeaderRowNumber = DataHeaderRowNumber_
+End Property
+
 Property Get ProductCodeColumnNumber() As Integer
     ProductCodeColumnNumber = ProductCodeColumnNumber_
 End Property
@@ -109,7 +117,10 @@ End Property
 Property Get DataStartRowNumber() As Long
     DataStartRowNumber = DataStartRowNumber_
 End Property
-
+'商品情報が記載されているの最後の列番号
+Public Function DataEndColumnNumber() As Integer
+    DataEndColumnNumber = Me.Worksheet.Cells(Me.DataHeaderRowNumber, Me.Worksheet.Columns.Count).End(xlToLeft).Column
+End Function
 '次に入力する商品情報が空白の行番号
 Public Function DataNextRowNumber() As Long
     DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
