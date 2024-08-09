@@ -288,14 +288,6 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
 
-Public Sub WriteProductsCode(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
-End Sub
-
-Public Sub WriteQty(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
-End Sub
-
 Public Sub WriteAllData(targetData As Variant) '“ñŽŸŒ³”z—ñ‚ðŽó‚¯Žæ‚é
     writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, targetData
 End Sub
