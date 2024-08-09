@@ -145,6 +145,8 @@ Public Sub WriteQty(writeCollection As Collection)
     writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
 End Sub
 
+public sub
+
 '保存ファイルパス
 Property Get SaveFilePath() As String
     SaveFilePath = OrderDataDirPath & "\" & SaveFileName
