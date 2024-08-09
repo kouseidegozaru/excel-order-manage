@@ -289,11 +289,15 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
 End Property
 
 Public Sub WriteProductsCode(writeCollection As Collection)
-    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
+    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
 End Sub
 
 Public Sub WriteQty(writeCollection As Collection)
-    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
+    writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
+End Sub
+
+Public Sub WriteAllData(writeData As Variant) '“ñŽŸŒ³”z—ñ‚ðŽó‚¯Žæ‚é
+    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeData
 End Sub
 
 

@@ -23,23 +23,23 @@ Function NumberToLetter(ByVal num As Integer) As String
 End Function
 
 ' データをシートに書き込む
-Sub WriteData(ws As Worksheet, startRowIndex As Long, startColIndex As Integer, WriteData As Variant)
+Sub writeData(ws As Worksheet, startRowIndex As Long, startColIndex As Integer, writeData As Variant)
     Dim i As Long, j As Long
     Dim item As Variant
     Dim rowCount As Long, colCount As Long
 
     ' writeDataが配列かコレクションかを確認
-    If IsArray(WriteData) Then
+    If IsArray(writeData) Then
         ' 配列の場合
-        For i = LBound(WriteData, 1) To UBound(WriteData, 1)
-            For j = LBound(WriteData, 2) To UBound(WriteData, 2)
-                ws.Cells(startRowIndex + i, startColIndex + j).value = WriteData(i, j)
+        For i = LBound(writeData, 1) To UBound(writeData, 1)
+            For j = LBound(writeData, 2) To UBound(writeData, 2)
+                ws.Cells(startRowIndex + i, startColIndex + j).value = writeData(i, j)
             Next j
         Next i
-    ElseIf TypeName(WriteData) = "Collection" Then
+    ElseIf TypeName(writeData) = "Collection" Then
         ' コレクションの場合
         rowCount = 0
-        For Each item In WriteData
+        For Each item In writeData
             If IsArray(item) Then
                 ' 内部配列の長さを取得
                 colCount = UBound(item, 2) - LBound(item, 2) + 1

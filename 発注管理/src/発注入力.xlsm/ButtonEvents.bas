@@ -13,8 +13,8 @@ Sub Decide()
     IsIgnoreChangeEvents = True
     
     '重複する商品コードを排除
-    Dim WriteData As Collection
-    Set WriteData = FilterCollection(Search.GetCheckedProductsCode, _
+    Dim writeData As Collection
+    Set writeData = FilterCollection(Search.GetCheckedProductsCode, _
                                      order.ProductsCode)
                                      
     Dim startRowIndex As Long
@@ -24,8 +24,8 @@ Sub Decide()
     lastRowIndex = startRowIndex
     
     '発注入力に商品コード入力
-    For i = 1 To WriteData.Count
-        order.Cells(lastRowIndex, order.ProductCodeColumnNumber) = WriteData(i)
+    For i = 1 To writeData.Count
+        order.Cells(lastRowIndex, order.ProductCodeColumnNumber) = writeData(i)
         lastRowIndex = lastRowIndex + 1
     Next i
     
