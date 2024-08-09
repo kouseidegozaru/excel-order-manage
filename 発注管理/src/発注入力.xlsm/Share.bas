@@ -91,4 +91,27 @@ Function IsMultiple(Number As Long, MultipleOf As Long) As Boolean
     End If
 End Function
 
-
+'二次元配列から一行目を削除
+Function RemoveFirstRow(ByVal arr As Variant) As Variant
+    Dim newArr() As Variant
+    Dim numRows As Long
+    Dim numCols As Long
+    Dim i As Long, j As Long
+    
+    ' 配列のサイズを取得
+    numRows = UBound(arr, 1)
+    numCols = UBound(arr, 2)
+    
+    ' 新しい配列のサイズを設定
+    ReDim newArr(1 To numRows - 1, 1 To numCols)
+    
+    ' 一行目を削除して新しい配列にコピー
+    For i = 2 To numRows
+        For j = 1 To numCols
+            newArr(i - 1, j) = arr(i, j)
+        Next j
+    Next i
+    
+    ' 新しい配列を返す
+    RemoveFirstRow = newArr
+End Function

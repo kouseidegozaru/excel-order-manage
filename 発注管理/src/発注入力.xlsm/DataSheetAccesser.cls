@@ -86,11 +86,21 @@ End Property
 Property Get DataStartColumnNumber() As Integer
     DataStartColumnNumber = DataStartColumnNumber_
 End Property
+Public Function DataStartColumn() As String
+    DataStartColumn = NumberToLetter(Me.DataStartColumnNumber)
+End Function
 
 Property Get DataStartRowNumber() As Long
     DataStartRowNumber = DataStartRowNumber_
 End Property
-
+'商品情報が記載されているの最後の列番号
+Public Function DataEndColumnNumber() As Integer
+    DataEndColumnNumber = Me.Worksheet.Cells(Me.DataStartRowNumber, Me.Worksheet.Columns.Count).End(xlToLeft).Column
+End Function
+'商品情報が記載されているの最後の列
+Public Function DataEndColumn() As String
+    DataEndColumn = NumberToLetter(Me.DataEndColumnNumber)
+End Function
 '次に入力する商品情報が空白の行番号
 Public Function DataNextRowNumber() As Long
     DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
@@ -117,7 +127,16 @@ Property Get ProductsCodeRange() As range
              Me.DataEndRowNumber
     Set ProductsCodeRange = Me.Worksheet.range(strRng)
 End Property
-
+'発注入力にあるデータの範囲(ヘッダー込み)
+Property Get DataRange() As range
+    Dim strRng As String
+    strRng = Me.DataStartColumn & _
+             Me.DataStartRowNumber & _
+             ":" & _
+             Me.DataEndColumn & _
+             Me.DataEndRowNumber
+    Set DataRange = Me.Worksheet.range(strRng)
+End Property
 '発注入力にある商品の数量の範囲
 Property Get QtyRange() As range
     Dim strRng As String
@@ -139,6 +158,14 @@ Property Get Qty() As Collection
     Set Qty = GetRangeValue(Me.QtyRange)
 End Property
 
+'発注入力に既に入力されているデータの取得(ヘッダー込み)
+Property Get data() As Variant '多次元配列で返す
+    data = Me.DataRange.value
+End Property
+'発注入力に既に入力されているデータの取得(ヘッダーなし)
+Property Get dataNoHeader() As Variant '多次元配列で返す
+    dataNoHeader = RemoveFirstRow(Me.data)
+End Property
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
