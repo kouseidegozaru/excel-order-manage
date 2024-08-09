@@ -263,5 +263,6 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
 
-
-
+Public Sub WriteAllData(targetData As Variant) '“ñŽŸŒ³”z—ñ‚ðŽó‚¯Žæ‚é
+    writeData Me.Worksheet, Me.DataNextRowNumber, Me.ProductCodeColumnNumber, targetData
+End Sub
