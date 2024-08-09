@@ -296,8 +296,8 @@ Public Sub WriteQty(writeCollection As Collection)
     writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
 End Sub
 
-Public Sub WriteAllData(writeData As Variant) '“ñŽŸŒ³”z—ñ‚ðŽó‚¯Žæ‚é
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeData
+Public Sub WriteAllData(targetData As Variant) '“ñŽŸŒ³”z—ñ‚ðŽó‚¯Žæ‚é
+    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, targetData
 End Sub
 
 

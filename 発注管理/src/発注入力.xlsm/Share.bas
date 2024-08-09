@@ -33,7 +33,7 @@ Sub writeData(ws As Worksheet, startRowIndex As Long, startColIndex As Integer, 
         ' îzóÒÇÃèÍçá
         For i = LBound(writeData, 1) To UBound(writeData, 1)
             For j = LBound(writeData, 2) To UBound(writeData, 2)
-                ws.Cells(startRowIndex + i, startColIndex + j).value = writeData(i, j)
+                ws.Cells(startRowIndex + i - 1, startColIndex + j - 1).value = writeData(i, j)
             Next j
         Next i
     ElseIf TypeName(writeData) = "Collection" Then
