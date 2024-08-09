@@ -13,8 +13,8 @@ Sub DisplayProductsInfo(targetRng As range)
     Dim targetColumn As Integer
     targetColumn = order.ProductCodeColumnNumber
     '数量の列の指定
-    Dim qtyColumn As Integer
-    qtyColumn = order.QtyColumnNumber
+    Dim QtyColumn As Integer
+    QtyColumn = order.QtyColumnNumber
     '仕入単価の列の指定
     Dim priceColumn As Integer
     priceColumn = order.PriceColumnNumber
@@ -46,7 +46,7 @@ Sub DisplayProductsInfo(targetRng As range)
                             cell.Offset(0, i + 1).value = rs.Fields(i).value
                         Next i
                         '仕入金額の計算式を設定
-                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(qtyColumn, cell.Row, priceColumn, cell.Row)
+                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(QtyColumn, cell.Row, priceColumn, cell.Row)
                         
                         rs.MoveNext
                     Loop

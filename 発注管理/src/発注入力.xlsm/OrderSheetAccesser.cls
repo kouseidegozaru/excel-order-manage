@@ -17,6 +17,7 @@ Private FormatSheetName_ As String
 Private FormatSheet_ As Worksheet
 
 Private ProductCodeColumnNumber_ As Integer
+Private MatchColumnNumber_ As Integer
 Private QtyColumnNumber_ As Integer
 Private PriceColumnNumber_ As Integer
 Private AmountColumnNumber_ As Integer
@@ -33,6 +34,7 @@ Private Sub Class_Initialize()
     FormatSheetName_ = "商品マスターシート"
     
     ProductCodeColumnNumber_ = 1
+    MatchColumnNumber_ = 10
     QtyColumnNumber_ = 11
     PriceColumnNumber_ = 13
     AmountColumnNumber_ = 14
@@ -87,14 +89,21 @@ Property Get QtyColumnNumber() As Integer
     QtyColumnNumber = QtyColumnNumber_
 End Property
 
-Property Get qtyColumn() As String
-    qtyColumn = NumberToLetter(Me.QtyColumnNumber)
+Property Get QtyColumn() As String
+    QtyColumn = NumberToLetter(Me.QtyColumnNumber)
 End Property
 Property Get AmountColumnNumber() As Integer
     AmountColumnNumber = AmountColumnNumber_
 End Property
 Property Get PriceColumnNumber() As Integer
     PriceColumnNumber = PriceColumnNumber_
+End Property
+Property Get MatchColumnNumber() As Integer
+    MatchColumnNumber = MatchColumnNumber_
+End Property
+
+Property Get MatchColumn() As String
+    MatchColumn = NumberToLetter(Me.MatchColumnNumber)
 End Property
 
 Property Get DataStartRowNumber() As Long
@@ -128,13 +137,24 @@ Property Get ProductsCodeRange() As range
     Set ProductsCodeRange = Me.Worksheet.range(strRng)
 End Property
 
+'発注入力にある商品の合わせ数の範囲
+Property Get MatchRange() As range
+    Dim strRng As String
+    strRng = Me.MatchColumn & _
+             Me.DataStartRowNumber & _
+             ":" & _
+             Me.MatchColumn & _
+             Me.DataEndRowNumber
+    Set MatchRange = Me.Worksheet.range(strRng)
+End Property
+
 '発注入力にある商品の数量の範囲
 Property Get QtyRange() As range
     Dim strRng As String
-    strRng = Me.qtyColumn & _
+    strRng = Me.QtyColumn & _
              Me.DataStartRowNumber & _
              ":" & _
-             Me.qtyColumn & _
+             Me.QtyColumn & _
              Me.DataEndRowNumber
     Set QtyRange = Me.Worksheet.range(strRng)
 End Property
@@ -211,6 +231,11 @@ End Property
 '発注入力に既に入力されている商品コードの取得
 Property Get ProductsCode() As Collection
     Set ProductsCode = GetRangeValue(Me.ProductsCodeRange)
+End Property
+
+'発注入力に既に入力されている合わせ数の取得
+Property Get Match() As Collection
+    Set Match = GetRangeValue(Me.MatchRange)
 End Property
 
 '発注入力に既に入力されている数量の取得
