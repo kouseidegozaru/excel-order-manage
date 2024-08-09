@@ -86,6 +86,9 @@ End Property
 Property Get DataStartColumnNumber() As Integer
     DataStartColumnNumber = DataStartColumnNumber_
 End Property
+Public Function DataStartColumn() As String
+    DataStartColumn = NumberToLetter(Me.DataStartColumnNumber)
+End Function
 
 Property Get DataStartRowNumber() As Long
     DataStartRowNumber = DataStartRowNumber_
@@ -155,6 +158,14 @@ Property Get Qty() As Collection
     Set Qty = GetRangeValue(Me.QtyRange)
 End Property
 
+'発注入力に既に入力されているデータの取得(ヘッダー込み)
+Property Get data() As Variant '多次元配列で返す
+    data = Me.DataRange.value
+End Property
+'発注入力に既に入力されているデータの取得(ヘッダーなし)
+Property Get dataNoHeader() As Variant '多次元配列で返す
+    dataNoHeader = RemoveFirstRow(Me.data)
+End Property
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
