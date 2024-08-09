@@ -171,15 +171,15 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
 End Property
 
 Public Sub WriteProductsCode(writeCollection As Collection)
-    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
+    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
 End Sub
 
 Public Sub WriteQty(writeCollection As Collection)
-    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
+    writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
 End Sub
 
 Public Sub WriteAllData(data As Variant)
-    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.DataStartColumnNumber, data
+    writeData Me.Worksheet, Me.DataStartRowNumber, Me.DataStartColumnNumber, data
 End Sub
 
 '保存ファイルパス
