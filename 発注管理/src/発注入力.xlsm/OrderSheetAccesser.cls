@@ -270,8 +270,8 @@ Property Get Qty() As Collection
 End Property
 
 '発注入力に既に入力されているデータの取得(ヘッダー込み)
-Property Get Data() As Variant '多次元配列で返す
-    Data = Me.DataRange.value
+Property Get data() As Variant '多次元配列で返す
+    data = Me.DataRange.value
 End Property
 
 '担当者名の表示
@@ -289,11 +289,11 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
 End Property
 
 Public Sub WriteProductsCode(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
+    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
 End Sub
 
 Public Sub WriteQty(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
+    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
 End Sub
 
 

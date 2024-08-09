@@ -20,6 +20,7 @@ Private WorkSheet_ As Worksheet
 
 Private ProductCodeColumnNumber_ As Integer
 Private QtyColumnNumber_ As Integer
+Private DataStartColumnNumber_ As Integer
 Private DataStartRowNumber_ As Long
 
 Private Sub Class_Initialize()
@@ -30,6 +31,7 @@ Private Sub Class_Initialize()
     
     ProductCodeColumnNumber_ = 1
     QtyColumnNumber_ = 2
+    DataStartColumnNumber_ = 1
     DataStartRowNumber_ = 1
     
 End Sub
@@ -79,6 +81,10 @@ End Property
 
 Property Get QtyColumn() As String
     QtyColumn = NumberToLetter(Me.QtyColumnNumber)
+End Property
+
+Property Get DataStartColumnNumber() As Integer
+    DataStartColumnNumber = DataStartColumnNumber_
 End Property
 
 Property Get DataStartRowNumber() As Long
@@ -138,11 +144,15 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
 End Property
 
 Public Sub WriteProductsCode(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
+    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
 End Sub
 
 Public Sub WriteQty(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
+    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
+End Sub
+
+Public Sub WriteAllData(data As Variant)
+    WriteData Me.Worksheet, Me.DataStartRowNumber, Me.DataStartColumnNumber, data
 End Sub
 
 '保存ファイルパス
