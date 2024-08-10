@@ -22,16 +22,40 @@ Function NumberToLetter(ByVal num As Integer) As String
     End If
 End Function
 
-'シートに列を指定して入力
-Sub writeData(ws As Worksheet, rowIndex As Long, colIndex As Integer, writeData As Collection)
+' データをシートに書き込む
+Sub writeData(ws As Worksheet, startRowIndex As Long, startColIndex As Integer, writeData As Variant)
+    Dim i As Long, j As Long
     Dim item As Variant
+    Dim rowCount As Long, colCount As Long
 
-    For Each item In writeData
-        ws.Cells(rowIndex, colIndex).value = item
-        rowIndex = rowIndex + 1
-    Next item
-
+    ' writeDataが配列かコレクションかを確認
+    If IsArray(writeData) Then
+        ' 配列の場合
+        For i = LBound(writeData, 1) To UBound(writeData, 1)
+            For j = LBound(writeData, 2) To UBound(writeData, 2)
+                ws.Cells(startRowIndex + i - 1, startColIndex + j - 1).value = writeData(i, j)
+            Next j
+        Next i
+    ElseIf TypeName(writeData) = "Collection" Then
+        ' コレクションの場合
+        rowCount = 0
+        For Each item In writeData
+            If IsArray(item) Then
+                ' 内部配列の長さを取得
+                colCount = UBound(item, 2) - LBound(item, 2) + 1
+                For j = LBound(item, 2) To UBound(item, 2)
+                    ws.Cells(startRowIndex + rowCount, startColIndex + j - LBound(item, 2)).value = item(j)
+                Next j
+                rowCount = rowCount + 1
+            End If
+        Next item
+    Else
+        ' エラーハンドリング
+        Err.Raise vbObjectError + 9999, "writeData", "writeDataは配列またはコレクションでなければなりません。"
+    End If
 End Sub
+
+
 
 'collection型の変数を比べ重複する値を除外
 Function FilterCollection(baseCol As Collection, filterCol As Collection) As Collection
@@ -67,4 +91,27 @@ Function IsMultiple(Number As Long, MultipleOf As Long) As Boolean
     End If
 End Function
 
-
+'二次元配列から一行目を削除
+Function RemoveFirstRow(ByVal arr As Variant) As Variant
+    Dim newArr() As Variant
+    Dim numRows As Long
+    Dim numCols As Long
+    Dim i As Long, j As Long
+    
+    ' 配列のサイズを取得
+    numRows = UBound(arr, 1)
+    numCols = UBound(arr, 2)
+    
+    ' 新しい配列のサイズを設定
+    ReDim newArr(1 To numRows - 1, 1 To numCols)
+    
+    ' 一行目を削除して新しい配列にコピー
+    For i = 2 To numRows
+        For j = 1 To numCols
+            newArr(i - 1, j) = arr(i, j)
+        Next j
+    Next i
+    
+    ' 新しい配列を返す
+    RemoveFirstRow = newArr
+End Function

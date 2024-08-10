@@ -21,6 +21,8 @@ Private MatchColumnNumber_ As Integer
 Private QtyColumnNumber_ As Integer
 Private PriceColumnNumber_ As Integer
 Private AmountColumnNumber_ As Integer
+
+Private DataHeaderRowNumber_ As Long
 Private DataStartRowNumber_ As Long
 
 Private InputBumonCodeRange_ As String
@@ -38,6 +40,8 @@ Private Sub Class_Initialize()
     QtyColumnNumber_ = 11
     PriceColumnNumber_ = 13
     AmountColumnNumber_ = 14
+    
+    DataHeaderRowNumber_ = 4
     DataStartRowNumber_ = 5
     
     InputBumonCodeRange_ = "A2"
@@ -77,6 +81,10 @@ Property Get FormatSheet() As Worksheet
     Set FormatSheet = FormatSheet_
 End Property
 
+Property Get DataHeaderRowNumber() As Long
+    DataHeaderRowNumber = DataHeaderRowNumber_
+End Property
+
 Property Get ProductCodeColumnNumber() As Integer
     ProductCodeColumnNumber = ProductCodeColumnNumber_
 End Property
@@ -109,7 +117,14 @@ End Property
 Property Get DataStartRowNumber() As Long
     DataStartRowNumber = DataStartRowNumber_
 End Property
-
+'商品情報が記載されているの最後の列番号
+Public Function DataEndColumnNumber() As Integer
+    DataEndColumnNumber = Me.Worksheet.Cells(Me.DataHeaderRowNumber, Me.Worksheet.Columns.Count).End(xlToLeft).Column
+End Function
+'商品情報が記載されているの最後の列
+Public Function DataEndColumn() As String
+    DataEndColumn = NumberToLetter(Me.DataEndColumnNumber)
+End Function
 '次に入力する商品情報が空白の行番号
 Public Function DataNextRowNumber() As Long
     DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
@@ -157,6 +172,17 @@ Property Get QtyRange() As range
              Me.QtyColumn & _
              Me.DataEndRowNumber
     Set QtyRange = Me.Worksheet.range(strRng)
+End Property
+
+'発注入力にあるデータの範囲(ヘッダー込み)
+Property Get DataRange() As range
+    Dim strRng As String
+    strRng = Me.ProductCodeColumn & _
+             Me.DataHeaderRowNumber & _
+             ":" & _
+             Me.DataEndColumn & _
+             Me.DataEndRowNumber
+    Set DataRange = Me.Worksheet.range(strRng)
 End Property
 
 '部門コードの取得
@@ -243,6 +269,11 @@ Property Get Qty() As Collection
     Set Qty = GetRangeValue(Me.QtyRange)
 End Property
 
+'発注入力に既に入力されているデータの取得(ヘッダー込み)
+Property Get data() As Variant '多次元配列で返す
+    data = Me.DataRange.value
+End Property
+
 '担当者名の表示
 Property Let UserName(name As String)
     Me.Worksheet.range(OutputUserNameRange_).value = name
@@ -257,12 +288,8 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
 
-Public Sub WriteProductsCode(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, writeCollection
-End Sub
-
-Public Sub WriteQty(writeCollection As Collection)
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.QtyColumnNumber, writeCollection
+Public Sub WriteAllData(targetData As Variant) '二次元配列を受け取る
+    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, targetData
 End Sub
 
 

@@ -11,10 +11,8 @@ Sub SaveData()
     data.NewWorkbook
     data.InitWorkSheet
     
-    '商品コードデータ
-    data.WriteProductsCode order.ProductsCode
-    '数量データ
-    data.WriteQty order.Qty
+    '商品データ書き込み
+    data.WriteAllData order.data
     
     '保存
     data.Save
@@ -43,12 +41,8 @@ Sub LoadData()
     data.OpenWorkBook
     data.InitWorkSheet
     
-    '商品コードを入力
-    order.WriteProductsCode data.ProductsCode
-    '商品情報表示
-    DisplayProductsInfo order.ProductsCodeRange
-    '数量を入力
-    order.WriteQty data.Qty
+    '商品情報を入力
+    order.WriteAllData data.dataNoHeader
     
     'データワークブックを閉じる
     data.CloseWorkBook
