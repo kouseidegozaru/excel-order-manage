@@ -52,5 +52,29 @@ Public Function ExecuteSelect(ByVal query As String, ByVal parameters As Object)
 End Function
 
 
+' Excelファイルにクエリを実行してRecordsetを返すメソッド
+Public Function ExecuteExcelQuery(ByVal filePath As String, ByVal query As String) As ADODB.Recordset
+    Dim conn As New ADODB.Connection
+    Dim rs As New ADODB.Recordset
+    Dim connectionString As String
+    
+    ' Excelファイルへの接続文字列を設定
+    connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & filePath & ";Extended Properties=""Excel 12.0 Xml;HDR=YES"""
+    
+    ' 接続を開く
+    conn.Open connectionString
+    
+    ' クエリを実行
+    rs.Open query, conn, adOpenStatic, adLockReadOnly
+    
+    ' 結果を返す
+    Set ExecuteExcelQuery = rs
+'
+'    ' 接続を閉じる
+'    conn.Close
+'
+'    ' オブジェクトを解放
+'    Set conn = Nothing
+End Function
 
 
