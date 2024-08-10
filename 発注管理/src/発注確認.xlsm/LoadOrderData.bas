@@ -92,38 +92,16 @@ Sub LoadData()
         data.FileName = FileName
         'ファイル情報の取得準備
         fileProperty.filePath = data.filePath
-        '商品コードと数量の合計を取得(辞書型)
-        Set resultDict = MergeDictionaries(resultDict, data.DataDict)
+        '商品情報を入力
+        load.WriteAllData data.dataNoHeader
         'データワークブックを閉じる
         data.CloseWorkBook
         
     Next FileName
     
+    Dim rs As ADODB.Recordset
+    Set rs = load.ProductsGroupData
+    load.ClearData
+    load.WriteAllData RemoveFirstRow(RecordsetToArray(rs))
     
-'''発注確認シートへ入力'''
-    Dim startRowIndex As Long
-    Dim lastRowIndex As Long
-    
-    startRowIndex = load.DataNextRowNumber
-    lastRowIndex = startRowIndex
-    
-    
-    '商品コードを入力
-    For Each productsCode In resultDict.Keys
-        load.Cells(lastRowIndex, load.ProductCodeColumnNumber) = productsCode
-        lastRowIndex = lastRowIndex + 1
-    Next productsCode
-    
-    '発注確認に商品コードを入力した範囲
-    Dim target As Range
-    Set target = load.Worksheet.Range(load.ProductCodeColumn & startRowIndex & ":" & load.ProductCodeColumn & lastRowIndex)
-    '商品情報の表示
-    DisplayProductsInfo target
-    
-    '数量を入力
-    lastRowIndex = startRowIndex
-    For Each productsCode In resultDict.Keys
-        load.Cells(lastRowIndex, load.QtyColumnNumber) = resultDict(productsCode)
-        lastRowIndex = lastRowIndex + 1
-    Next productsCode
 End Sub
