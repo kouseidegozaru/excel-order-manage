@@ -30,11 +30,15 @@ Sub writeData(ws As Worksheet, startRowIndex As Long, startColIndex As Integer, 
 
     ' writeDataが配列かコレクションかを確認
     If IsArray(writeData) Then
+        rowcnt = 0
         ' 配列の場合
         For i = LBound(writeData, 1) To UBound(writeData, 1)
+            colcnt = 0
             For j = LBound(writeData, 2) To UBound(writeData, 2)
-                ws.Cells(startRowIndex + i - 1, startColIndex + j - 1).value = writeData(i, j)
+                ws.Cells(startRowIndex + rowcnt, startColIndex + colcnt).value = writeData(i, j)
+                colcnt = colcnt + 1
             Next j
+            rowcnt = rowcnt + 1
         Next i
     ElseIf TypeName(writeData) = "Collection" Then
         ' コレクションの場合
@@ -118,18 +122,22 @@ Function RemoveFirstRow(ByVal arr As Variant) As Variant
     Dim newArr() As Variant
     Dim numRows As Long
     Dim numCols As Long
+    Dim minRows As Long
+    Dim minCols As Long
     Dim i As Long, j As Long
     
     ' 配列のサイズを取得
     numRows = UBound(arr, 1)
     numCols = UBound(arr, 2)
+    minRows = LBound(arr, 1)
+    minCols = LBound(arr, 2)
     
     ' 新しい配列のサイズを設定
-    ReDim newArr(1 To numRows - 1, 1 To numCols)
+    ReDim newArr(minRows To numRows - 1, minCols To numCols)
     
     ' 一行目を削除して新しい配列にコピー
-    For i = 2 To numRows
-        For j = 1 To numCols
+    For i = minRows + 1 To numRows
+        For j = minCols To numCols
             newArr(i - 1, j) = arr(i, j)
         Next j
     Next i
@@ -137,3 +145,39 @@ Function RemoveFirstRow(ByVal arr As Variant) As Variant
     ' 新しい配列を返す
     RemoveFirstRow = newArr
 End Function
+
+Function RecordsetToArray(rs As ADODB.Recordset) As Variant
+    Dim arr As Variant
+    Dim i As Long, j As Long
+    Dim rowCount As Long
+    Dim colCount As Long
+    
+    ' レコードセットの列数を取得
+    colCount = rs.Fields.Count
+    
+    ' レコードセットの行数を取得
+    rs.MoveLast
+    rowCount = rs.RecordCount
+    rs.MoveFirst
+    
+    ' 二次元配列を初期化
+    ReDim arr(0 To rowCount, 0 To colCount - 1)
+    
+    ' ヘッダーを配列に格納
+    For i = 0 To colCount - 1
+        arr(0, i) = rs.Fields(i).name
+    Next i
+    
+    ' データを配列に格納
+    i = 1
+    Do Until rs.EOF
+        For j = 0 To colCount - 1
+            arr(i, j) = rs.Fields(j).value
+        Next j
+        rs.MoveNext
+        i = i + 1
+    Loop
+    
+    RecordsetToArray = arr
+End Function
+

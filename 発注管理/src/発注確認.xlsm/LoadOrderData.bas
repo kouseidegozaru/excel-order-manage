@@ -99,4 +99,9 @@ Sub LoadData()
         
     Next FileName
     
+    Dim rs As ADODB.Recordset
+    Set rs = load.ProductsGroupData
+    load.ClearData
+    load.WriteAllData RemoveFirstRow(RecordsetToArray(rs))
+    
 End Sub
