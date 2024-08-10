@@ -266,3 +266,28 @@ End Property
 Public Sub WriteAllData(targetData As Variant) '二次元配列を受け取る
     writeData Me.Worksheet, Me.DataNextRowNumber, Me.ProductCodeColumnNumber, targetData
 End Sub
+
+Public Function ProductsGroupData() As ADODB.Recordset
+    Dim dataAccessor As New SqlExecutor
+    Dim rs As ADODB.Recordset
+    Dim filePath As String
+    Dim sheetName As String
+    Dim rangeName As String
+    Dim query As String
+    
+    ' Excel情報
+    filePath = Me.Workbook.FullName
+    sheetName = Me.Worksheet.name
+    rangeName = Me.DataRange.Address
+    
+    
+    ' 実行するクエリ
+    query = query = "SELECT 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, SUM(数量) AS 合計数量, 荷姿, 仕入単価, 仕入金額, LT, 商品備考, メーカー読み " & _
+           "FROM [" & sheetName & "1$" & rangeName & "] " & _
+           "GROUP BY 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, 荷姿, 仕入単価, 仕入金額, LT, 商品備考, メーカー読み"
+    
+    ' Excelファイルにクエリを実行
+    Set rs = dataAccessor.ExecuteExcelQuery(filePath, query)
+
+    Set ProductsGroupData = rs
+End Function
