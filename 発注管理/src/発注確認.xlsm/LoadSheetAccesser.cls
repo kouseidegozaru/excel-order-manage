@@ -19,6 +19,8 @@ Private QtyColumnNumber_ As Integer
 Private PriceColumnNumber_ As Integer
 Private AmountColumnNumber_ As Integer
 Private DataStartRowNumber_ As Long
+Private DataStartColumnNumber_ As Integer
+Private HeaderRowNumber_ As Integer
 
 Private InputBumonCodeRange_ As String
 Private OutputBumonNameRange_ As String
@@ -43,6 +45,8 @@ Private Sub Class_Initialize()
     PriceColumnNumber_ = 13
     AmountColumnNumber_ = 14
     DataStartRowNumber_ = 9
+    DataStartColumnNumber_ = 1
+    HeaderRowNumber_ = 8
     
     FilePropertyStartColumnNumber_ = 2
     FilePropertyUserNameRowNumber_ = 4
@@ -157,7 +161,16 @@ End Sub
 Property Get DataStartRowNumber() As Long
     DataStartRowNumber = DataStartRowNumber_
 End Property
+Property Get DataStartColumnNumber() As Integer
+    DataStartColumnNumber = DataStartColumnNumber_
+End Property
+Public Function DataStartColumn() As String
+    DataStartColumn = NumberToLetter(Me.DataStartColumnNumber)
+End Function
 
+Property Get HeaderRowNumber() As Long
+    HeaderRowNumber = HeaderRowNumber_
+End Property
 '次に入力する商品情報が空白の行番号
 Public Function DataNextRowNumber() As Long
     DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
@@ -173,6 +186,14 @@ Property Get DataEndRowNumber() As Long
     End If
     DataEndRowNumber = lastRow
 End Property
+'商品情報が記載されているの最後の列番号
+Public Function DataEndColumnNumber() As Integer
+    DataEndColumnNumber = Me.Worksheet.Cells(Me.DataStartRowNumber, Me.Worksheet.Columns.Count).End(xlToLeft).Column
+End Function
+'商品情報が記載されているの最後の列
+Public Function DataEndColumn() As String
+    DataEndColumn = NumberToLetter(Me.DataEndColumnNumber)
+End Function
 
 '発注入力にある商品コードの範囲
 Property Get ProductsCodeRange() As Range
@@ -195,7 +216,16 @@ Property Get QtyRange() As Range
              Me.DataEndRowNumber
     Set QtyRange = Me.Worksheet.Range(strRng)
 End Property
-
+'発注入力にあるデータの範囲(ヘッダー込み)
+Property Get DataRange() As Range
+    Dim strRng As String
+    strRng = Me.DataStartColumn & _
+             Me.HeaderRowNumber & _
+             ":" & _
+             Me.DataEndColumn & _
+             Me.DataEndRowNumber
+    Set DataRange = Me.Worksheet.Range(strRng)
+End Property
 '部門コードの取得
 Property Get BumonCode() As Integer
     '値の取得
@@ -278,12 +308,12 @@ Public Function ProductsGroupData() As ADODB.Recordset
     ' Excel情報
     filePath = Me.Workbook.FullName
     sheetName = Me.Worksheet.name
-    rangeName = Me.DataRange.Address
+    rangeName = Replace(Me.DataRange.Address(False, False), "$", "")
     
     
     ' 実行するクエリ
-    query = query = "SELECT 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, SUM(数量) AS 合計数量, 荷姿, 仕入単価, 仕入金額, LT, 商品備考, メーカー読み " & _
-           "FROM [" & sheetName & "1$" & rangeName & "] " & _
+    query = "SELECT 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, SUM(数量) AS 合計数量, 荷姿, 仕入単価, 仕入金額, LT, 商品備考, メーカー読み " & _
+           "FROM [" & sheetName & "$" & rangeName & "] " & _
            "GROUP BY 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, 荷姿, 仕入単価, 仕入金額, LT, 商品備考, メーカー読み"
     
     ' Excelファイルにクエリを実行
