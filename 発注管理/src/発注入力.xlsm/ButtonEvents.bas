@@ -30,8 +30,8 @@ Sub Decide()
     Next i
     
     '発注入力に商品コードを入力した範囲
-    Dim target As range
-    Set target = order.Worksheet.range(order.ProductCodeColumn & startRowIndex & ":" & order.ProductCodeColumn & lastRowIndex)
+    Dim target As Range
+    Set target = order.Worksheet.Range(order.ProductCodeColumn & startRowIndex & ":" & order.ProductCodeColumn & lastRowIndex)
     
     '商品情報表示
     DisplayProductsInfo target

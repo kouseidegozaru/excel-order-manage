@@ -1,7 +1,7 @@
 Attribute VB_Name = "Share"
 
-Public Function GetRangeValue(rng As range) As Collection
-    Dim cell As range
+Public Function GetRangeValue(rng As Range) As Collection
+    Dim cell As Range
     Dim col As New Collection
     
     ' 範囲内の各セルをループ

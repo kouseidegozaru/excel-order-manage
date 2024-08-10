@@ -10,14 +10,14 @@ Attribute VB_Exposed = True
 '行削除を検知するための変更前の行数
 Private lastUpdatedRowCnt As Long
 
-Private Sub Worksheet_Change(ByVal target As range)
+Private Sub Worksheet_Change(ByVal target As Range)
 
     'セルの変更をフック
     HookCellChange target
     
 End Sub
 
-Private Sub HookCellChange(ByVal target As range)
+Private Sub HookCellChange(ByVal target As Range)
     'IsIgnoreChangeEventsはシートの変更を検知するかどうかの状態を設定
     'events.Ignoreはシートの変更があっても無視する
 

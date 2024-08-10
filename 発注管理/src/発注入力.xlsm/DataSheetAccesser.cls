@@ -108,14 +108,14 @@ Property Get DataEndRowNumber() As Long
 End Property
 
 '発注入力にあるデータの範囲(ヘッダー込み)
-Property Get DataRange() As range
+Property Get DataRange() As Range
     Dim strRng As String
     strRng = Me.DataStartColumn & _
              Me.DataStartRowNumber & _
              ":" & _
              Me.DataEndColumn & _
              Me.DataEndRowNumber
-    Set DataRange = Me.Worksheet.range(strRng)
+    Set DataRange = Me.Worksheet.Range(strRng)
 End Property
 
 '発注入力に既に入力されているデータの取得(ヘッダー込み)

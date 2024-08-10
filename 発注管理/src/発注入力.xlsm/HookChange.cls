@@ -11,7 +11,7 @@ Option Explicit
 
 'セルの変更を検知するための汎用クラス
 
-Private targetRange As range
+Private targetRange As Range
 Private isIgnore As Boolean
 
 Public Sub Class_Initialize()
@@ -19,12 +19,12 @@ Public Sub Class_Initialize()
 End Sub
 
 '変更されたシートの範囲をセット
-Public Sub SetRange(targetRng As range)
+Public Sub SetRange(targetRng As Range)
     Set targetRange = targetRng
 End Sub
 
 'シートの特定の範囲の変更があったか
-Public Function IsChanged(rng As range) As Boolean
+Public Function IsChanged(rng As Range) As Boolean
     IsChanged = False
     
     '監視しない

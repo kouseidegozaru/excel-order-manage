@@ -7,7 +7,7 @@ End Sub
 
 Private Sub SetBumonCD()
     Dim order As New OrderSheetAccesser
-    Dim rng As range
+    Dim rng As Range
     Set rng = order.BumonCodeRange
     
     With rng.Validation
@@ -26,7 +26,7 @@ End Sub
 
 Private Sub SetUserCD()
     Dim order As New OrderSheetAccesser
-    Dim rng As range
+    Dim rng As Range
     Set rng = order.UserCodeRange
     
     With rng.Validation
@@ -45,7 +45,7 @@ End Sub
 
 Private Sub SetDate()
     Dim order As New OrderSheetAccesser
-    Dim rng As range
+    Dim rng As Range
     Set rng = order.TargetDateRange
     
     With rng.Validation

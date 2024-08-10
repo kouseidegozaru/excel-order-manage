@@ -150,14 +150,14 @@ Property Get DataEndRowNumber() As Long
     DataEndRowNumber = lastRow
 End Property
 '商品コードがあるデータの範囲
-Property Get DataRange() As range
+Property Get DataRange() As Range
     Dim strRng As String
     strRng = Me.ProductCodeColumn & _
              Me.DataStartRowNumber & _
              ":" & _
              Me.ProductCodeColumn & _
              Me.DataEndRowNumber
-    Set DataRange = Me.Worksheet.range(strRng)
+    Set DataRange = Me.Worksheet.Range(strRng)
 End Property
 Public Sub Clear()
     Me.DeleteAllCheckboxes

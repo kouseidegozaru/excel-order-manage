@@ -142,54 +142,54 @@ Property Get DataEndRowNumber() As Long
 End Property
 
 '発注入力にある商品コードの範囲
-Property Get ProductsCodeRange() As range
+Property Get ProductsCodeRange() As Range
     Dim strRng As String
     strRng = Me.ProductCodeColumn & _
              Me.DataStartRowNumber & _
              ":" & _
              Me.ProductCodeColumn & _
              Me.DataEndRowNumber
-    Set ProductsCodeRange = Me.Worksheet.range(strRng)
+    Set ProductsCodeRange = Me.Worksheet.Range(strRng)
 End Property
 
 '発注入力にある商品の合わせ数の範囲
-Property Get MatchRange() As range
+Property Get MatchRange() As Range
     Dim strRng As String
     strRng = Me.MatchColumn & _
              Me.DataStartRowNumber & _
              ":" & _
              Me.MatchColumn & _
              Me.DataEndRowNumber
-    Set MatchRange = Me.Worksheet.range(strRng)
+    Set MatchRange = Me.Worksheet.Range(strRng)
 End Property
 
 '発注入力にある商品の数量の範囲
-Property Get QtyRange() As range
+Property Get QtyRange() As Range
     Dim strRng As String
     strRng = Me.QtyColumn & _
              Me.DataStartRowNumber & _
              ":" & _
              Me.QtyColumn & _
              Me.DataEndRowNumber
-    Set QtyRange = Me.Worksheet.range(strRng)
+    Set QtyRange = Me.Worksheet.Range(strRng)
 End Property
 
 '発注入力にあるデータの範囲(ヘッダー込み)
-Property Get DataRange() As range
+Property Get DataRange() As Range
     Dim strRng As String
     strRng = Me.ProductCodeColumn & _
              Me.DataHeaderRowNumber & _
              ":" & _
              Me.DataEndColumn & _
              Me.DataEndRowNumber
-    Set DataRange = Me.Worksheet.range(strRng)
+    Set DataRange = Me.Worksheet.Range(strRng)
 End Property
 
 '部門コードの取得
 Property Get BumonCode() As Integer
     '値の取得
     Dim value As Variant
-    value = Me.Worksheet.range(InputBumonCodeRange_).value
+    value = Me.Worksheet.Range(InputBumonCodeRange_).value
     
     '未入力の場合終了
     If IsEmpty(value) Then
@@ -207,15 +207,15 @@ Property Get BumonCode() As Integer
     End If
 End Property
 
-Property Get BumonCodeRange() As range
-    Set BumonCodeRange = Me.Worksheet.range(InputBumonCodeRange_)
+Property Get BumonCodeRange() As Range
+    Set BumonCodeRange = Me.Worksheet.Range(InputBumonCodeRange_)
 End Property
 
 '担当者コードの取得
 Property Get UserCode() As Integer
     '値の取得
     Dim value As Variant
-    value = Me.Worksheet.range(InputUserCodeRange_).value
+    value = Me.Worksheet.Range(InputUserCodeRange_).value
     
     '未入力の場合終了
     If IsEmpty(value) Then
@@ -233,14 +233,14 @@ Property Get UserCode() As Integer
     End If
 End Property
 
-Property Get UserCodeRange() As range
-    Set UserCodeRange = Me.Worksheet.range(InputUserCodeRange_)
+Property Get UserCodeRange() As Range
+    Set UserCodeRange = Me.Worksheet.Range(InputUserCodeRange_)
 End Property
 
 '対象日付の取得
 Property Get TargetDate() As Date
     Dim value As Variant
-    value = Me.Worksheet.range(InputTargetDateRange_).value
+    value = Me.Worksheet.Range(InputTargetDateRange_).value
     
     '未入力の場合終了
     If IsEmpty(value) Then
@@ -250,8 +250,8 @@ Property Get TargetDate() As Date
     TargetDate = CDate(value)
 End Property
 
-Property Get TargetDateRange() As range
-    Set TargetDateRange = Me.Worksheet.range(InputTargetDateRange_)
+Property Get TargetDateRange() As Range
+    Set TargetDateRange = Me.Worksheet.Range(InputTargetDateRange_)
 End Property
 
 '発注入力に既に入力されている商品コードの取得
@@ -276,12 +276,12 @@ End Property
 
 '担当者名の表示
 Property Let UserName(name As String)
-    Me.Worksheet.range(OutputUserNameRange_).value = name
+    Me.Worksheet.Range(OutputUserNameRange_).value = name
 End Property
 
 '部門名の表示
 Property Let BumonName(name As String)
-    Me.Worksheet.range(OutputBumonNameRange_).value = name
+    Me.Worksheet.Range(OutputBumonNameRange_).value = name
 End Property
 
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)

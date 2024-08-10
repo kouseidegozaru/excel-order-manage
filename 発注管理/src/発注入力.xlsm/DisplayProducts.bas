@@ -1,7 +1,7 @@
 Attribute VB_Name = "DisplayProducts"
 '発注入力に入力された商品コードから商品情報を表示
 
-Sub DisplayProductsInfo(targetRng As range)
+Sub DisplayProductsInfo(targetRng As Range)
 
     Dim DataStorage As New DataBaseAccesser
     Dim order As New OrderSheetAccesser
@@ -22,7 +22,7 @@ Sub DisplayProductsInfo(targetRng As range)
     Dim amountColumn As Integer
     amountColumn = order.AmountColumnNumber
     
-    Dim cell As range
+    Dim cell As Range
     
     ' 範囲内の指定した列の各行を処理
     For Each cell In targetRng.Columns(targetColumn).Cells
