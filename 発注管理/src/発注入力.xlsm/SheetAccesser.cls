@@ -16,16 +16,16 @@ Private DataHeaderRowIndex_ As Long
 Private DataStartRowIndex_ As Long
 Private DataStartColumnIndex_ As Integer
 
-Private Sub InitStatus(DataHeaderRow, DataStartRow, DataStartColumn)
+Public Sub InitStatus(Optional DataHeaderRow As Long = 1, Optional DataStartRow As Long = 1, Optional DataStartColumn As Integer = 1)
     DataHeaderRowIndex_ = DataHeaderRow
     DataStartRowIndex_ = DataStartRow
     DataStartColumnIndex_ = DataStartColumn
 End Sub
-Private Sub InitWorkBook(wb As Workbook)
+Public Sub InitWorkBook(wb As Workbook)
     Set WorkBook_ = wb
 End Sub
 
-Private Sub InitWorkSheet(ws As Worksheet)
+Public Sub InitWorkSheet(ws As Worksheet)
     Set WorkSheet_ = ws
 End Sub
 
@@ -40,20 +40,22 @@ End Property
 Property Get DataHeaderRowIndex() As Long
     DataHeaderRowIndex = DataHeaderRowIndex_
 End Property
+
 Property Get DataStartRowIndex() As Long
     DataStartRowIndex = DataStartRowIndex_
 End Property
+
 Property Get DataStartColumnIndex() As Integer
     DataStartColumnIndex = DataStartColumnIndex_
 End Property
 '商品情報が記載されているの最後の列番号
-Public Function DataEndColumnIndex() As Integer
+Property Get DataEndColumnIndex() As Integer
     DataEndColumnIndex = Me.Worksheet.Cells(Me.DataHeaderRowIndex, Me.Worksheet.Columns.Count).End(xlToLeft).Column
-End Function
+End Property
 '次に入力する商品情報が空白の行番号
-Public Function DataNextRowIndex() As Long
+Property Get DataNextRowIndex() As Long
     DataNextRowIndex = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.DataStartColumnIndex).End(xlUp).Row + 1
-End Function
+End Property
 
 '商品情報が記載されている最後の行番号
 Property Get DataEndRowIndex() As Long
@@ -74,8 +76,12 @@ Public Sub WriteAllData(targetData As Variant) '二次元配列を受け取る
     WriteMatrixArray Me.Worksheet, Me.DataStartRowIndex, Me.ProductCodeColumnIndex, targetData
 End Sub
 
-Public Function GetAllData() As Variant
+Property Get AllDataRange() As Range
     GetAllData = GetRange(Me.Worksheet, Me.DataStartRowIndex, Me.DataStartColumnIndex, Me.DataEndRowIndex, Me.DataEndColumnIndex).value
+End Property
+
+Public Function GetAllData() As Variant
+    GetAllData = Me.AllDataRange.value
 End Function
 
 Public Function GetAllDara_NoHead() As Variant
@@ -83,15 +89,20 @@ Public Function GetAllDara_NoHead() As Variant
 End Function
 
 '''汎用メソッド'''
-Public Function GetRange(ws As Worksheet, startRow As Long, startCol As Long, endRow As Long, endCol As Long) As Range
+Public Function GetRange(startRow As Long, startCol As Long, endRow As Long, endCol As Long) As Range
+    Dim ws As Worksheet
+    Set ws = Me.Worksheet
     Set GetRange = ws.Range(ws.Cells(startRow, startCol), ws.Cells(endRow, endCol))
 End Function
 
 ' データをシートに書き込む
-Public Sub WriteMatrixArray(ws As Worksheet, startRowIndex As Long, startColIndex As Integer, writeData As Variant)
+Public Sub WriteMatrixArray(startRowIndex As Long, startColIndex As Integer, writeData As Variant)
     Dim i As Long, j As Long
     Dim item As Variant
     Dim rowCount As Long, colCount As Long
+    
+    Dim ws As Worksheet
+    Set ws = Me.Worksheet
 
     ' writeDataが配列か確認
     If IsArray(writeData) Then
@@ -110,4 +121,30 @@ Public Sub WriteMatrixArray(ws As Worksheet, startRowIndex As Long, startColInde
         Err.Raise vbObjectError + 9999, "writeData", "writeDataは配列でなければなりません。"
     End If
 End Sub
+
+'rangeで指定した範囲が一行または一列の場合に一次元の配列に格納する
+Public Function RangeToOneDimArray(rng As Range) As Variant
+    Dim arr As Variant
+    Dim oneDimArr() As Variant
+    Dim i As Integer
+
+    arr = rng.value
+
+    ' 一行か一列かを判定
+    If rng.Rows.Count = 1 Then
+        ' 一行の場合
+        ReDim oneDimArr(1 To rng.Columns.Count)
+        For i = 1 To rng.Columns.Count
+            oneDimArr(i) = arr(1, i)
+        Next i
+    ElseIf rng.Columns.Count = 1 Then
+        ' 一列の場合
+        ReDim oneDimArr(1 To rng.Rows.Count)
+        For i = 1 To rng.Rows.Count
+            oneDimArr(i) = arr(i, 1)
+        Next i
+    End If
+
+    RangeToOneDimArray = oneDimArr
+End Function
 
