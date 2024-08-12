@@ -120,34 +120,3 @@ Public Sub WriteMatrixCollection(startRowIndex As Long, startColIndex As Integer
         Err.Raise vbObjectError + 9999, "writeData", "writeDataはCollectionでなければなりません。"
     End If
 End Sub
-
-' rangeで指定した範囲が一行または一列の場合に一次元のCollectionに格納する
-Public Function RangeToOneDimCollection(rng As Range) As Collection
-    Dim arr As Variant
-    Dim oneDimCollection As New Collection
-    Dim i As Integer
-
-    arr = rng.value
-    
-    If IsEmpty(arr) Then
-        Set RangeToOneDimCollection = oneDimCollection
-        Exit Function
-    End If
-
-    ' 一行か一列かを判定
-    If rng.Rows.count = 1 Then
-        ' 一行の場合
-        For i = 1 To rng.Columns.count
-            oneDimCollection.Add arr(1, i)
-        Next i
-    ElseIf rng.Columns.count = 1 Then
-        ' 一列の場合
-        For i = 1 To rng.Rows.count
-            oneDimCollection.Add arr(i, 1)
-        Next i
-    End If
-
-    Set RangeToOneDimCollection = oneDimCollection
-End Function
-
-

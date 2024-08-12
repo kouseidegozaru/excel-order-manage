@@ -9,46 +9,6 @@ Function IndexToLetter(ByVal num As Integer) As String
     End If
 End Function
 
-' データをシートに書き込む
-Sub writeData(ws As Worksheet, startRowIndex As Long, startColIndex As Integer, writeData As Variant)
-    Dim i As Long, j As Long
-    Dim item As Variant
-    Dim rowCollection As Variant
-    Dim rowCount As Long, colCount As Long
-
-    ' writeDataが配列かコレクションかを確認
-    If IsArray(writeData) Then
-        ' 配列の場合
-        For i = LBound(writeData, 1) To UBound(writeData, 1)
-            For j = LBound(writeData, 2) To UBound(writeData, 2)
-                ws.Cells(startRowIndex + i - 1, startColIndex + j - 1).value = writeData(i, j)
-            Next j
-        Next i
-    ElseIf TypeName(writeData) = "Collection" Then
-        ' コレクションの場合
-        rowCount = 0
-        For Each rowCollection In writeData
-            colCount = 0
-            If TypeName(rowCollection) = "Collection" Then
-                ' 内部がさらにコレクションの場合
-                For Each item In rowCollection
-                    ws.Cells(startRowIndex + rowCount, startColIndex + colCount).value = item
-                    colCount = colCount + 1
-                Next item
-            ElseIf IsArray(rowCollection) Then
-                ' 内部が配列の場合
-                For j = LBound(rowCollection, 1) To UBound(rowCollection, 1)
-                    ws.Cells(startRowIndex + rowCount, startColIndex + j - LBound(rowCollection, 1)).value = rowCollection(j)
-                Next j
-            End If
-            rowCount = rowCount + 1
-        Next rowCollection
-    Else
-        ' エラーハンドリング
-        Err.Raise vbObjectError + 9999, "writeData", "writeDataは配列またはコレクションでなければなりません。"
-    End If
-End Sub
-
 'collection型の変数を比べ重複する値を除外
 Function FilterCollection(baseCol As Collection, filterCol As Collection) As Collection
     Dim resultCol As New Collection
@@ -74,7 +34,6 @@ Function FilterCollection(baseCol As Collection, filterCol As Collection) As Col
     Set FilterCollection = resultCol
 End Function
 
-
 'Numberが MultipleOfの倍数の場合にTrueを返す
 Function IsMultiple(Number As Long, MultipleOf As Long) As Boolean
     If MultipleOf = 0 Then
@@ -82,6 +41,38 @@ Function IsMultiple(Number As Long, MultipleOf As Long) As Boolean
     Else
         IsMultiple = (Number Mod MultipleOf = 0)
     End If
+End Function
+
+
+'''以下はSheetAccesserのみで使用する項目'''
+
+' rangeで指定した範囲が一行または一列の場合に一次元のCollectionに格納する
+Public Function RangeToOneDimCollection(rng As Range) As Collection
+    Dim arr As Variant
+    Dim oneDimCollection As New Collection
+    Dim i As Integer
+
+    arr = rng.value
+    
+    If IsEmpty(arr) Then
+        Set RangeToOneDimCollection = oneDimCollection
+        Exit Function
+    End If
+
+    ' 一行か一列かを判定
+    If rng.Rows.count = 1 Then
+        ' 一行の場合
+        For i = 1 To rng.Columns.count
+            oneDimCollection.Add arr(1, i)
+        Next i
+    ElseIf rng.Columns.count = 1 Then
+        ' 一列の場合
+        For i = 1 To rng.Rows.count
+            oneDimCollection.Add arr(i, 1)
+        Next i
+    End If
+
+    Set RangeToOneDimCollection = oneDimCollection
 End Function
 
 '二次元コレクションから一行目を削除
@@ -118,7 +109,7 @@ Function RemoveFirstRow(ByVal col As Collection) As Collection
     Set RemoveFirstRow = newCol
 End Function
 
-
+'二次元配列を二次元のコレクションに変換する
 Function ArrayToCollection(ByVal arr As Variant) As Collection
     Dim col As New Collection
     Dim innerCol As Collection
@@ -138,4 +129,3 @@ Function ArrayToCollection(ByVal arr As Variant) As Collection
     
     Set ArrayToCollection = col
 End Function
-
