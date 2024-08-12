@@ -3,24 +3,24 @@ Attribute VB_Name = "DisplayProducts"
 
 Sub DisplayProductsInfo(targetRng As Range)
 
-    Dim DataStorage As New DataBaseAccesser
+    Dim dataStorage As New DataBaseAccesser
     Dim order As New OrderSheetAccesser
     
     ' 処理する部門の指定
-    Dim BumonCD As Integer
-    BumonCD = order.BumonCode
+    Dim bumonCD As Integer
+    bumonCD = order.bumonCode
     ' 処理する列の指定
     Dim targetColumn As Integer
-    targetColumn = order.ProductCodeColumnNumber
+    targetColumn = order.ProductCodeColumnIndex
     '数量の列の指定
-    Dim QtyColumn As Integer
-    QtyColumn = order.QtyColumnNumber
+    Dim qtyColumn As Integer
+    qtyColumn = order.qtyColumnIndex
     '仕入単価の列の指定
     Dim priceColumn As Integer
-    priceColumn = order.PriceColumnNumber
+    priceColumn = order.PriceColumnIndex
     '仕入金額の列の指定
     Dim amountColumn As Integer
-    amountColumn = order.AmountColumnNumber
+    amountColumn = order.AmountColumnIndex
     
     Dim cell As Range
     
@@ -28,12 +28,12 @@ Sub DisplayProductsInfo(targetRng As Range)
     For Each cell In targetRng.Columns(targetColumn).Cells
         ' 空白でないセルを処理
         If cell.value <> "" Then
-            If DataStorage.ExistsProducts(BumonCD, cell.value) Then
+            If dataStorage.ExistsProducts(bumonCD, cell.value) Then
                 '背景を白に
                 Call ChangeBackColor(cell, 255, 255, 255)
                 
                 Dim rs As ADODB.recordSet
-                Set rs = DataStorage.GetProduct(BumonCD, cell.value)
+                Set rs = dataStorage.GetProduct(bumonCD, cell.value)
                 
                 ' レコードセットをセルに貼り付ける
                 If Not rs.EOF Then
@@ -42,11 +42,11 @@ Sub DisplayProductsInfo(targetRng As Range)
                     ' レコードセットをワークシートに貼り付け
 '                    rs.MoveFirst
                     Do Until rs.EOF
-                        For i = 0 To rs.Fields.Count - 1
+                        For i = 0 To rs.Fields.count - 1
                             cell.Offset(0, i + 1).value = rs.Fields(i).value
                         Next i
                         '仕入金額の計算式を設定
-                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(QtyColumn, cell.Row, priceColumn, cell.Row)
+                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(qtyColumn, cell.row, priceColumn, cell.row)
                         
                         rs.MoveNext
                     Loop
@@ -78,12 +78,12 @@ Private Sub ChangeBackColor(cell As Object, r As Integer, g As Integer, b As Int
 End Sub
 
 '仕入金額の計算式を返す
-Private Function GetAmountCalcFormula(qtyColumnIndex As Integer, qtyRowIndex As Long, priceColumnIndex As Integer, priceRowIndex As Long) As String
+Private Function GetAmountCalcFormula(qtyColumnIndex As Integer, qtyRowIndex As Long, PriceColumnIndex As Integer, priceRowIndex As Long) As String
     GetAmountCalcFormula = "=IFERROR(" & _
-                            NumberToLetter(qtyColumnIndex) & _
+                            IndexToLetter(qtyColumnIndex) & _
                             qtyRowIndex & _
                             "*" & _
-                            NumberToLetter(priceColumnIndex) & _
+                            IndexToLetter(PriceColumnIndex) & _
                             priceRowIndex & _
                             ",0)"
 End Function

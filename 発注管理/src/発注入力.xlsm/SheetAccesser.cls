@@ -21,7 +21,7 @@ Public Sub InitStatus(Optional DataHeaderRow As Long = 1, Optional DataStartRow 
     DataStartRowIndex_ = DataStartRow
     DataStartColumnIndex_ = DataStartColumn
 End Sub
-Public Sub InitWorkBook(wb As Workbook)
+Public Sub InitWorkbook(wb As Workbook)
     Set WorkBook_ = wb
 End Sub
 
@@ -50,11 +50,11 @@ Property Get DataStartColumnIndex() As Integer
 End Property
 '商品情報が記載されているの最後の列番号
 Property Get DataEndColumnIndex() As Integer
-    DataEndColumnIndex = Me.Worksheet.Cells(Me.DataHeaderRowIndex, Me.Worksheet.Columns.Count).End(xlToLeft).Column
+    DataEndColumnIndex = Me.Worksheet.Cells(Me.DataHeaderRowIndex, Me.Worksheet.Columns.count).End(xlToLeft).Column
 End Property
 '次に入力する商品情報が空白の行番号
 Property Get DataNextRowIndex() As Long
-    DataNextRowIndex = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.DataStartColumnIndex).End(xlUp).Row + 1
+    DataNextRowIndex = Me.Worksheet.Cells(Me.Worksheet.Rows.count, Me.DataStartColumnIndex).End(xlUp).row + 1
 End Property
 
 '商品情報が記載されている最後の行番号
@@ -72,20 +72,20 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
 
-Public Sub WriteAllData(targetData As Variant) '二次元配列を受け取る
-    WriteMatrixArray Me.Worksheet, Me.DataStartRowIndex, Me.ProductCodeColumnIndex, targetData
+Public Sub WriteAllData(targetData As Collection) '二次元配列を受け取る
+    WriteMatrixCollection Me.DataNextRowIndex, Me.DataStartColumnIndex, targetData
 End Sub
 
 Property Get AllDataRange() As Range
-    GetAllData = GetRange(Me.Worksheet, Me.DataStartRowIndex, Me.DataStartColumnIndex, Me.DataEndRowIndex, Me.DataEndColumnIndex).value
+    Set AllDataRange = GetRange(Me.DataHeaderRowIndex, Me.DataStartColumnIndex, Me.DataEndRowIndex, Me.DataEndColumnIndex)
 End Property
 
-Public Function GetAllData() As Variant
-    GetAllData = Me.AllDataRange.value
+Public Function GetAllData() As Collection
+    Set GetAllData = ArrayToCollection(Me.AllDataRange.value)
 End Function
 
-Public Function GetAllDara_NoHead() As Variant
-    GetAllDara_NoHead = RemoveFirstRow(Me.GetAllData)
+Public Function GetAllData_NoHead() As Collection
+    Set GetAllData_NoHead = RemoveFirstRow(Me.GetAllData)
 End Function
 
 '''汎用メソッド'''
@@ -96,55 +96,58 @@ Public Function GetRange(startRow As Long, startCol As Long, endRow As Long, end
 End Function
 
 ' データをシートに書き込む
-Public Sub WriteMatrixArray(startRowIndex As Long, startColIndex As Integer, writeData As Variant)
+Public Sub WriteMatrixCollection(startRowIndex As Long, startColIndex As Integer, writeData As Collection)
     Dim i As Long, j As Long
     Dim item As Variant
-    Dim rowCount As Long, colCount As Long
-    
+    Dim rowCollection As Collection
     Dim ws As Worksheet
     Set ws = Me.Worksheet
 
-    ' writeDataが配列か確認
-    If IsArray(writeData) Then
+    ' writeDataがCollectionか確認
+    If TypeName(writeData) = "Collection" Then
+        ' Collectionの場合
         rowCount = 0
-        ' 配列の場合
-        For i = LBound(writeData, 1) To UBound(writeData, 1)
+        For Each rowCollection In writeData
             colCount = 0
-            For j = LBound(writeData, 2) To UBound(writeData, 2)
-                ws.Cells(startRowIndex + colCount, startColIndex + rowCount).value = writeData(i, j)
+            For Each item In rowCollection
+                ws.Cells(startRowIndex + rowCount, startColIndex + colCount).value = item
                 colCount = colCount + 1
-            Next j
+            Next item
             rowCount = rowCount + 1
-        Next i
+        Next rowCollection
     Else
         ' エラーハンドリング
-        Err.Raise vbObjectError + 9999, "writeData", "writeDataは配列でなければなりません。"
+        Err.Raise vbObjectError + 9999, "writeData", "writeDataはCollectionでなければなりません。"
     End If
 End Sub
 
-'rangeで指定した範囲が一行または一列の場合に一次元の配列に格納する
-Public Function RangeToOneDimArray(rng As Range) As Variant
+' rangeで指定した範囲が一行または一列の場合に一次元のCollectionに格納する
+Public Function RangeToOneDimCollection(rng As Range) As Collection
     Dim arr As Variant
-    Dim oneDimArr() As Variant
+    Dim oneDimCollection As New Collection
     Dim i As Integer
 
     arr = rng.value
+    
+    If IsEmpty(arr) Then
+        Set RangeToOneDimCollection = oneDimCollection
+        Exit Function
+    End If
 
     ' 一行か一列かを判定
-    If rng.Rows.Count = 1 Then
+    If rng.Rows.count = 1 Then
         ' 一行の場合
-        ReDim oneDimArr(1 To rng.Columns.Count)
-        For i = 1 To rng.Columns.Count
-            oneDimArr(i) = arr(1, i)
+        For i = 1 To rng.Columns.count
+            oneDimCollection.Add arr(1, i)
         Next i
-    ElseIf rng.Columns.Count = 1 Then
+    ElseIf rng.Columns.count = 1 Then
         ' 一列の場合
-        ReDim oneDimArr(1 To rng.Rows.Count)
-        For i = 1 To rng.Rows.Count
-            oneDimArr(i) = arr(i, 1)
+        For i = 1 To rng.Rows.count
+            oneDimCollection.Add arr(i, 1)
         Next i
     End If
 
-    RangeToOneDimArray = oneDimArr
+    Set RangeToOneDimCollection = oneDimCollection
 End Function
+
 

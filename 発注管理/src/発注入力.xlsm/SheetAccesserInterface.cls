@@ -7,9 +7,13 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'''定義したはいいもののインターフェースを使用するとメソッド名が長くなって分かりずらいので'''
+'''このインターフェースは使用していません'''
+
 ' IWorksheetHandler インターフェース
 ' シートにアクセスするためのインターフェース
 
+Public super As SheetAccesser
 ' プロパティ
 Property Get Workbook() As Workbook
 End Property
@@ -33,10 +37,10 @@ Function DataEndColumnIndex() As Integer
 End Function
 Function DataNextRowIndex() As Long
 End Function
-Sub WriteAllData(targetData As Variant)
+Sub WriteAllData(targetData As Collection)
 End Sub
 Function GetAllData() As Variant
 End Function
-Function GetAllDara_NoHead() As Variant
+Function GetAllData_NoHead() As Variant
 End Function
 

@@ -12,7 +12,7 @@ Private Sub SetBumonCD()
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
-        .add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=1, Formula2:=10000 ' 数値型のバリデーションを追加
+        .Add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=1, Formula2:=10000 ' 数値型のバリデーションを追加
         .IgnoreBlank = True ' 空白セルを無視
         .InCellDropdown = True ' ドロップダウンリストを表示
         .InputTitle = "部門コード"
@@ -31,7 +31,7 @@ Private Sub SetUserCD()
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
-        .add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=1, Formula2:=10000 ' 数値型のバリデーションを追加
+        .Add Type:=xlValidateWholeNumber, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=1, Formula2:=10000 ' 数値型のバリデーションを追加
         .IgnoreBlank = True ' 空白セルを無視
         .InCellDropdown = True ' ドロップダウンリストを表示
         .InputTitle = "担当者コード"
@@ -50,7 +50,7 @@ Private Sub SetDate()
     
     With rng.Validation
         .Delete ' 既存のバリデーションを削除
-        .add Type:=xlValidateDate, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:="1/1/1900", Formula2:="12/31/2100" ' 日付型のバリデーションを追加
+        .Add Type:=xlValidateDate, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:="1/1/1900", Formula2:="12/31/2100" ' 日付型のバリデーションを追加
         .IgnoreBlank = True ' 空白セルを無視
         .InCellDropdown = True ' ドロップダウンリストを表示
         .InputTitle = "発注日付"
@@ -72,12 +72,12 @@ Public Function IsMatchQty() As Boolean
     '合わせ数
     Dim matchCol As Collection
     
-    Set qtyCol = order.Qty
-    Set matchCol = order.Match
+    Set qtyCol = order.qty
+    Set matchCol = order.match
     
     IsMatchQty = True
     
-    For i = 1 To matchCol.Count
+    For i = 1 To matchCol.count
         If Not IsMultiple(qtyCol(i), matchCol(i)) Then
             IsMatchQty = False
             Exit For

@@ -7,12 +7,16 @@ Sub SaveData()
     Application.ScreenUpdating = False
 
     Dim order As New OrderSheetAccesser
+    
     Dim data As New DataSheetAccesser
-    data.NewWorkbook
+    data.InitStatus order.bumonCode, _
+                    order.userCode, _
+                    order.targetDate
+    data.InitNewWorkbook
     data.InitWorkSheet
     
     '商品データ書き込み
-    data.WriteAllData order.data
+    data.WriteTableData order.GetAllData
     
     '保存
     data.Save
@@ -38,11 +42,14 @@ Sub LoadData()
         End
     End If
     
-    data.OpenWorkBook
+    data.InitStatus order.bumonCode, _
+                    order.userCode, _
+                    order.targetDate
+    data.InitOpenWorkBook
     data.InitWorkSheet
     
     '商品情報を入力
-    order.WriteAllData data.dataNoHeader
+    order.WriteAllData data.GetAllData_NoHead
     
     'データワークブックを閉じる
     data.CloseWorkBook
