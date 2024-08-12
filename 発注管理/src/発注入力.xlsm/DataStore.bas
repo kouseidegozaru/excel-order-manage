@@ -36,14 +36,15 @@ Sub LoadData()
     '発注入力の商品情報を全て削除
     order.ProductsCodeRange.EntireRow.Delete
     
+    data.InitStatus order.bumonCode, _
+                    order.userCode, _
+                    order.targetDate
+        
     'ファイルが存在しない場合は処理終了
     If Dir(data.SaveFilePath) = "" Then
         End
     End If
     
-    data.InitStatus order.bumonCode, _
-                    order.userCode, _
-                    order.targetDate
     data.InitOpenWorkBook
     data.InitWorkSheet
     

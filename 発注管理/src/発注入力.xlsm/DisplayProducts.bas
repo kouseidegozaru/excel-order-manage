@@ -5,22 +5,17 @@ Sub DisplayProductsInfo(targetRng As Range)
 
     Dim dataStorage As New DataBaseAccesser
     Dim order As New OrderSheetAccesser
-    
+
     ' 処理する部門の指定
-    Dim bumonCD As Integer
-    bumonCD = order.bumonCode
-    ' 処理する列の指定
-    Dim targetColumn As Integer
-    targetColumn = order.ProductCodeColumnIndex
+    Dim bumonCD As Integer: bumonCD = order.bumonCode
+    '商品CDの列の指定
+    Dim targetColumn As Integer: targetColumn = order.ProductCodeColumnIndex
     '数量の列の指定
-    Dim qtyColumn As Integer
-    qtyColumn = order.qtyColumnIndex
+    Dim qtyColumn As Integer: qtyColumn = order.qtyColumnIndex
     '仕入単価の列の指定
-    Dim priceColumn As Integer
-    priceColumn = order.PriceColumnIndex
+    Dim priceColumn As Integer: priceColumn = order.PriceColumnIndex
     '仕入金額の列の指定
-    Dim amountColumn As Integer
-    amountColumn = order.AmountColumnIndex
+    Dim amountColumn As Integer: amountColumn = order.AmountColumnIndex
     
     Dim cell As Range
     
@@ -28,42 +23,57 @@ Sub DisplayProductsInfo(targetRng As Range)
     For Each cell In targetRng.Columns(targetColumn).Cells
         ' 空白でないセルを処理
         If cell.value <> "" Then
+            '商品が存在する場合
             If dataStorage.ExistsProducts(bumonCD, cell.value) Then
-                '背景を白に
-                Call ChangeBackColor(cell, 255, 255, 255)
+            
+                DefaultCellDesign cell
+                Call WriteRow(cell, bumonCD, qtyColumn, priceColumn, amountColumn)
                 
-                Dim rs As ADODB.recordSet
-                Set rs = dataStorage.GetProduct(bumonCD, cell.value)
-                
-                ' レコードセットをセルに貼り付ける
-                If Not rs.EOF Then
-                    Dim i As Integer
-                    
-                    ' レコードセットをワークシートに貼り付け
-'                    rs.MoveFirst
-                    Do Until rs.EOF
-                        For i = 0 To rs.Fields.count - 1
-                            cell.Offset(0, i + 1).value = rs.Fields(i).value
-                        Next i
-                        '仕入金額の計算式を設定
-                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(qtyColumn, cell.row, priceColumn, cell.row)
-                        
-                        rs.MoveNext
-                    Loop
-                End If
-                
-                ' レコードセットを閉じる
-                rs.Close
-                Set rs = Nothing
             Else
-                '商品コードが存在しない場合は背景を赤に
-                Call ChangeBackColor(cell, 255, 0, 0)
+            
+                ErrorCellDesign cell
+                
             End If
         End If
     Next cell
     
 End Sub
+Private Sub WriteRow(cell As Object, bumonCD As Integer, qtyColumn As Integer, priceColumn As Integer, amountColumn As Integer)
 
+    Dim dataStorage As New DataBaseAccesser
+    
+    Dim rs As ADODB.recordSet
+    Set rs = dataStorage.GetProduct(bumonCD, cell.value)
+    
+    ' レコードセットをセルに貼り付ける
+    If Not rs.EOF Then
+        Dim i As Integer
+        
+        Do Until rs.EOF
+        
+            ' レコードセットをワークシートに貼り付け
+            For i = 0 To rs.Fields.count - 1
+                cell.Offset(0, i + 1).value = rs.Fields(i).value
+            Next i
+            
+            '仕入金額の計算式を設定
+            cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(qtyColumn, cell.row, priceColumn, cell.row)
+            
+            rs.MoveNext
+        Loop
+    End If
+    
+    ' レコードセットを閉じる
+    rs.Close
+    Set rs = Nothing
+    
+End Sub
+Private Sub ErrorCellDesign(cell As Object)
+    Call ChangeBackColor(cell, 255, 0, 0)
+End Sub
+Private Sub DefaultCellDesign(cell As Object)
+    Call ChangeBackColor(cell, 255, 255, 255)
+End Sub
 Private Sub ChangeBackColor(cell As Object, r As Integer, g As Integer, b As Integer)
         ' 背景色を赤に設定
         cell.Interior.color = RGB(r, g, b)
