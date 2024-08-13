@@ -43,3 +43,11 @@ Private Sub SetDate()
     End With
 End Sub
 
+'共有フォルダへのアクセス権限があるかチェック
+Public Sub CheckDirPermission()
+    Dim data As New DataSheetAccesser
+    If Not CheckDirectoryAccess(data.SaveDirPath) Then
+        MsgBox "共有フォルダへのアクセス権限がありません。使用するには情報課へ依頼してください"
+        End
+    End If
+End Sub

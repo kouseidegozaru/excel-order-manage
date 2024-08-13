@@ -8,7 +8,12 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Private Sub Workbook_Open()
+    '共有フォルダのアクセス権チェック
+    CheckDirPermission
+    '一か月前のファイルを削除
     DeleteDataFiles
+    'バリデーションチェックを設定
     SetValidations
+    'データの読み込み
     Loads
 End Sub
