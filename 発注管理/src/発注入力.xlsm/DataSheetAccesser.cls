@@ -24,8 +24,6 @@ Private Sub Class_Initialize()
 
     WorkSheetName_ = "Sheet1"
     
-    ProductCodeColumnIndex_ = 1
-    
     Set super = New SheetAccesser
     super.InitStatus DataHeaderRow:=1, _
                      DataStartRow:=2, _
@@ -64,10 +62,6 @@ End Property
 '保存ファイルパス
 Property Get SaveFilePath() As String
     SaveFilePath = Me.SaveDirPath & "\" & Me.SaveFileName
-End Property
-
-Property Get ProductCodeColumnIndex() As Integer
-    ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
 
 Sub WriteTableData(targetData As Collection)

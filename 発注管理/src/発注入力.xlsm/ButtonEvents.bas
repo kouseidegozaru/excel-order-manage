@@ -4,6 +4,8 @@ Attribute VB_Name = "ButtonEvents"
 '確定ボタン(商品コードの反映)
 Sub Decide()
 
+    Application.ScreenUpdating = False
+
     Dim order As New OrderSheetAccesser
     Dim search As New SearchSheetAccesser
     
@@ -13,7 +15,7 @@ Sub Decide()
     '重複する商品コードを排除
     Dim writeData As Collection
     Set writeData = FilterCollection(search.GetCheckedProductsCode, _
-                                     order.ProductsCode)
+                                     order.productsCode)
                                      
     Dim startRowIndex As Long
     Dim lastRowIndex As Long
@@ -32,13 +34,15 @@ Sub Decide()
     Set target = order.Worksheet.Range(IndexToLetter(order.ProductCodeColumnIndex) & startRowIndex & _
                                        ":" & _
                                        IndexToLetter(order.ProductCodeColumnIndex) & lastRowIndex)
+                                       
+    order.Worksheet.Activate
     
     '商品情報表示
     DisplayProductsInfo target
     
     IsIgnoreChangeEvents = False
     
-    order.Worksheet.Activate
+    Application.ScreenUpdating = True
     
 End Sub
 

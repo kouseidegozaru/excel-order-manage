@@ -179,7 +179,7 @@ Public Function GetAllProducts(ByVal bumonCD As Integer) As ADODB.recordSet
        "dbo.HM商品.計区, " & _
        "dbo.HM商品.入数, " & _
        "dbo.HM商品.合わせ数, " & _
-       "'' AS 数量, " & _
+       "0 AS 数量, " & _
        "dbo.HM商品.[ケス単位] AS 荷姿, " & _
        "dbo.HM商品.仕入単価, " & _
        "'' AS 仕入金額, " & _
@@ -221,7 +221,7 @@ Public Function GetProduct(ByVal bumonCD As Integer, ProductsCD As Long) As ADOD
            "dbo.HM商品.計区, " & _
            "dbo.HM商品.入数, " & _
            "dbo.HM商品.合わせ数, " & _
-           "'' AS 数量, " & _
+           "0 AS 数量, " & _
            "dbo.HM商品.[ケス単位] AS 荷姿, " & _
            "dbo.HM商品.仕入単価, " & _
            "'' AS 仕入金額, " & _

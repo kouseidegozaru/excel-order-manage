@@ -102,18 +102,18 @@ Property Get QtyRange() As Range
 End Property
 
 '発注入力に既に入力されている商品コードの取得
-Property Get ProductsCode() As Collection
-    Set ProductsCode = super.RangeToOneDimCollection(Me.ProductsCodeRange)
+Property Get productsCode() As Collection
+    Set productsCode = RangeToOneDimCollection(Me.ProductsCodeRange)
 End Property
 
 '発注入力に既に入力されている合わせ数の取得
 Property Get match() As Collection
-    Set match = super.RangeToOneDimCollection(Me.MatchRange)
+    Set match = RangeToOneDimCollection(Me.MatchRange)
 End Property
 
 '発注入力に既に入力されている数量の取得
 Property Get qty() As Collection
-    Set qty = super.RangeToOneDimCollection(Me.QtyRange)
+    Set qty = RangeToOneDimCollection(Me.QtyRange)
 End Property
 
 '部門コードの取得
