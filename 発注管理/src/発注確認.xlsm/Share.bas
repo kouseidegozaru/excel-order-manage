@@ -12,35 +12,6 @@ End Function
 
 '''以下はSheetAccesserのみで使用する項目'''
 
-' rangeで指定した範囲が一行または一列の場合に一次元のCollectionに格納する
-Public Function RangeToOneDimCollection(rng As Range) As Collection
-    Dim arr As Variant
-    Dim oneDimCollection As New Collection
-    Dim i As Integer
-
-    arr = rng.value
-    
-    If IsEmpty(arr) Then
-        Set RangeToOneDimCollection = oneDimCollection
-        Exit Function
-    End If
-
-    ' 一行か一列かを判定
-    If rng.Rows.Count = 1 Then
-        ' 一行の場合
-        For i = 1 To rng.Columns.Count
-            oneDimCollection.Add arr(1, i)
-        Next i
-    ElseIf rng.Columns.Count = 1 Then
-        ' 一列の場合
-        For i = 1 To rng.Rows.Count
-            oneDimCollection.Add arr(i, 1)
-        Next i
-    End If
-
-    Set RangeToOneDimCollection = oneDimCollection
-End Function
-
 '二次元コレクションから一行目を削除
 Function RemoveFirstRow(ByVal col As Collection) As Collection
     Dim newCol As Collection

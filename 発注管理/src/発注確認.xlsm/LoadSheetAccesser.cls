@@ -15,9 +15,6 @@ Private super As SheetAccesser
 Private WorkSheetName_ As String
 
 Private ProductCodeColumnIndex_ As Integer
-Private QtyColumnIndex_ As Integer
-Private PriceColumnIndex_ As Integer
-Private AmountColumnIndex_ As Integer
 
 Private InputBumonCodeRange_ As String
 Private OutputBumonNameRange_ As String
@@ -38,9 +35,6 @@ Private Sub Class_Initialize()
     CompleteString_ = "◎"
     
     ProductCodeColumnIndex_ = 1
-    QtyColumnIndex_ = 11
-    PriceColumnIndex_ = 13
-    AmountColumnIndex_ = 14
     
     FilePropertyStartColumnIndex_ = 2
     FilePropertyUserNameRowIndex_ = 4
@@ -71,18 +65,6 @@ End Sub
 
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
-End Property
-
-Property Get QtyColumnIndex() As Integer
-    QtyColumnIndex = QtyColumnIndex_
-End Property
-
-Property Get AmountColumnIndex() As Integer
-    AmountColumnIndex = AmountColumnIndex_
-End Property
-
-Property Get PriceColumnIndex() As Integer
-    PriceColumnIndex = PriceColumnIndex_
 End Property
 
 Property Get FilePropertyStartColumnIndex() As Integer
@@ -146,13 +128,6 @@ Property Get ProductsCodeRange() As Range
                                            Me.ProductCodeColumnIndex)
 End Property
 
-'発注入力にある商品の数量の範囲
-Property Get QtyRange() As Range
-    Set QtyRange = super.GetRange(Me.DataStartRowIndex, _
-                                  Me.QtyColumnIndex, _
-                                  Me.DataEndRowIndex, _
-                                  Me.QtyColumnIndex)
-End Property
 '部門コードの取得
 Property Get BumonCode() As Integer
     '値の取得
@@ -194,16 +169,6 @@ End Property
 
 Property Get TargetDateRange() As Range
     Set TargetDateRange = Me.Worksheet.Range(InputTargetDateRange_)
-End Property
-
-'発注入力に既に入力されている商品コードの取得
-Property Get ProductsCode() As Collection
-    Set ProductsCode = RangeToOneDimCollection(Me.ProductsCodeRange)
-End Property
-
-'発注入力に既に入力されている数量の取得
-Property Get Qty() As Collection
-    Set Qty = RangeToOneDimCollection(Me.QtyRange)
 End Property
 
 '担当者名の表示
