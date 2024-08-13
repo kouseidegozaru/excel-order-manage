@@ -66,8 +66,8 @@ End Sub
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
-Property Get PiecesColumnIndex() As Integer
-    PiecesColumnIndex = PiecesColumnIndex_
+Property Get piecesColumnIndex() As Integer
+    piecesColumnIndex = PiecesColumnIndex_
 End Property
 Property Get qtyColumnIndex() As Integer
     qtyColumnIndex = QtyColumnIndex_

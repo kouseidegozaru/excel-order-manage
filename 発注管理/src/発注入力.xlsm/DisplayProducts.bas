@@ -91,8 +91,11 @@ End Sub
 Public Sub ApplyAmountCalcFormulaToRange()
     Dim order As New OrderSheetAccesser
     
+    
+    Dim piecesColumnIndex As Integer
     Dim qtyColumnIndex As Integer
     Dim priceColumnIndex As Integer
+    piecesColumnIndex = order.piecesColumnIndex
     qtyColumnIndex = order.qtyColumnIndex
     priceColumnIndex = order.priceColumnIndex
     
@@ -107,17 +110,20 @@ Public Sub ApplyAmountCalcFormulaToRange()
     Dim formula As String
     
     For row = startRow To endRow
-        formula = GetAmountCalcFormula(qtyColumnIndex, row, priceColumnIndex, row)
+        formula = GetAmountCalcFormula(row, piecesColumnIndex, qtyColumnIndex, priceColumnIndex)
         Cells(row, targetColumnIndex).formula = formula
     Next row
 End Sub
 'Žd“ü‹àŠz‚ÌŒvŽZŽ®‚ð•Ô‚·
-Private Function GetAmountCalcFormula(qtyColumnIndex As Integer, qtyRowIndex As Long, priceColumnIndex As Integer, priceRowIndex As Long) As String
+Private Function GetAmountCalcFormula(rowIndex As Long, piecesColumnIndex As Integer, qtyColumnIndex As Integer, priceColumnIndex As Integer) As String
     GetAmountCalcFormula = "=IFERROR(" & _
+                            IndexToLetter(piecesColumnIndex) & _
+                            rowIndex & _
+                            "*" & _
                             IndexToLetter(qtyColumnIndex) & _
-                            qtyRowIndex & _
+                            rowIndex & _
                             "*" & _
                             IndexToLetter(priceColumnIndex) & _
-                            priceRowIndex & _
+                            rowIndex & _
                             ",0)"
 End Function
