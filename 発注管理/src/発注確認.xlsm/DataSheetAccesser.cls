@@ -49,11 +49,11 @@ End Property
 Property Let FileName(targetFileName As String)
     fileName_ = targetFileName
     
-    InitWorkBook
+    InitWorkbook
     InitWorkSheet
 End Property
 
-Public Sub InitWorkBook()
+Public Sub InitWorkbook()
     Set WorkBook_ = Workbooks.Open(Me.filePath)
 End Sub
 
@@ -101,7 +101,7 @@ End Function
 
 '次に入力する商品情報が空白の行番号
 Public Function DataNextRowNumber() As Long
-    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
+    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).row + 1
 End Function
 '商品情報が記載されているの最後の列番号
 Public Function DataEndColumnNumber() As Integer

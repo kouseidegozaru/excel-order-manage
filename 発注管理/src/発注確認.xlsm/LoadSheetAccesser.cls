@@ -58,11 +58,11 @@ Private Sub Class_Initialize()
     
     InputTargetDateRange_ = "C2"
     
-    InitWorkBook
+    InitWorkbook
     InitWorkSheet
 End Sub
 
-Private Sub InitWorkBook()
+Private Sub InitWorkbook()
     Set WorkBook_ = ThisWorkbook
 End Sub
 
@@ -173,7 +173,7 @@ Property Get HeaderRowNumber() As Long
 End Property
 '次に入力する商品情報が空白の行番号
 Public Function DataNextRowNumber() As Long
-    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
+    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).row + 1
 End Function
 
 '商品情報が記載されている最後の行番号

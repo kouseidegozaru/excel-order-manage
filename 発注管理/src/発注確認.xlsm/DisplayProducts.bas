@@ -47,7 +47,7 @@ Sub DisplayProductsInfo(targetRng As Range)
                             cell.Offset(0, i + 1).value = rs.Fields(i).value
                         Next i
                         'édì¸ã‡äzÇÃåvéZéÆÇê›íË
-                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(QtyColumn, cell.Row, priceColumn, cell.Row)
+                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(QtyColumn, cell.row, priceColumn, cell.row)
                         
                         rs.MoveNext
                     Loop
