@@ -16,6 +16,18 @@
 `Qty`
     - 数量
 
+`Pieces`
+    - 入数
+
+`Match`
+    - 合わせ数
+
+`Price`
+    - 単価
+
+`Amount`
+    - 仕入金額
+    
 ### 命名規則
 
  - キャメルケース
@@ -34,6 +46,8 @@
 
  - 全ての機能を使用可能にするには、メソッドの先頭が`Init`で始まるものを実行する
     - `InitWorkBook`や`InitWorkSheet`など
+      
+ - メンバ変数は末尾に`_`がつく
 
 ### `DataBaseAccesser`
 
