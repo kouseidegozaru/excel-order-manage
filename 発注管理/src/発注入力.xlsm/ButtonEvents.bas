@@ -69,19 +69,20 @@ Sub Update()
     columnIndex = search.DataStartColumnIndex
     
     ' データの書き込み
-    rs.MoveFirst
-    Do While Not rs.EOF
-        
-        For i = 0 To rs.Fields.count - 1
-            search.Cells(rowIndex, i + columnIndex) = rs.Fields(i).value
-        Next i
-        
-        ' チェックボックスの追加
-        search.AddCheckBox rowIndex
-        
-        rowIndex = rowIndex + 1
-        rs.MoveNext
-    Loop
+    Dim targetRange As Range
+    Set targetRange = search.Worksheet.Cells(rowIndex, columnIndex)
+    
+    ' レコードセットを一括で貼り付ける
+    targetRange.CopyFromRecordset rs
+    
+    ' 貼り付けたデータの行数を取得
+    Dim pastedRows As Long
+    pastedRows = rs.Fields.count - 1
+    
+    ' チェックボックスの追加
+    For i = 0 To pastedRows - 1
+        search.AddCheckBox rowIndex + i
+    Next i
     
     search.Worksheet.Activate
 

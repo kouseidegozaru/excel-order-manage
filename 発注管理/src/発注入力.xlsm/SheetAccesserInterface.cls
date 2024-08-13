@@ -10,7 +10,6 @@ Attribute VB_Exposed = False
 '''定義したはいいもののインターフェースを使用するとメソッド名が長くなって分かりずらいので'''
 '''このインターフェースは使用していません'''
 
-' IWorksheetHandler インターフェース
 ' シートにアクセスするためのインターフェース
 
 Public super As SheetAccesser
