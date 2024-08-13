@@ -13,7 +13,7 @@ Sub DisplayProductsInfo(targetRng As Range)
     '数量の列の指定
     Dim qtyColumn As Integer: qtyColumn = order.qtyColumnIndex
     '仕入単価の列の指定
-    Dim priceColumn As Integer: priceColumn = order.PriceColumnIndex
+    Dim priceColumn As Integer: priceColumn = order.priceColumnIndex
     '仕入金額の列の指定
     Dim amountColumn As Integer: amountColumn = order.AmountColumnIndex
     
@@ -37,6 +37,9 @@ Sub DisplayProductsInfo(targetRng As Range)
         End If
     Next cell
     
+    '仕入金額計算式の入力
+    ApplyAmountCalcFormulaToRange
+    
 End Sub
 Private Sub WriteRow(cell As Object, bumonCD As Integer, qtyColumn As Integer, priceColumn As Integer, amountColumn As Integer)
 
@@ -55,9 +58,6 @@ Private Sub WriteRow(cell As Object, bumonCD As Integer, qtyColumn As Integer, p
             For i = 0 To rs.Fields.count - 1
                 cell.Offset(0, i + 1).value = rs.Fields(i).value
             Next i
-            
-            '仕入金額の計算式を設定
-            cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(qtyColumn, cell.row, priceColumn, cell.row)
             
             rs.MoveNext
         Loop
@@ -87,13 +87,37 @@ Private Sub ChangeBackColor(cell As Object, r As Integer, g As Integer, b As Int
         cell.Borders(xlInsideHorizontal).LineStyle = xlContinuous
 End Sub
 
+'仕入金額計算式の入力
+Public Sub ApplyAmountCalcFormulaToRange()
+    Dim order As New OrderSheetAccesser
+    
+    Dim qtyColumnIndex As Integer
+    Dim priceColumnIndex As Integer
+    qtyColumnIndex = order.qtyColumnIndex
+    priceColumnIndex = order.priceColumnIndex
+    
+    Dim startRow As Long
+    Dim endRow As Long
+    Dim targetColumnIndex As Integer
+    startRow = order.DataStartRowIndex
+    endRow = order.DataEndRowIndex
+    targetColumnIndex = order.AmountColumnIndex
+    
+    Dim row As Long
+    Dim formula As String
+    
+    For row = startRow To endRow
+        formula = GetAmountCalcFormula(qtyColumnIndex, row, priceColumnIndex, row)
+        Cells(row, targetColumnIndex).formula = formula
+    Next row
+End Sub
 '仕入金額の計算式を返す
-Private Function GetAmountCalcFormula(qtyColumnIndex As Integer, qtyRowIndex As Long, PriceColumnIndex As Integer, priceRowIndex As Long) As String
+Private Function GetAmountCalcFormula(qtyColumnIndex As Integer, qtyRowIndex As Long, priceColumnIndex As Integer, priceRowIndex As Long) As String
     GetAmountCalcFormula = "=IFERROR(" & _
                             IndexToLetter(qtyColumnIndex) & _
                             qtyRowIndex & _
                             "*" & _
-                            IndexToLetter(PriceColumnIndex) & _
+                            IndexToLetter(priceColumnIndex) & _
                             priceRowIndex & _
                             ",0)"
 End Function

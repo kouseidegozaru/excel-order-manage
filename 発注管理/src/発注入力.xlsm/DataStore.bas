@@ -54,6 +54,9 @@ Sub LoadData()
     'データワークブックを閉じる
     data.CloseWorkBook
     
+    '仕入れ金額計算式の入力
+    ApplyAmountCalcFormulaToRange
+    
     Application.ScreenUpdating = True
 End Sub
 

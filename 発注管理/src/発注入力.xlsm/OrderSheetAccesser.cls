@@ -70,8 +70,8 @@ End Property
 Property Get AmountColumnIndex() As Integer
     AmountColumnIndex = AmountColumnIndex_
 End Property
-Property Get PriceColumnIndex() As Integer
-    PriceColumnIndex = PriceColumnIndex_
+Property Get priceColumnIndex() As Integer
+    priceColumnIndex = PriceColumnIndex_
 End Property
 Property Get MatchColumnIndex() As Integer
     MatchColumnIndex = MatchColumnIndex_
