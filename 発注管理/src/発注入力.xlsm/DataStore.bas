@@ -7,12 +7,16 @@ Sub SaveData()
     Application.ScreenUpdating = False
 
     Dim order As New OrderSheetAccesser
+    
     Dim data As New DataSheetAccesser
-    data.NewWorkbook
+    data.InitStatus order.bumonCode, _
+                    order.userCode, _
+                    order.targetDate
+    data.InitNewWorkbook
     data.InitWorkSheet
     
     '商品データ書き込み
-    data.WriteAllData order.data
+    data.WriteTableData order.GetAllData
     
     '保存
     data.Save
@@ -21,7 +25,6 @@ Sub SaveData()
     Application.ScreenUpdating = True
     
 End Sub
-
 
 Sub LoadData()
     
@@ -33,19 +36,26 @@ Sub LoadData()
     '発注入力の商品情報を全て削除
     order.ProductsCodeRange.EntireRow.Delete
     
+    data.InitStatus order.bumonCode, _
+                    order.userCode, _
+                    order.targetDate
+        
     'ファイルが存在しない場合は処理終了
     If Dir(data.SaveFilePath) = "" Then
         End
     End If
     
-    data.OpenWorkBook
+    data.InitOpenWorkBook
     data.InitWorkSheet
     
     '商品情報を入力
-    order.WriteAllData data.dataNoHeader
+    order.WriteAllData data.GetAllData_NoHead
     
     'データワークブックを閉じる
     data.CloseWorkBook
+    
+    '仕入れ金額計算式の入力
+    ApplyAmountCalcFormulaToRange
     
     Application.ScreenUpdating = True
 End Sub

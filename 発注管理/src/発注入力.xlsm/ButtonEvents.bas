@@ -4,44 +4,45 @@ Attribute VB_Name = "ButtonEvents"
 '確定ボタン(商品コードの反映)
 Sub Decide()
 
+    Application.ScreenUpdating = False
+
     Dim order As New OrderSheetAccesser
-    Dim Search As New SearchSheetAccesser
-    Set Search.Workbook = ActiveWorkbook
-    Search.InitWorkSheet
+    Dim search As New SearchSheetAccesser
     
     '変更のイベントを無視
     IsIgnoreChangeEvents = True
     
     '重複する商品コードを排除
     Dim writeData As Collection
-    Set writeData = FilterCollection(Search.GetCheckedProductsCode, _
-                                     order.ProductsCode)
+    Set writeData = FilterCollection(search.GetCheckedProductsCode, _
+                                     order.productsCode)
                                      
     Dim startRowIndex As Long
     Dim lastRowIndex As Long
     
-    startRowIndex = order.DataNextRowNumber
+    startRowIndex = order.DataNextRowIndex
     lastRowIndex = startRowIndex
     
     '発注入力に商品コード入力
-    For i = 1 To writeData.Count
-        order.Cells(lastRowIndex, order.ProductCodeColumnNumber) = writeData(i)
+    For i = 1 To writeData.count
+        order.Cells(lastRowIndex, order.ProductCodeColumnIndex) = writeData(i)
         lastRowIndex = lastRowIndex + 1
     Next i
     
     '発注入力に商品コードを入力した範囲
-    Dim target As range
-    Set target = order.Worksheet.range(order.ProductCodeColumn & startRowIndex & ":" & order.ProductCodeColumn & lastRowIndex)
+    Dim target As Range
+    Set target = order.Worksheet.Range(IndexToLetter(order.ProductCodeColumnIndex) & startRowIndex & _
+                                       ":" & _
+                                       IndexToLetter(order.ProductCodeColumnIndex) & lastRowIndex)
+                                       
+    order.Worksheet.Activate
     
     '商品情報表示
     DisplayProductsInfo target
     
-    '保存
-    SaveData
-    
     IsIgnoreChangeEvents = False
     
-    order.Worksheet.Activate
+    Application.ScreenUpdating = True
     
 End Sub
 
@@ -52,39 +53,37 @@ Sub Update()
     Application.ScreenUpdating = False
     
     Dim order As New OrderSheetAccesser
-    Dim Search As New SearchSheetAccesser
+    Dim search As New SearchSheetAccesser
     
-    Set Search.Workbook = order.Workbook
-    Search.InitWorkSheet
-    Search.Clear
+    search.Clear
     
     Dim DataBaseAccesser As New DataBaseAccesser
     Dim rs As ADODB.recordSet
     ' データベースからレコードセットを取得
-    Set rs = DataBaseAccesser.GetAllProducts(order.BumonCode)
+    Set rs = DataBaseAccesser.GetAllProducts(order.bumonCode)
     
     Dim rowIndex As Long
     Dim columnIndex As Integer
     
-    rowIndex = Search.DataStartRowNumber
-    columnIndex = Search.DataStartColumnNumber
+    rowIndex = search.DataStartRowIndex
+    columnIndex = search.DataStartColumnIndex
     
     ' データの書き込み
     rs.MoveFirst
     Do While Not rs.EOF
         
-        For i = 0 To rs.Fields.Count - 1
-            Search.Cells(rowIndex, i + columnIndex) = rs.Fields(i).value
+        For i = 0 To rs.Fields.count - 1
+            search.Cells(rowIndex, i + columnIndex) = rs.Fields(i).value
         Next i
         
         ' チェックボックスの追加
-        Search.AddCheckBox rowIndex
+        search.AddCheckBox rowIndex
         
         rowIndex = rowIndex + 1
         rs.MoveNext
     Loop
     
-    Search.Worksheet.Activate
+    search.Worksheet.Activate
 
     Application.ScreenUpdating = True
     
@@ -92,18 +91,14 @@ End Sub
 
 'チェックボックスのクリア
 Sub ClearCheckBoxes()
-    Dim order As New OrderSheetAccesser
-    Dim Search As New SearchSheetAccesser
-    
-    Set Search.Workbook = order.Workbook
-    Search.InitWorkSheet
-    Search.ClearCheckBoxes
+    Dim search As New SearchSheetAccesser
+    search.ClearCheckBoxes
 End Sub
 
 '商品検索シートの表示
-Sub Search()
-    Dim order As New OrderSheetAccesser
-    order.FormatSheet.Activate
+Sub search()
+    Dim search As New SearchSheetAccesser
+    search.Worksheet.Activate
 End Sub
 
 '送信

@@ -4,11 +4,11 @@ Sub DeleteDataFiles()
     Dim data As New DataSheetAccesser
     Dim fileProperty As New FilePropertyManager
     Dim filter As New FileFilter
-    Dim filePath As String
+    Dim FilePath As String
     Dim fs As New Scripting.FileSystemObject
     
     '対象ディレクトリを設定
-    filter.DirPath = data.DataDirPath
+    filter.DirPath = data.SaveDirPath
     
     'ファイル名の取得
     Dim fileNames As Collection
@@ -22,17 +22,17 @@ Sub DeleteDataFiles()
     Dim oneMonthAgo As Date
     oneMonthAgo = DateAdd("m", -1, today)
     
-    For Each FileName In fileNames
+    For Each fileName In fileNames
     
         'ファイル情報取得準備
-        filePath = data.DataDirPath & "\" & FileName
-        fileProperty.filePath = filePath
+        FilePath = data.SaveDirPath & "\" & fileName
+        fileProperty.InitFilePath FilePath
         
         '一か月前の場合ファイル削除
         If fileProperty.TargetDate < oneMonthAgo Then
-            fs.DeleteFile filePath
+            fs.DeleteFile FilePath
         End If
         
-    Next FileName
+    Next fileName
         
 End Sub

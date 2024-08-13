@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Dim filePath_ As String
+Dim FilePath_ As String
 Dim fileName_ As String
 
 Dim BumonCodeIdentifier_ As String
@@ -22,10 +22,10 @@ Private Sub Class_Initialize()
     BreakIdentifier_ = "-"
 End Sub
 
-Property Let filePath(targetFilePath As String)
-    filePath_ = targetFilePath
-    fileName_ = GetFileName(filePath_)
-End Property
+Public Sub InitFilePath(targetFilePath As String)
+    FilePath_ = targetFilePath
+    fileName_ = GetFileName(FilePath_)
+End Sub
 
 Property Get BumonCode() As Integer
     BumonCode = CInt(ExtractBetweenCharacters(fileName_, BumonCodeIdentifier_, BreakIdentifier_))
@@ -34,8 +34,8 @@ Property Get BumonCodeIdentifier() As String
     BumonCodeIdentifier = BumonCodeIdentifier_
 End Property
 
-Property Get UserCode() As Integer
-    UserCode = CInt(ExtractBetweenCharacters(fileName_, UserCodeIdentifier_, BreakIdentifier_))
+Property Get userCode() As Integer
+    userCode = CInt(ExtractBetweenCharacters(fileName_, UserCodeIdentifier_, BreakIdentifier_))
 End Property
 Property Get UserCodeIdentifier() As String
     UserCodeIdentifier = UserCodeIdentifier_
@@ -64,7 +64,7 @@ Property Get BreakIdentifier() As String
 End Property
 
 Property Get UpdatedDate() As Date
-    UpdatedDate = FileDateTime(filePath_)
+    UpdatedDate = FileDateTime(FilePath_)
 End Property
 
 Private Function ExtractBetweenCharacters(ByVal str As String, ByVal startChar As String, ByVal endChar As String) As String
@@ -89,9 +89,9 @@ Private Function ExtractBetweenCharacters(ByVal str As String, ByVal startChar A
     End If
 End Function
 
-Private Function GetFileName(filePath As String) As String
-    Dim FileName As String
-    FileName = Mid(filePath, InStrRev(filePath, "\") + 1)
-    GetFileName = FileName
+Private Function GetFileName(FilePath As String) As String
+    Dim fileName As String
+    fileName = Mid(FilePath, InStrRev(FilePath, "\") + 1)
+    GetFileName = fileName
 End Function
 

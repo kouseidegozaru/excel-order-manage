@@ -14,42 +14,42 @@ Sub LoadFileProperty()
     Dim filter As New FileFilter
     Dim users As New UserCodeAccesser
     
-    Dim BumonCodeFilter As String
-    Dim UserCodeFilter As String
-    Dim TargetDateFilter As String
+    Dim bumonCodeFilter As String
+    Dim userCodeFilter As String
+    Dim targetDateFilter As String
     
     'プロパティをクリア
     load.ClearFileProperty
     
     'ファイルの抽出条件文字列の設定
-    BumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
-    TargetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
+    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
+    targetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     '探索するディレクトリの設定
-    filter.DirPath = data.DataDirPath
+    filter.DirPath = data.SaveDirPath
     
     '部門を指定して従業員コードの取得
-    Dim UserCodes As Collection
-    Set UserCodes = users.GetEmployeeCodes(load.BumonCode)
+    Dim userCodes As Collection
+    Set userCodes = users.GetEmployeeCodes(load.BumonCode)
     
     
-    For Each UserCode In UserCodes
+    For Each userCode In userCodes
     
         '従業員名の取得
         Dim userName As String
-        userName = DataStorage.GetUserName(UserCode)
+        userName = DataStorage.GetUserName(userCode)
         
         'ファイルの抽出条件文字列の設定
-        UserCodeFilter = fileProperty.UserCodeIdentifier & UserCode & fileProperty.BreakIdentifier
+        userCodeFilter = fileProperty.UserCodeIdentifier & userCode & fileProperty.BreakIdentifier
         
         'フィルターの実行
         Dim filePathCollection As Collection
-        Set filePathCollection = filter.AndFilter(BumonCodeFilter, TargetDateFilter, UserCodeFilter)
+        Set filePathCollection = filter.AndFilter(bumonCodeFilter, targetDateFilter, userCodeFilter)
         
         'フィルターの結果が存在する場合
         If filePathCollection.Count > 0 Then
             'ファイル情報の取得準備
-            fileProperty.filePath = data.DataDirPath & "\" & filePathCollection(1)
+            fileProperty.InitFilePath data.SaveDirPath & "\" & filePathCollection(1)
             'ファイルプロパティの表示
             load.AddFileProperty userName, True, fileProperty.UpdatedDate
         Else
@@ -58,7 +58,7 @@ Sub LoadFileProperty()
         End If
         
         
-    Next UserCode
+    Next userCode
     
 End Sub
 
@@ -71,37 +71,37 @@ Sub LoadData()
     load.ClearData
     
 '''発注情報の取得'''
-    Dim BumonCodeFilter As String
-    Dim TargetDateFilter As String
+    Dim bumonCodeFilter As String
+    Dim targetDateFilter As String
     
     'ファイルの抽出条件文字列の設定
-    BumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
-    TargetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
+    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
+    targetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     'フィルターの実行
     Dim filePathCollection As Collection
-    filter.DirPath = data.DataDirPath
-    Set filePathCollection = filter.AndFilter(BumonCodeFilter, TargetDateFilter)
+    filter.DirPath = data.SaveDirPath
+    Set filePathCollection = filter.AndFilter(bumonCodeFilter, targetDateFilter)
     
-    '商品コードをキー値、数量を値とした辞書型変数
-    Dim resultDict As New Scripting.Dictionary
     
-    For Each FileName In filePathCollection
+    For Each fileName In filePathCollection
         
         'データの取得準備
-        data.FileName = FileName
+        data.InitSaveFileName CStr(fileName)
+        data.InitOpenWorkBook
+        data.InitWorkSheet
         'ファイル情報の取得準備
-        fileProperty.filePath = data.filePath
+        fileProperty.InitFilePath data.SaveFilePath
         '商品情報を入力
-        load.WriteAllData data.dataNoHeader
+        load.WriteAllData data.GetAllData_NoHead
         'データワークブックを閉じる
         data.CloseWorkBook
         
-    Next FileName
+    Next fileName
     
     Dim rs As ADODB.Recordset
-    Set rs = load.ProductsGroupData
+    Set rs = load.AllGroupData
     load.ClearData
-    load.WriteAllData RemoveFirstRow(RecordsetToArray(rs))
+    load.WriteAllData RemoveFirstRow(RecordsetToCollection(rs))
     
 End Sub

@@ -10,19 +10,19 @@ Attribute VB_Exposed = True
 '行削除を検知するための変更前の行数
 Private lastUpdatedRowCnt As Long
 
-Private Sub Worksheet_Change(ByVal target As range)
+Private Sub Worksheet_Change(ByVal target As Range)
 
     'セルの変更をフック
     HookCellChange target
     
 End Sub
 
-Private Sub HookCellChange(ByVal target As range)
+Private Sub HookCellChange(ByVal target As Range)
     'IsIgnoreChangeEventsはシートの変更を検知するかどうかの状態を設定
     'events.Ignoreはシートの変更があっても無視する
 
     'データアクセス
-    Dim DataStorage As New DataBaseAccesser
+    Dim dataStorage As New DataBaseAccesser
 
     Dim order As New OrderSheetAccesser
 
@@ -38,7 +38,7 @@ Private Sub HookCellChange(ByVal target As range)
         
         
 '行の削除を監視
-        If .IsDeleted(lastUpdatedRowCnt, order.DataNextRowNumber) Then
+        If .IsDeleted(lastUpdatedRowCnt, order.DataNextRowIndex) Then
 
         End If
         
@@ -49,7 +49,7 @@ Private Sub HookCellChange(ByVal target As range)
             IsIgnoreChangeEvents = True
              
             ' 担当者名の表示
-            order.UserName = DataStorage.GetUserName(order.UserCode)
+            order.UserName = dataStorage.GetUserName(order.userCode)
             ' 発注データの読み込み
             LoadData
             
@@ -63,7 +63,7 @@ Private Sub HookCellChange(ByVal target As range)
             IsIgnoreChangeEvents = True
             
             ' 部門名の表示
-            order.BumonName = DataStorage.GetBumonName(order.BumonCode)
+            order.BumonName = dataStorage.GetBumonName(order.bumonCode)
             ' 発注データの読み込み
             LoadData
             
@@ -105,5 +105,5 @@ Private Sub HookCellChange(ByVal target As range)
     End With
     
     '最終行数を更新
-    lastUpdatedRowCnt = order.DataNextRowNumber
+    lastUpdatedRowCnt = order.DataNextRowIndex
 End Sub

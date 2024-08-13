@@ -9,21 +9,16 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 '発注入力フォームのセル番地の設定
 
-Private WorkBook_ As Workbook
+'SheetAccesserクラスを疑似的に継承
+Private super As SheetAccesser
 
 Private WorkSheetName_ As String
-Private WorkSheet_ As Worksheet
-Private FormatSheetName_ As String
-Private FormatSheet_ As Worksheet
 
-Private ProductCodeColumnNumber_ As Integer
-Private MatchColumnNumber_ As Integer
-Private QtyColumnNumber_ As Integer
-Private PriceColumnNumber_ As Integer
-Private AmountColumnNumber_ As Integer
-
-Private DataHeaderRowNumber_ As Long
-Private DataStartRowNumber_ As Long
+Private ProductCodeColumnIndex_ As Integer
+Private MatchColumnIndex_ As Integer
+Private QtyColumnIndex_ As Integer
+Private PriceColumnIndex_ As Integer
+Private AmountColumnIndex_ As Integer
 
 Private InputBumonCodeRange_ As String
 Private OutputBumonNameRange_ As String
@@ -33,16 +28,12 @@ Private InputTargetDateRange_ As String
 
 Private Sub Class_Initialize()
     WorkSheetName_ = "発注入力"
-    FormatSheetName_ = "商品マスターシート"
     
-    ProductCodeColumnNumber_ = 1
-    MatchColumnNumber_ = 10
-    QtyColumnNumber_ = 11
-    PriceColumnNumber_ = 13
-    AmountColumnNumber_ = 14
-    
-    DataHeaderRowNumber_ = 4
-    DataStartRowNumber_ = 5
+    ProductCodeColumnIndex_ = 1
+    MatchColumnIndex_ = 10
+    QtyColumnIndex_ = 11
+    PriceColumnIndex_ = 13
+    AmountColumnIndex_ = 14
     
     InputBumonCodeRange_ = "A2"
     OutputBumonNameRange_ = "B2"
@@ -52,144 +43,84 @@ Private Sub Class_Initialize()
     
     InputTargetDateRange_ = "E2"
     
-    InitWorkBook
+    
+    Set super = New SheetAccesser
+    super.InitStatus DataHeaderRow:=4, _
+                     DataStartRow:=5, _
+                     DataStartColumn:=1
+                     
+    
+    InitWorkbook
     InitWorkSheet
-    InitFormatSheet
 End Sub
 
-Private Sub InitWorkBook()
-    Set WorkBook_ = ThisWorkbook
+Private Sub InitWorkbook()
+    super.InitWorkbook ThisWorkbook
 End Sub
 
 Private Sub InitWorkSheet()
-    Set WorkSheet_ = WorkBook_.Sheets(WorkSheetName_)
+    super.InitWorkSheet super.Workbook.Sheets(WorkSheetName_)
 End Sub
-
-Private Sub InitFormatSheet()
-    Set FormatSheet_ = WorkBook_.Sheets(FormatSheetName_)
-End Sub
-
-Property Get Workbook() As Workbook
-    Set Workbook = WorkBook_
+Property Get ProductCodeColumnIndex() As Integer
+    ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
-
-Property Get Worksheet() As Worksheet
-    Set Worksheet = WorkSheet_
+Property Get qtyColumnIndex() As Integer
+    qtyColumnIndex = QtyColumnIndex_
 End Property
-
-Property Get FormatSheet() As Worksheet
-    Set FormatSheet = FormatSheet_
+Property Get AmountColumnIndex() As Integer
+    AmountColumnIndex = AmountColumnIndex_
 End Property
-
-Property Get DataHeaderRowNumber() As Long
-    DataHeaderRowNumber = DataHeaderRowNumber_
+Property Get priceColumnIndex() As Integer
+    priceColumnIndex = PriceColumnIndex_
 End Property
-
-Property Get ProductCodeColumnNumber() As Integer
-    ProductCodeColumnNumber = ProductCodeColumnNumber_
-End Property
-
-Property Get ProductCodeColumn() As String
-    ProductCodeColumn = NumberToLetter(Me.ProductCodeColumnNumber)
-End Property
-
-Property Get QtyColumnNumber() As Integer
-    QtyColumnNumber = QtyColumnNumber_
-End Property
-
-Property Get QtyColumn() As String
-    QtyColumn = NumberToLetter(Me.QtyColumnNumber)
-End Property
-Property Get AmountColumnNumber() As Integer
-    AmountColumnNumber = AmountColumnNumber_
-End Property
-Property Get PriceColumnNumber() As Integer
-    PriceColumnNumber = PriceColumnNumber_
-End Property
-Property Get MatchColumnNumber() As Integer
-    MatchColumnNumber = MatchColumnNumber_
-End Property
-
-Property Get MatchColumn() As String
-    MatchColumn = NumberToLetter(Me.MatchColumnNumber)
-End Property
-
-Property Get DataStartRowNumber() As Long
-    DataStartRowNumber = DataStartRowNumber_
-End Property
-'商品情報が記載されているの最後の列番号
-Public Function DataEndColumnNumber() As Integer
-    DataEndColumnNumber = Me.Worksheet.Cells(Me.DataHeaderRowNumber, Me.Worksheet.Columns.Count).End(xlToLeft).Column
-End Function
-'商品情報が記載されているの最後の列
-Public Function DataEndColumn() As String
-    DataEndColumn = NumberToLetter(Me.DataEndColumnNumber)
-End Function
-'次に入力する商品情報が空白の行番号
-Public Function DataNextRowNumber() As Long
-    DataNextRowNumber = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.ProductCodeColumnNumber).End(xlUp).Row + 1
-End Function
-
-'商品情報が記載されている最後の行番号
-Property Get DataEndRowNumber() As Long
-    Dim lastRow As Long
-    '発注入力に商品データがない場合行範囲をずらす(無いと範囲にヘッダー行も含まれてしまう)
-    lastRow = Me.DataNextRowNumber - 1
-    If lastRow < Me.DataStartRowNumber Then
-        lastRow = Me.DataStartRowNumber
-    End If
-    DataEndRowNumber = lastRow
+Property Get MatchColumnIndex() As Integer
+    MatchColumnIndex = MatchColumnIndex_
 End Property
 
 '発注入力にある商品コードの範囲
-Property Get ProductsCodeRange() As range
-    Dim strRng As String
-    strRng = Me.ProductCodeColumn & _
-             Me.DataStartRowNumber & _
-             ":" & _
-             Me.ProductCodeColumn & _
-             Me.DataEndRowNumber
-    Set ProductsCodeRange = Me.Worksheet.range(strRng)
+Property Get ProductsCodeRange() As Range
+    Set ProductsCodeRange = super.GetRange(Me.DataStartRowIndex, _
+                                           Me.ProductCodeColumnIndex, _
+                                           Me.DataEndRowIndex, _
+                                           Me.ProductCodeColumnIndex)
 End Property
 
 '発注入力にある商品の合わせ数の範囲
-Property Get MatchRange() As range
-    Dim strRng As String
-    strRng = Me.MatchColumn & _
-             Me.DataStartRowNumber & _
-             ":" & _
-             Me.MatchColumn & _
-             Me.DataEndRowNumber
-    Set MatchRange = Me.Worksheet.range(strRng)
+Property Get MatchRange() As Range
+    Set MatchRange = super.GetRange(Me.DataStartRowIndex, _
+                                    Me.MatchColumnIndex, _
+                                    Me.DataEndRowIndex, _
+                                    Me.MatchColumnIndex)
 End Property
 
 '発注入力にある商品の数量の範囲
-Property Get QtyRange() As range
-    Dim strRng As String
-    strRng = Me.QtyColumn & _
-             Me.DataStartRowNumber & _
-             ":" & _
-             Me.QtyColumn & _
-             Me.DataEndRowNumber
-    Set QtyRange = Me.Worksheet.range(strRng)
+Property Get QtyRange() As Range
+    Set QtyRange = super.GetRange(Me.DataStartRowIndex, _
+                                  Me.qtyColumnIndex, _
+                                  Me.DataEndRowIndex, _
+                                  Me.qtyColumnIndex)
 End Property
 
-'発注入力にあるデータの範囲(ヘッダー込み)
-Property Get DataRange() As range
-    Dim strRng As String
-    strRng = Me.ProductCodeColumn & _
-             Me.DataHeaderRowNumber & _
-             ":" & _
-             Me.DataEndColumn & _
-             Me.DataEndRowNumber
-    Set DataRange = Me.Worksheet.range(strRng)
+'発注入力に既に入力されている商品コードの取得
+Property Get productsCode() As Collection
+    Set productsCode = RangeToOneDimCollection(Me.ProductsCodeRange)
+End Property
+
+'発注入力に既に入力されている合わせ数の取得
+Property Get match() As Collection
+    Set match = RangeToOneDimCollection(Me.MatchRange)
+End Property
+
+'発注入力に既に入力されている数量の取得
+Property Get qty() As Collection
+    Set qty = RangeToOneDimCollection(Me.QtyRange)
 End Property
 
 '部門コードの取得
-Property Get BumonCode() As Integer
+Property Get bumonCode() As Integer
     '値の取得
     Dim value As Variant
-    value = Me.Worksheet.range(InputBumonCodeRange_).value
+    value = Me.Worksheet.Range(InputBumonCodeRange_).value
     
     '未入力の場合終了
     If IsEmpty(value) Then
@@ -197,25 +128,21 @@ Property Get BumonCode() As Integer
     End If
     
     '部門コードが存在するか
-    Dim DataStorage As New DataBaseAccesser
-    If DataStorage.ExistsBumon(CInt(value)) Then
-        BumonCode = CInt(value)
+    Dim dataStorage As New DataBaseAccesser
+    If dataStorage.ExistsBumon(CInt(value)) Then
+        bumonCode = CInt(value)
     Else
-        BumonCode = 0
+        bumonCode = 0
         MsgBox ("正しい部門コードを入力して下さい")
         End
     End If
 End Property
 
-Property Get BumonCodeRange() As range
-    Set BumonCodeRange = Me.Worksheet.range(InputBumonCodeRange_)
-End Property
-
 '担当者コードの取得
-Property Get UserCode() As Integer
+Property Get userCode() As Integer
     '値の取得
     Dim value As Variant
-    value = Me.Worksheet.range(InputUserCodeRange_).value
+    value = Me.Worksheet.Range(InputUserCodeRange_).value
     
     '未入力の場合終了
     If IsEmpty(value) Then
@@ -223,73 +150,104 @@ Property Get UserCode() As Integer
     End If
     
     '担当者コードが存在するか
-    Dim DataStorage As New DataBaseAccesser
-    If DataStorage.ExistsUser(CInt(value)) Then
-        UserCode = CInt(value)
+    Dim dataStorage As New DataBaseAccesser
+    If dataStorage.ExistsUser(CInt(value)) Then
+        userCode = CInt(value)
     Else
-        UserCode = 0
+        userCode = 0
         MsgBox ("正しい担当者コードを入力して下さい")
         End
     End If
 End Property
 
-Property Get UserCodeRange() As range
-    Set UserCodeRange = Me.Worksheet.range(InputUserCodeRange_)
-End Property
-
 '対象日付の取得
-Property Get TargetDate() As Date
+Property Get targetDate() As Date
     Dim value As Variant
-    value = Me.Worksheet.range(InputTargetDateRange_).value
+    value = Me.Worksheet.Range(InputTargetDateRange_).value
     
     '未入力の場合終了
     If IsEmpty(value) Then
         End
     End If
     
-    TargetDate = CDate(value)
+    targetDate = CDate(value)
 End Property
 
-Property Get TargetDateRange() As range
-    Set TargetDateRange = Me.Worksheet.range(InputTargetDateRange_)
+Property Get BumonCodeRange() As Range
+    Set BumonCodeRange = Me.Worksheet.Range(InputBumonCodeRange_)
 End Property
 
-'発注入力に既に入力されている商品コードの取得
-Property Get ProductsCode() As Collection
-    Set ProductsCode = GetRangeValue(Me.ProductsCodeRange)
+Property Get UserCodeRange() As Range
+    Set UserCodeRange = Me.Worksheet.Range(InputUserCodeRange_)
 End Property
 
-'発注入力に既に入力されている合わせ数の取得
-Property Get Match() As Collection
-    Set Match = GetRangeValue(Me.MatchRange)
-End Property
-
-'発注入力に既に入力されている数量の取得
-Property Get Qty() As Collection
-    Set Qty = GetRangeValue(Me.QtyRange)
-End Property
-
-'発注入力に既に入力されているデータの取得(ヘッダー込み)
-Property Get data() As Variant '多次元配列で返す
-    data = Me.DataRange.value
+Property Get TargetDateRange() As Range
+    Set TargetDateRange = Me.Worksheet.Range(InputTargetDateRange_)
 End Property
 
 '担当者名の表示
 Property Let UserName(name As String)
-    Me.Worksheet.range(OutputUserNameRange_).value = name
+    Me.Worksheet.Range(OutputUserNameRange_).value = name
 End Property
 
 '部門名の表示
 Property Let BumonName(name As String)
-    Me.Worksheet.range(OutputBumonNameRange_).value = name
+    Me.Worksheet.Range(OutputBumonNameRange_).value = name
+End Property
+
+
+'''継承部分'''
+
+'プロパティ
+Property Get Workbook() As Workbook
+    Set Workbook = super.Workbook
+End Property
+
+Property Get Worksheet() As Worksheet
+    Set Worksheet = super.Worksheet
+End Property
+
+Property Get DataHeaderRowIndex() As Long
+    DataHeaderRowIndex = super.DataHeaderRowIndex
+End Property
+
+Property Get DataStartRowIndex() As Long
+    DataStartRowIndex = super.DataStartRowIndex
+End Property
+
+Property Get DataStartColumnIndex() As Integer
+    DataStartColumnIndex = super.DataStartColumnIndex
+End Property
+
+Property Get DataEndRowIndex() As Long
+    DataEndRowIndex = super.DataEndRowIndex
+End Property
+
+Property Get AllDataRange() As Range
+    Set AllDataRange = super.AllDataRange
 End Property
 
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
-    Me.Worksheet.Cells(rowIndex, columnIndex).value = value
+    super.Cells(rowIndex, columnIndex) = value
 End Property
 
-Public Sub WriteAllData(targetData As Variant) '二次元配列を受け取る
-    writeData Me.Worksheet, Me.DataStartRowNumber, Me.ProductCodeColumnNumber, targetData
+' メソッド
+Function DataEndColumnIndex() As Integer
+    DataEndColumnIndex = super.DataEndColumnIndex
+End Function
+
+Function DataNextRowIndex() As Long
+    DataNextRowIndex = super.DataNextRowIndex
+End Function
+
+Sub WriteAllData(targetData As Collection)
+    Call super.WriteAllData(targetData)
 End Sub
 
+Function GetAllData() As Collection
+    Set GetAllData = super.GetAllData
+End Function
 
+Function GetAllData_NoHead() As Collection
+    Set GetAllData_NoHead = super.GetAllData_NoHead
+End Function

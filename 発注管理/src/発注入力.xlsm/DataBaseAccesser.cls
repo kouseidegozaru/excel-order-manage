@@ -31,7 +31,7 @@ Public Function ExistsUser(ByVal UserID As Integer) As Boolean
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.add "担当者CD", UserID
+    parameters.Add "担当者CD", UserID
 
     Dim result As Object
     Set result = Executor.ExecuteSelect(query, parameters)
@@ -49,7 +49,7 @@ Public Function ExistsUser(ByVal UserID As Integer) As Boolean
 End Function
 
 ' 部門が存在するか
-Public Function ExistsBumon(ByVal BumonCD As Integer) As Boolean
+Public Function ExistsBumon(ByVal bumonCD As Integer) As Boolean
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -59,7 +59,7 @@ Public Function ExistsBumon(ByVal BumonCD As Integer) As Boolean
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.add "部門CD", BumonCD
+    parameters.Add "部門CD", bumonCD
 
     Dim result As Object
     Set result = Executor.ExecuteSelect(query, parameters)
@@ -77,7 +77,7 @@ Public Function ExistsBumon(ByVal BumonCD As Integer) As Boolean
 End Function
 
 ' 商品が存在するか
-Public Function ExistsProducts(ByVal BumonCD As Integer, ByVal ProductsCD As Long) As Boolean
+Public Function ExistsProducts(ByVal bumonCD As Integer, ByVal ProductsCD As Long) As Boolean
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -87,8 +87,8 @@ Public Function ExistsProducts(ByVal BumonCD As Integer, ByVal ProductsCD As Lon
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.add "部門CD", BumonCD
-    parameters.add "品CD", ProductsCD
+    parameters.Add "部門CD", bumonCD
+    parameters.Add "品CD", ProductsCD
 
     Dim result As Object
     Set result = Executor.ExecuteSelect(query, parameters)
@@ -116,7 +116,7 @@ Public Function GetUserName(ByVal UserID As Integer) As String
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.add "担当者CD", UserID
+    parameters.Add "担当者CD", UserID
 
     Dim result As Object
     Set result = Executor.ExecuteSelect(query, parameters)
@@ -134,7 +134,7 @@ Public Function GetUserName(ByVal UserID As Integer) As String
 End Function
 
 ' 部門名取得
-Public Function GetBumonName(ByVal BumonCD As Integer) As String
+Public Function GetBumonName(ByVal bumonCD As Integer) As String
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -144,7 +144,7 @@ Public Function GetBumonName(ByVal BumonCD As Integer) As String
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.add "部門CD", BumonCD
+    parameters.Add "部門CD", bumonCD
 
     Dim result As Object
     Set result = Executor.ExecuteSelect(query, parameters)
@@ -162,7 +162,7 @@ Public Function GetBumonName(ByVal BumonCD As Integer) As String
 End Function
 
 ' 部門の全ての商品取得
-Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
+Public Function GetAllProducts(ByVal bumonCD As Integer) As ADODB.recordSet
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -179,7 +179,7 @@ Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
        "dbo.HM商品.計区, " & _
        "dbo.HM商品.入数, " & _
        "dbo.HM商品.合わせ数, " & _
-       "'' AS 数量, " & _
+       "0 AS 数量, " & _
        "dbo.HM商品.[ケス単位] AS 荷姿, " & _
        "dbo.HM商品.仕入単価, " & _
        "'' AS 仕入金額, " & _
@@ -196,7 +196,7 @@ Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.add "部門CD", BumonCD
+    parameters.Add "部門CD", bumonCD
 
     Dim result As ADODB.recordSet
     Set result = Executor.ExecuteSelect(query, parameters)
@@ -205,7 +205,7 @@ Public Function GetAllProducts(ByVal BumonCD As Integer) As ADODB.recordSet
 End Function
 
 ' 部門の条件に合う商品取得
-Public Function GetProduct(ByVal BumonCD As Integer, ProductsCD As Long) As ADODB.recordSet
+Public Function GetProduct(ByVal bumonCD As Integer, ProductsCD As Long) As ADODB.recordSet
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -221,7 +221,7 @@ Public Function GetProduct(ByVal BumonCD As Integer, ProductsCD As Long) As ADOD
            "dbo.HM商品.計区, " & _
            "dbo.HM商品.入数, " & _
            "dbo.HM商品.合わせ数, " & _
-           "'' AS 数量, " & _
+           "0 AS 数量, " & _
            "dbo.HM商品.[ケス単位] AS 荷姿, " & _
            "dbo.HM商品.仕入単価, " & _
            "'' AS 仕入金額, " & _
@@ -239,8 +239,8 @@ Public Function GetProduct(ByVal BumonCD As Integer, ProductsCD As Long) As ADOD
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.add "部門CD", BumonCD
-    parameters.add "品CD", ProductsCD
+    parameters.Add "部門CD", bumonCD
+    parameters.Add "品CD", ProductsCD
 
     Dim result As ADODB.recordSet
     Set result = Executor.ExecuteSelect(query, parameters)
