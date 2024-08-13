@@ -14,11 +14,12 @@ Private super As SheetAccesser
 
 Private WorkSheetName_ As String
 
-Private ProductCodeColumnIndex_ As Integer
-Private MatchColumnIndex_ As Integer
-Private QtyColumnIndex_ As Integer
-Private PriceColumnIndex_ As Integer
-Private AmountColumnIndex_ As Integer
+Private ProductCodeColumnIndex_ As Integer '品コード
+Private PiecesColumnIndex_ As Integer '入数
+Private MatchColumnIndex_ As Integer '合わせ数
+Private QtyColumnIndex_ As Integer '数量
+Private PriceColumnIndex_ As Integer '単価
+Private AmountColumnIndex_ As Integer '仕入金額
 
 Private InputBumonCodeRange_ As String
 Private OutputBumonNameRange_ As String
@@ -30,6 +31,7 @@ Private Sub Class_Initialize()
     WorkSheetName_ = "発注入力"
     
     ProductCodeColumnIndex_ = 1
+    PiecesColumnIndex_ = 9
     MatchColumnIndex_ = 10
     QtyColumnIndex_ = 11
     PriceColumnIndex_ = 13
@@ -63,6 +65,9 @@ Private Sub InitWorkSheet()
 End Sub
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
+End Property
+Property Get PiecesColumnIndex() As Integer
+    PiecesColumnIndex = PiecesColumnIndex_
 End Property
 Property Get qtyColumnIndex() As Integer
     qtyColumnIndex = QtyColumnIndex_
