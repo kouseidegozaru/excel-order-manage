@@ -102,6 +102,6 @@ Sub LoadData()
     Dim rs As ADODB.Recordset
     Set rs = load.AllGroupData
     load.ClearData
-    load.WriteAllData RemoveFirstRow(RecordsetToCollection(rs))
+    load.WriteAllData RecordsetToCollection(rs)
     
 End Sub
