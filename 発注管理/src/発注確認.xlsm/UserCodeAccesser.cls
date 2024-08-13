@@ -8,21 +8,21 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 'CSVファイルから対象の部門コードの従業員コードを取得
-Private pFilePath As String
-Private pData As Collection
+Private FilePath_ As String
+Private Data_ As Collection
 Private EmployeeCodeHeaderName As String
 Private EmployeeCodeColumnIndex As Integer
 Private departmentCodeHeaderName As String
 Private departmentCodeColumnIndex As Integer
 
 Private Sub Class_Initialize()
-    EmployeeCodeHeaderName = "社員コード"
-    EmployeeCodeColumnIndex = 1
     departmentCodeHeaderName = "部門コード"
     departmentCodeColumnIndex = 0
-    pFilePath = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\従業員コード.csv"
+    EmployeeCodeHeaderName = "社員コード"
+    EmployeeCodeColumnIndex = 1
+    FilePath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\従業員コード.csv"
     
-    Set pData = New Collection
+    Set Data_ = New Collection
     LoadData
 End Sub
 
@@ -30,7 +30,7 @@ Public Function GetEmployeeCodes(departmentCode As String) As Collection
     Dim employeeCodes As New Collection
     Dim item As Variant
 
-    For Each item In pData
+    For Each item In Data_
         If item(departmentCodeHeaderName) = departmentCode Then
             employeeCodes.Add item(EmployeeCodeHeaderName)
         End If
@@ -47,7 +47,7 @@ Private Sub LoadData()
     Dim headers As Variant
     Dim dataItem As Object
 
-    fileContent = ReadFileContent(pFilePath)
+    fileContent = ReadFileContent(FilePath_)
     lines = Split(fileContent, vbCrLf)
     
     If UBound(lines) < 1 Then Exit Sub
@@ -60,12 +60,12 @@ Private Sub LoadData()
             Set dataItem = CreateObject("Scripting.Dictionary")
             dataItem.Add departmentCodeHeaderName, line(departmentCodeColumnIndex)
             dataItem.Add EmployeeCodeHeaderName, line(EmployeeCodeColumnIndex)
-            pData.Add dataItem
+            Data_.Add dataItem
         End If
     Next i
 End Sub
 
-Private Function ReadFileContent(filePath As String) As String
+Private Function ReadFileContent(FilePath As String) As String
     Dim fileContent As String
     Dim stream As New ADODB.stream
     
@@ -75,7 +75,7 @@ Private Function ReadFileContent(filePath As String) As String
         .Type = 2 ' adTypeText
         .Charset = "utf-8"
         .Open
-        .LoadFromFile filePath
+        .LoadFromFile FilePath
         fileContent = .ReadText(-1) ' -1 = 全テキスト読み込み
         .Close
     End With

@@ -97,38 +97,30 @@ Function ArrayToCollection(ByVal arr As Variant) As Collection
 End Function
 
 
-Function RecordsetToArray(rs As ADODB.Recordset) As Variant
-    Dim arr As Variant
-    Dim i As Long, j As Long
-    Dim rowCount As Long
-    Dim colCount As Long
+Function RecordsetToCollection(rs As ADODB.Recordset) As Collection
+    Dim col As Collection
+    Dim rowCol As Collection
+    Dim i As Long
     
-    ' レコードセットの列数を取得
-    colCount = rs.Fields.Count
+    ' コレクションを初期化
+    Set col = New Collection
     
-    ' レコードセットの行数を取得
-    rs.MoveLast
-    rowCount = rs.RecordCount
-    rs.MoveFirst
+    ' レコードセットが空でないことを確認
+    If Not rs.EOF Then
+        rs.MoveFirst
+        
+        ' データをコレクションに格納
+        Do Until rs.EOF
+            Set rowCol = New Collection
+            For i = 0 To rs.Fields.Count - 1
+                rowCol.Add rs.Fields(i).value, rs.Fields(i).name
+            Next i
+            col.Add rowCol
+            rs.MoveNext
+        Loop
+    End If
     
-    ' 二次元配列を初期化
-    ReDim arr(0 To rowCount, 0 To colCount - 1)
-    
-    ' ヘッダーを配列に格納
-    For i = 0 To colCount - 1
-        arr(0, i) = rs.Fields(i).name
-    Next i
-    
-    ' データを配列に格納
-    i = 1
-    Do Until rs.EOF
-        For j = 0 To colCount - 1
-            arr(i, j) = rs.Fields(j).value
-        Next j
-        rs.MoveNext
-        i = i + 1
-    Loop
-    
-    RecordsetToArray = arr
+    Set RecordsetToCollection = col
 End Function
+
 

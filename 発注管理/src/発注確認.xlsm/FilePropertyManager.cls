@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Dim filePath_ As String
+Dim FilePath_ As String
 Dim fileName_ As String
 
 Dim BumonCodeIdentifier_ As String
@@ -22,9 +22,9 @@ Private Sub Class_Initialize()
     BreakIdentifier_ = "-"
 End Sub
 
-Property Let filePath(targetFilePath As String)
-    filePath_ = targetFilePath
-    fileName_ = GetFileName(filePath_)
+Property Let InitFilePath(targetFilePath As String)
+    FilePath_ = targetFilePath
+    fileName_ = GetFileName(FilePath_)
 End Property
 
 Property Get BumonCode() As Integer
@@ -34,14 +34,14 @@ Property Get BumonCodeIdentifier() As String
     BumonCodeIdentifier = BumonCodeIdentifier_
 End Property
 
-Property Get UserCode() As Integer
-    UserCode = CInt(ExtractBetweenCharacters(fileName_, UserCodeIdentifier_, BreakIdentifier_))
+Property Get userCode() As Integer
+    userCode = CInt(ExtractBetweenCharacters(fileName_, UserCodeIdentifier_, BreakIdentifier_))
 End Property
 Property Get UserCodeIdentifier() As String
     UserCodeIdentifier = UserCodeIdentifier_
 End Property
 
-Property Get TargetDate() As Date
+Property Get targetDate() As Date
     Dim strDate As String
     Dim year As Integer, month As Integer, day As Integer
     
@@ -51,9 +51,9 @@ Property Get TargetDate() As Date
         year = CInt(Left(strDate, 4))
         month = CInt(Mid(strDate, 5, 2))
         day = CInt(Right(strDate, 2))
-        TargetDate = DateSerial(year, month, day)
+        targetDate = DateSerial(year, month, day)
     Else
-        TargetDate = Date ' デフォルト値
+        targetDate = Date ' デフォルト値
     End If
 End Property
 Property Get DateIdentifier() As String
@@ -64,7 +64,7 @@ Property Get BreakIdentifier() As String
 End Property
 
 Property Get UpdatedDate() As Date
-    UpdatedDate = FileDateTime(filePath_)
+    UpdatedDate = FileDateTime(FilePath_)
 End Property
 
 Private Function ExtractBetweenCharacters(ByVal str As String, ByVal startChar As String, ByVal endChar As String) As String
@@ -89,9 +89,9 @@ Private Function ExtractBetweenCharacters(ByVal str As String, ByVal startChar A
     End If
 End Function
 
-Private Function GetFileName(filePath As String) As String
+Private Function GetFileName(FilePath As String) As String
     Dim FileName As String
-    FileName = Mid(filePath, InStrRev(filePath, "\") + 1)
+    FileName = Mid(FilePath, InStrRev(FilePath, "\") + 1)
     GetFileName = FileName
 End Function
 

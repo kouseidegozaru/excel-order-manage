@@ -23,7 +23,7 @@ Sub LoadFileProperty()
     
     'ファイルの抽出条件文字列の設定
     BumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
-    TargetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
+    TargetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     '探索するディレクトリの設定
     filter.DirPath = data.DataDirPath
@@ -33,14 +33,14 @@ Sub LoadFileProperty()
     Set UserCodes = users.GetEmployeeCodes(load.BumonCode)
     
     
-    For Each UserCode In UserCodes
+    For Each userCode In UserCodes
     
         '従業員名の取得
-        Dim userName As String
-        userName = DataStorage.GetUserName(UserCode)
+        Dim UserName As String
+        UserName = DataStorage.GetUserName(userCode)
         
         'ファイルの抽出条件文字列の設定
-        UserCodeFilter = fileProperty.UserCodeIdentifier & UserCode & fileProperty.BreakIdentifier
+        UserCodeFilter = fileProperty.UserCodeIdentifier & userCode & fileProperty.BreakIdentifier
         
         'フィルターの実行
         Dim filePathCollection As Collection
@@ -49,16 +49,16 @@ Sub LoadFileProperty()
         'フィルターの結果が存在する場合
         If filePathCollection.Count > 0 Then
             'ファイル情報の取得準備
-            fileProperty.filePath = data.DataDirPath & "\" & filePathCollection(1)
+            fileProperty.FilePath = data.DataDirPath & "\" & filePathCollection(1)
             'ファイルプロパティの表示
-            load.AddFileProperty userName, True, fileProperty.UpdatedDate
+            load.AddFileProperty UserName, True, fileProperty.UpdatedDate
         Else
             'ファイルプロパティの表示
-            load.AddFileProperty userName, False, Date
+            load.AddFileProperty UserName, False, Date
         End If
         
         
-    Next UserCode
+    Next userCode
     
 End Sub
 
@@ -76,7 +76,7 @@ Sub LoadData()
     
     'ファイルの抽出条件文字列の設定
     BumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
-    TargetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
+    TargetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     'フィルターの実行
     Dim filePathCollection As Collection
@@ -91,7 +91,7 @@ Sub LoadData()
         'データの取得準備
         data.FileName = FileName
         'ファイル情報の取得準備
-        fileProperty.filePath = data.filePath
+        fileProperty.FilePath = data.FilePath
         '商品情報を入力
         load.WriteAllData data.dataNoHeader
         'データワークブックを閉じる

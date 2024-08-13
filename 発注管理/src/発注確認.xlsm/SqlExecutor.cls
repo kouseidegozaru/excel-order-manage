@@ -53,13 +53,13 @@ End Function
 
 
 ' Excelファイルにクエリを実行してRecordsetを返すメソッド
-Public Function ExecuteExcelQuery(ByVal filePath As String, ByVal query As String) As ADODB.Recordset
+Public Function ExecuteExcelQuery(ByVal FilePath As String, ByVal query As String) As ADODB.Recordset
     Dim conn As New ADODB.Connection
     Dim rs As New ADODB.Recordset
     Dim connectionString As String
     
     ' Excelファイルへの接続文字列を設定
-    connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & filePath & ";Extended Properties=""Excel 12.0 Xml;HDR=YES"""
+    connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & FilePath & ";Extended Properties=""Excel 12.0 Xml;HDR=YES"""
     
     ' 接続を開く
     conn.Open connectionString

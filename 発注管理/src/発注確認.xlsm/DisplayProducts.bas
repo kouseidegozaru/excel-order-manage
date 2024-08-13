@@ -1,90 +1,13 @@
 Attribute VB_Name = "DisplayProducts"
 '発注入力に入力された商品コードから商品情報を表示
 
-Sub DisplayProductsInfo(targetRng As Range)
-
-    Dim DataStorage As New DataBaseAccesser
-    Dim load As New LoadSheetAccesser
-    
-    ' 処理する部門の指定
-    Dim BumonCD As Integer
-    BumonCD = load.BumonCode
-    ' 処理する列の指定
-    Dim targetColumn As Integer
-    targetColumn = load.ProductCodeColumnNumber
-    '数量の列の指定
-    Dim QtyColumn As Integer
-    QtyColumn = load.QtyColumnNumber
-    '仕入単価の列の指定
-    Dim priceColumn As Integer
-    priceColumn = load.PriceColumnNumber
-    '仕入金額の列の指定
-    Dim amountColumn As Integer
-    amountColumn = load.AmountColumnNumber
-    
-    Dim cell As Range
-    
-    ' 範囲内の指定した列の各行を処理
-    For Each cell In targetRng.Columns(targetColumn).Cells
-        ' 空白でないセルを処理
-        If cell.value <> "" Then
-            If DataStorage.ExistsProducts(BumonCD, cell.value) Then
-                '背景を白に
-                Call ChangeBackColor(cell, 255, 255, 255)
-                
-                Dim rs As ADODB.Recordset
-                Set rs = DataStorage.GetProduct(BumonCD, cell.value)
-                
-                ' レコードセットをセルに貼り付ける
-                If Not rs.EOF Then
-                    Dim i As Integer
-                    
-                    
-                    ' レコードセットをワークシートに貼り付け
-'                    rs.MoveFirst
-                    Do Until rs.EOF
-                        For i = 0 To rs.Fields.Count - 1
-                            cell.Offset(0, i + 1).value = rs.Fields(i).value
-                        Next i
-                        '仕入金額の計算式を設定
-                        cell.Offset(0, amountColumn - 1).value = GetAmountCalcFormula(QtyColumn, cell.row, priceColumn, cell.row)
-                        
-                        rs.MoveNext
-                    Loop
-                End If
-                
-                ' レコードセットを閉じる
-                rs.Close
-                Set rs = Nothing
-            Else
-                '商品コードが存在しない場合は背景を赤に
-                Call ChangeBackColor(cell, 255, 0, 0)
-            End If
-        End If
-    Next cell
-    
-End Sub
-
-Private Sub ChangeBackColor(cell As Object, r As Integer, g As Integer, b As Integer)
-        ' 背景色を赤に設定
-        cell.Interior.Color = RGB(r, g, b)
-        
-        ' 既存の罫線を保持
-        cell.Borders(xlEdgeLeft).LineStyle = xlContinuous
-        cell.Borders(xlEdgeTop).LineStyle = xlContinuous
-        cell.Borders(xlEdgeBottom).LineStyle = xlContinuous
-        cell.Borders(xlEdgeRight).LineStyle = xlContinuous
-        cell.Borders(xlInsideVertical).LineStyle = xlContinuous
-        cell.Borders(xlInsideHorizontal).LineStyle = xlContinuous
-End Sub
-
 '仕入金額の計算式を返す
-Private Function GetAmountCalcFormula(qtyColumnIndex As Integer, qtyRowIndex As Long, priceColumnIndex As Integer, priceRowIndex As Long) As String
+Private Function GetAmountCalcFormula(QtyColumnIndex As Integer, qtyRowIndex As Long, PriceColumnIndex As Integer, priceRowIndex As Long) As String
     GetAmountCalcFormula = "=IFERROR(" & _
-                            NumberToLetter(qtyColumnIndex) & _
+                            NumberToLetter(QtyColumnIndex) & _
                             qtyRowIndex & _
                             "*" & _
-                            NumberToLetter(priceColumnIndex) & _
+                            NumberToLetter(PriceColumnIndex) & _
                             priceRowIndex & _
                             ",0)"
 End Function
