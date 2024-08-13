@@ -43,6 +43,23 @@ Function IsMultiple(Number As Long, MultipleOf As Long) As Boolean
     End If
 End Function
 
+'ディレクトリへのアクセス権限のチェック
+Function CheckDirectoryAccess(ByVal directoryPath As String) As Boolean
+    On Error GoTo ErrorHandler
+    
+    ' Dir関数でディレクトリが存在し、アクセス可能かどうか確認
+    If Dir(directoryPath, vbDirectory) <> "" Then
+        CheckDirectoryAccess = True
+    Else
+        CheckDirectoryAccess = False
+    End If
+    
+    Exit Function
+
+ErrorHandler:
+    ' エラーハンドリング: アクセスできない場合、Falseを返す
+    CheckDirectoryAccess = False
+End Function
 
 '''以下はSheetAccesserのみで使用する項目'''
 
