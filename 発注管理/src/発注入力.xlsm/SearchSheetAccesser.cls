@@ -23,9 +23,7 @@ Private Sub Class_Initialize()
     WorkSheetName_ = "商品マスターシート"
     
     ProductCodeColumnIndex_ = 3
-    DataStartRowIndex_ = 3
-    DataStartColumnIndex_ = 2
-    CheckStateColumnIndex_ = 20
+    CheckStateColumnIndex_ = 21
     CheckBoxColumnIndex_ = 1
         
     Set super = New SheetAccesser
