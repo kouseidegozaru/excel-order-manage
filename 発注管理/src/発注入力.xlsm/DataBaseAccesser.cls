@@ -172,6 +172,7 @@ Public Function GetAllProducts(ByVal bumonCD As Integer) As ADODB.recordSet
        "dbo.HM商品.入荷時間帯, " & _
        "dbo.HM商品.品CD, " & _
        "dbo.M仕入先.仕入先名 AS 仕入先名, " & _
+       "M発注先.仕入先CD AS 発注先コード名, " & _
        "M発注先.仕入先名 AS 発注先名, " & _
        "Mメーカー.仕入先名 AS メーカー名, " & _
        "dbo.HM商品.品名, " & _
@@ -190,8 +191,7 @@ Public Function GetAllProducts(ByVal bumonCD As Integer) As ADODB.recordSet
        "INNER JOIN dbo.M仕入先 ON dbo.HM商品.仕入先CD = dbo.M仕入先.仕入先CD " & _
        "INNER JOIN dbo.M仕入先 AS Mメーカー ON dbo.HM商品.[メーカーCD] = Mメーカー.仕入先CD " & _
        "INNER JOIN dbo.M仕入先 AS M発注先 ON dbo.HM商品.[発注先CD] = M発注先.仕入先CD " & _
-       "WHERE dbo.HM商品.部門CD = ? " & _
-       "AND dbo.HM商品.廃盤日付 IS NULL " & _
+       "WHERE dbo.HM商品.部門CD = ? AND dbo.HM商品.廃盤日付 IS NULL " & _
        "ORDER BY Mメーカー.仕入先名 ASC, dbo.HM商品.品名 ASC;"
     
     Dim parameters As Object

@@ -9,11 +9,14 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 
 Private Sub Workbook_Open()
-      IsIgnoreChangeEvents = True
-       
-      SetValidations
-      ' 発注データの読み込み
-      LoadData
-      
-      IsIgnoreChangeEvents = False
+    IsIgnoreChangeEvents = True
+    
+    '共有フォルダのアクセス権チェック
+    CheckDirPermission
+    'バリデーションチェックを設定
+    SetValidations
+    ' 発注データの読み込み
+    LoadData
+    
+    IsIgnoreChangeEvents = False
 End Sub
