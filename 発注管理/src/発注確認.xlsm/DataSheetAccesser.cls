@@ -33,16 +33,8 @@ Private Sub Class_Initialize()
     
 End Sub
 
-Public Sub InitStatus(BumonCode As Integer, userCode As Integer, targetDate As Date)
-    SaveFileName_ = "b" & BumonCode & "-" & _
-                    "u" & userCode & "-" & _
-                    "d" & Format(targetDate, "yyyymmdd") & "-" & _
-                    ".xlsx"
-End Sub
-
-Public Sub InitNewWorkbook()
-    ' 新規ワークブックの作成
-    super.InitWorkbook Application.Workbooks.Add
+Public Sub InitSaveFileName(fileName As String)
+    SaveFileName_ = fileName
 End Sub
 
 Public Sub InitOpenWorkBook()
@@ -79,7 +71,7 @@ Public Sub Save()
     Application.DisplayAlerts = False
     
     ' ワークブックを保存（既存のファイルがあれば上書き保存）
-    Me.Workbook.SaveAs FileName:=Me.SaveFilePath, FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    Me.Workbook.SaveAs fileName:=Me.SaveFilePath, FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
     
     ' 警告メッセージを再度有効にする
     Application.DisplayAlerts = True

@@ -22,10 +22,10 @@ Private Sub Class_Initialize()
     BreakIdentifier_ = "-"
 End Sub
 
-Property Let InitFilePath(targetFilePath As String)
+Public Sub InitFilePath(targetFilePath As String)
     FilePath_ = targetFilePath
     fileName_ = GetFileName(FilePath_)
-End Property
+End Sub
 
 Property Get BumonCode() As Integer
     BumonCode = CInt(ExtractBetweenCharacters(fileName_, BumonCodeIdentifier_, BreakIdentifier_))
@@ -41,7 +41,7 @@ Property Get UserCodeIdentifier() As String
     UserCodeIdentifier = UserCodeIdentifier_
 End Property
 
-Property Get targetDate() As Date
+Property Get TargetDate() As Date
     Dim strDate As String
     Dim year As Integer, month As Integer, day As Integer
     
@@ -51,9 +51,9 @@ Property Get targetDate() As Date
         year = CInt(Left(strDate, 4))
         month = CInt(Mid(strDate, 5, 2))
         day = CInt(Right(strDate, 2))
-        targetDate = DateSerial(year, month, day)
+        TargetDate = DateSerial(year, month, day)
     Else
-        targetDate = Date ' デフォルト値
+        TargetDate = Date ' デフォルト値
     End If
 End Property
 Property Get DateIdentifier() As String
@@ -90,8 +90,8 @@ Private Function ExtractBetweenCharacters(ByVal str As String, ByVal startChar A
 End Function
 
 Private Function GetFileName(FilePath As String) As String
-    Dim FileName As String
-    FileName = Mid(FilePath, InStrRev(FilePath, "\") + 1)
-    GetFileName = FileName
+    Dim fileName As String
+    fileName = Mid(FilePath, InStrRev(FilePath, "\") + 1)
+    GetFileName = fileName
 End Function
 

@@ -26,9 +26,9 @@ Private InputUserCodeRange_ As String
 Private OutputUserNameRange_ As String
 
 Private FilePropertyStartColumnIndex_ As Integer
-Private FilePropertyUserNameRowIndex_ As Integer
-Private FilePropertyCompleteRowIndex_ As Integer
-Private FilePropertyUpdateTimeRowIndex_ As Integer
+Private FilePropertyUserNameRowIndex_ As Long
+Private FilePropertyCompleteRowIndex_ As Long
+Private FilePropertyUpdateTimeRowIndex_ As Long
 
 Private CompleteString_ As String
 
@@ -117,7 +117,7 @@ Public Sub ClearFileProperty()
     Me.FilePropertyRange.Delete Shift:=xlToLeft
 End Sub
 
-Public Sub AddFileProperty(UserName As String, IsCompleted As Boolean, updatedTime As Date)
+Public Sub AddFileProperty(userName As String, IsCompleted As Boolean, updatedTime As Date)
     Dim lastColumn As Integer
     lastColumn = FilePropertyNextColumnIndex
     
@@ -130,7 +130,7 @@ Public Sub AddFileProperty(UserName As String, IsCompleted As Boolean, updatedTi
         Me.Worksheet.Cells(FilePropertyUpdateTimeRowIndex_, lastColumn) = updatedTime
     End If
     
-    Me.Worksheet.Cells(FilePropertyUserNameRowIndex_, lastColumn) = UserName
+    Me.Worksheet.Cells(FilePropertyUserNameRowIndex_, lastColumn) = userName
     Me.Worksheet.Cells(FilePropertyCompleteRowIndex_, lastColumn) = writeCompleteString
 End Sub
 
@@ -176,7 +176,7 @@ Property Get BumonCode() As Integer
 End Property
 
 '対象日付の取得
-Property Get targetDate() As Date
+Property Get TargetDate() As Date
     Dim value As Variant
     value = Me.Worksheet.Range(InputTargetDateRange_).value
     
@@ -185,7 +185,7 @@ Property Get targetDate() As Date
         End
     End If
     
-    targetDate = CDate(value)
+    TargetDate = CDate(value)
 End Property
 
 Property Get BumonCodeRange() As Range
@@ -207,17 +207,13 @@ Property Get Qty() As Collection
 End Property
 
 '担当者名の表示
-Property Let UserName(name As String)
+Property Let userName(name As String)
     Me.Worksheet.Range(OutputUserNameRange_).value = name
 End Property
 
 '部門名の表示
 Property Let BumonName(name As String)
     Me.Worksheet.Range(OutputBumonNameRange_).value = name
-End Property
-
-Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
-    Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
 
 Public Function AllGroupData() As ADODB.Recordset
@@ -231,18 +227,18 @@ Public Function AllGroupData() As ADODB.Recordset
     ' Excel情報
     FilePath = Me.Workbook.FullName
     sheetName = Me.Worksheet.name
-    rangeName = Replace(Me.DataRange.Address(False, False), "$", "")
+    rangeName = Replace(Me.AllDataRange.Address(False, False), "$", "")
     
     
     ' 実行するクエリ
-    query = "SELECT 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, SUM(数量) AS 合計数量, 荷姿, 仕入単価, 仕入金額, LT, 商品備考, メーカー読み " & _
+    query = "SELECT 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, SUM(数量) AS 合計数量, 荷姿, 仕入単価, SUM(仕入金額) AS 合計仕入金額, LT, 商品備考, メーカー読み " & _
            "FROM [" & sheetName & "$" & rangeName & "] " & _
-           "GROUP BY 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, 荷姿, 仕入単価, 仕入金額, LT, 商品備考, メーカー読み"
+           "GROUP BY 品CD, 入荷時間帯, 仕入先名, 発注先名, メーカー名, 品名, 規格, 計区, 入数, 合わせ数, 荷姿, 仕入単価, LT, 商品備考, メーカー読み"
     
     ' Excelファイルにクエリを実行
     Set rs = dataAccessor.ExecuteExcelQuery(FilePath, query)
 
-    Set ProductsGroupData = rs
+    Set AllGroupData = rs
 End Function
 
 

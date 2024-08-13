@@ -22,17 +22,17 @@ Sub DeleteDataFiles()
     Dim oneMonthAgo As Date
     oneMonthAgo = DateAdd("m", -1, today)
     
-    For Each FileName In fileNames
+    For Each fileName In fileNames
     
         'ファイル情報取得準備
-        FilePath = data.DataDirPath & "\" & FileName
-        fileProperty.FilePath = FilePath
+        FilePath = data.DataDirPath & "\" & fileName
+        fileProperty.InitFilePath = FilePath
         
         '一か月前の場合ファイル削除
-        If fileProperty.targetDate < oneMonthAgo Then
+        If fileProperty.TargetDate < oneMonthAgo Then
             fs.DeleteFile FilePath
         End If
         
-    Next FileName
+    Next fileName
         
 End Sub

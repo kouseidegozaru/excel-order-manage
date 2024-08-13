@@ -20,23 +20,23 @@ End Property
 Public Function AndFilter(ParamArray filterNames() As Variant) As Collection
     Dim fileList As Collection
     Set fileList = New Collection
-    Dim FileName As String
+    Dim fileName As String
     
-    FileName = Dir(dirPath_ & "\*.*")
-    Do While FileName <> ""
+    fileName = Dir(dirPath_ & "\*.*")
+    Do While fileName <> ""
         Dim matchesAll As Boolean
         matchesAll = True
         For Each filterName In filterNames
-            If InStr(1, FileName, filterName, vbTextCompare) = 0 Then
+            If InStr(1, fileName, filterName, vbTextCompare) = 0 Then
                 matchesAll = False
                 Exit For
             End If
         Next filterName
         
         If matchesAll Then
-            fileList.Add FileName
+            fileList.Add fileName
         End If
-        FileName = Dir()
+        fileName = Dir()
     Loop
     
     Set AndFilter = fileList
@@ -45,10 +45,10 @@ End Function
 Public Function OrFilter(ParamArray filterNames() As Variant) As Collection
     Dim fileList As Collection
     Set fileList = New Collection
-    Dim FileName As String
+    Dim fileName As String
     
-    FileName = Dir(dirPath_ & "\*.*")
-    Do While FileName <> ""
+    fileName = Dir(dirPath_ & "\*.*")
+    Do While fileName <> ""
         Dim matchesAny As Boolean
         matchesAny = False
         For Each filterName In filterNames
@@ -57,21 +57,21 @@ Public Function OrFilter(ParamArray filterNames() As Variant) As Collection
                 Set subFilterResult = filterName
                 Dim subFile As Variant
                 For Each subFile In subFilterResult
-                    If subFile = FileName Then
+                    If subFile = fileName Then
                         matchesAny = True
                         Exit For
                     End If
                 Next subFile
-            ElseIf InStr(1, FileName, filterName, vbTextCompare) > 0 Then
+            ElseIf InStr(1, fileName, filterName, vbTextCompare) > 0 Then
                 matchesAny = True
                 Exit For
             End If
         Next filterName
         
         If matchesAny Then
-            fileList.Add FileName
+            fileList.Add fileName
         End If
-        FileName = Dir()
+        fileName = Dir()
     Loop
     
     Set OrFilter = fileList
