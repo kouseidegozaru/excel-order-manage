@@ -18,10 +18,10 @@ Public Sub SetConnection(ByVal connString As String)
 End Sub
 
 ' SELECT文を実行してRecordsetを返すメソッド
-Public Function ExecuteSelect(ByVal query As String, ByVal parameters As Object) As ADODB.recordSet
+Public Function ExecuteSelect(ByVal query As String, ByVal parameters As Object) As ADODB.Recordset
     Dim conn As New ADODB.Connection
     Dim cmd As New ADODB.Command
-    Dim rs As New ADODB.recordSet
+    Dim rs As New ADODB.Recordset
     Dim paramKey As Variant
     
     ' 接続を開く

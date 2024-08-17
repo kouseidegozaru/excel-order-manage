@@ -58,7 +58,7 @@ Sub Update()
     search.Clear
     
     Dim DataBaseAccesser As New DataBaseAccesser
-    Dim rs As ADODB.recordSet
+    Dim rs As ADODB.Recordset
     ' データベースからレコードセットを取得
     Set rs = DataBaseAccesser.GetAllProducts(order.bumonCode)
     
@@ -77,7 +77,7 @@ Sub Update()
     
     ' 貼り付けたデータの行数を取得
     Dim pastedRows As Long
-    pastedRows = rs.Fields.count - 1
+    pastedRows = DataBaseAccesser.GetAllProductsCount(order.bumonCode)
     
     ' チェックボックスの追加
     For i = 0 To pastedRows - 1

@@ -162,7 +162,7 @@ Public Function GetBumonName(ByVal bumonCD As Integer) As String
 End Function
 
 ' 部門の全ての商品取得
-Public Function GetAllProducts(ByVal bumonCD As Integer) As ADODB.recordSet
+Public Function GetAllProducts(ByVal bumonCD As Integer) As ADODB.Recordset
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -198,14 +198,43 @@ Public Function GetAllProducts(ByVal bumonCD As Integer) As ADODB.recordSet
     Set parameters = CreateObject("Scripting.Dictionary")
     parameters.Add "部門CD", bumonCD
 
-    Dim result As ADODB.recordSet
+    Dim result As ADODB.Recordset
     Set result = Executor.ExecuteSelect(query, parameters)
     
     Set GetAllProducts = result
 End Function
 
+' 部門の商品の件数を取得
+Public Function GetAllProductsCount(ByVal bumonCD As Integer) As Long
+    Dim Executor As SqlExecutor
+    Set Executor = New SqlExecutor
+    Executor.SetConnection MFRE05ConnectionString
+    
+    Dim query As String
+    query = "SELECT COUNT(1) " & _
+            "FROM dbo.HM商品 " & _
+            "WHERE 部門CD = ? AND 廃盤日付 IS NULL;"
+    
+    Dim parameters As Object
+    Set parameters = CreateObject("Scripting.Dictionary")
+    parameters.Add "部門CD", bumonCD
+
+    Dim result As ADODB.Recordset
+    Set result = Executor.ExecuteSelect(query, parameters)
+    
+    If Not result.EOF Then
+        GetAllProductsCount = result.Fields(0).value
+    Else
+        GetAllProductsCount = 0
+    End If
+    
+    ' Recordsetを閉じる
+    result.Close
+    Set result = Nothing
+    Set Executor = Nothing
+End Function
 ' 部門の条件に合う商品取得
-Public Function GetProduct(ByVal bumonCD As Integer, ProductsCD As Long) As ADODB.recordSet
+Public Function GetProduct(ByVal bumonCD As Integer, ProductsCD As Long) As ADODB.Recordset
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -242,14 +271,14 @@ Public Function GetProduct(ByVal bumonCD As Integer, ProductsCD As Long) As ADOD
     parameters.Add "部門CD", bumonCD
     parameters.Add "品CD", ProductsCD
 
-    Dim result As ADODB.recordSet
+    Dim result As ADODB.Recordset
     Set result = Executor.ExecuteSelect(query, parameters)
     
     Set GetProduct = result
 End Function
 
 ' 商品マスターの列名取得
-Public Function GetTableColumn() As ADODB.recordSet
+Public Function GetTableColumn() As ADODB.Recordset
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -260,7 +289,7 @@ Public Function GetTableColumn() As ADODB.recordSet
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
 
-    Dim result As ADODB.recordSet
+    Dim result As ADODB.Recordset
     Set result = Executor.ExecuteSelect(query, parameters)
     
     Set GetTableColumn = result
