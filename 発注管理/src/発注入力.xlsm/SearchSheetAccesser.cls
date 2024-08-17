@@ -65,14 +65,19 @@ Public Sub AddCheckBox(rowIndex As Long)
     Dim ws As Worksheet
     Set ws = Me.Worksheet
     
-    ' チェックボックスの追加
-    Dim cb As CheckBox
-    Set cb = ws.CheckBoxes.Add(Left:=ws.Cells(rowIndex, columnIndex).Left, _
-                               Top:=ws.Cells(rowIndex, columnIndex).Top, _
-                               Width:=ws.Cells(rowIndex, columnIndex).Width, _
-                               Height:=ws.Cells(rowIndex, columnIndex).Height)
-    cb.Caption = ""
-    cb.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
+    ' フォームコントロールのチェックボックスを追加
+    Dim cb As Shape
+    Set cb = ws.Shapes.AddFormControl(xlCheckBox, _
+                                      Left:=ws.Cells(rowIndex, columnIndex).Left, _
+                                      Top:=ws.Cells(rowIndex, columnIndex).Top, _
+                                      Width:=ws.Cells(rowIndex, columnIndex).Width, _
+                                      Height:=ws.Cells(rowIndex, columnIndex).Height)
+    
+    ' チェックボックスのキャプションを空に設定
+    cb.TextFrame.Characters.Text = ""
+    
+    ' チェックボックスのリンクするセルを設定
+    cb.ControlFormat.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
 End Sub
 
 Public Function GetCheckedProductsCode() As Collection
@@ -132,29 +137,24 @@ Sub DeleteAllCheckboxes()
         End If
     Next shp
 
-    ' ActiveX Controlsのチェックボックスを削除
-    For Each cb In ws.OLEObjects
-        If TypeName(cb.Object) = "CheckBox" Then
-            cb.Delete
-        End If
-    Next cb
-
 End Sub
 
 Sub ClearCheckBoxes()
     Dim ws As Worksheet
-    Dim chkBox As CheckBox
+    Dim shp As Shape
 
     Set ws = Me.Worksheet
     
-    ' 各ワークシートのフォームコントロールチェックボックスをループ
-    For Each chkBox In ws.CheckBoxes
-        ' チェックボックスがTrueの場合
-        If chkBox.value = xlOn Then
-            chkBox.value = xlOff
+    ' ワークシート上のすべてのシェイプをループ
+    For Each shp In ws.Shapes
+        ' シェイプがフォームコントロールのチェックボックスであるか確認
+        If shp.Type = msoFormControl And shp.FormControlType = xlCheckBox Then
+            ' チェックボックスがオンの場合
+            If shp.ControlFormat.value = xlOn Then
+                shp.ControlFormat.value = xlOff
+            End If
         End If
-    Next chkBox
-    
+    Next shp
 End Sub
 
 
