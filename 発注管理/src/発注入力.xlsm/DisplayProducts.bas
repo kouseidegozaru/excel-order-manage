@@ -45,7 +45,7 @@ Private Sub WriteRow(cell As Object, bumonCD As Integer, qtyColumn As Integer, p
 
     Dim dataStorage As New DataBaseAccesser
     
-    Dim rs As ADODB.recordSet
+    Dim rs As ADODB.Recordset
     Set rs = dataStorage.GetProduct(bumonCD, cell.value)
     
     ' レコードセットをセルに貼り付ける
