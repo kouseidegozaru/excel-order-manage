@@ -75,18 +75,24 @@ Public Function RangeToOneDimCollection(rng As Range) As Collection
         Set RangeToOneDimCollection = oneDimCollection
         Exit Function
     End If
-
+    
+    'range.valueで範囲が一つのセル番地のみを指す場合に配列ではなくなる
+    If Not IsArray(arr) Then
+        oneDimCollection.Add arr
+    
     ' 一行か一列かを判定
-    If rng.Rows.count = 1 Then
+    ElseIf rng.Rows.count = 1 Then
         ' 一行の場合
         For i = 1 To rng.Columns.count
             oneDimCollection.Add arr(1, i)
         Next i
+        
     ElseIf rng.Columns.count = 1 Then
         ' 一列の場合
         For i = 1 To rng.Rows.count
             oneDimCollection.Add arr(i, 1)
         Next i
+        
     End If
 
     Set RangeToOneDimCollection = oneDimCollection
