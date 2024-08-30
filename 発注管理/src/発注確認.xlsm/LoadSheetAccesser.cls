@@ -220,6 +220,55 @@ Public Function AllGroupData() As ADODB.Recordset
     Set AllGroupData = rs
 End Function
 
+Public Sub AddCheckBox(rowIndex As Long)
+    Dim columnIndex As Integer
+    Dim stateColumnIndex As Integer
+    
+    columnIndex = Me.CheckBoxColumnIndex
+    stateColumnIndex = Me.CheckStateColumnIndex
+    
+    Dim ws As Worksheet
+    Set ws = Me.Worksheet
+    
+    ' フォームコントロールのチェックボックスを追加
+    Dim cb As Shape
+    Set cb = ws.Shapes.AddFormControl(xlCheckBox, _
+                                      Left:=ws.Cells(rowIndex, columnIndex).Left, _
+                                      Top:=ws.Cells(rowIndex, columnIndex).Top, _
+                                      Width:=ws.Cells(rowIndex, columnIndex).Width, _
+                                      Height:=ws.Cells(rowIndex, columnIndex).Height)
+    
+    ' チェックボックスのキャプションを空に設定
+    cb.TextFrame.Characters.Text = ""
+    
+    ' チェックボックスのリンクするセルを設定
+    cb.ControlFormat.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
+End Sub
+
+Public Function GetCheckedProductsCode() As Collection
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Set wb = Me.Workbook
+    Set ws = Me.Worksheet
+    
+    Dim productsColumn As Integer
+    Dim checkedStateColumn As Integer
+    
+    Dim checkedProductsCode As New Collection
+    Dim i As Long
+    
+    productsColumn = Me.ProductCodeColumnIndex
+    checkedStateColumn = Me.CheckStateColumnIndex
+    
+    For i = 1 To ws.Cells(ws.Rows.Count, productsColumn).End(xlUp).row
+        If ws.Cells(i, checkedStateColumn).value = True Then
+            checkedProductsCode.Add ws.Cells(i, productsColumn).value
+        End If
+    Next i
+    
+    Set GetCheckedProductsCode = checkedProductsCode
+End Function
+
 
 '''継承部分'''
 
