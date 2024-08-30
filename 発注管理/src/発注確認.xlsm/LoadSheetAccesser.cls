@@ -16,6 +16,9 @@ Private WorkSheetName_ As String
 
 Private ProductCodeColumnIndex_ As Integer
 
+Private CheckStateColumnIndex_ As Integer
+Private CheckBoxColumnIndex_ As Integer
+
 Private InputBumonCodeRange_ As String
 Private OutputBumonNameRange_ As String
 Private InputTargetDateRange_ As String
@@ -34,7 +37,10 @@ Private Sub Class_Initialize()
     
     CompleteString_ = "Åù"
     
-    ProductCodeColumnIndex_ = 1
+    ProductCodeColumnIndex_ = 2
+    
+    CheckStateColumnIndex_ = 19
+    CheckBoxColumnIndex_ = 1
     
     FilePropertyStartColumnIndex_ = 2
     FilePropertyUserNameRowIndex_ = 4
@@ -49,7 +55,7 @@ Private Sub Class_Initialize()
     Set super = New SheetAccesser
     super.InitStatus DataHeaderRow:=8, _
                      DataStartRow:=9, _
-                     DataStartColumn:=1
+                     DataStartColumn:=2
     
     InitWorkbook
     InitWorkSheet
@@ -65,6 +71,14 @@ End Sub
 
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
+End Property
+
+Property Get CheckStateColumnIndex() As Integer
+    CheckStateColumnIndex = CheckStateColumnIndex_
+End Property
+
+Property Get CheckBoxColumnIndex() As Integer
+    CheckBoxColumnIndex = CheckBoxColumnIndex_
 End Property
 
 Property Get FilePropertyStartColumnIndex() As Integer
