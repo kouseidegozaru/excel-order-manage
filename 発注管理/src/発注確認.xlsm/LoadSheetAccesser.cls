@@ -16,6 +16,9 @@ Private WorkSheetName_ As String
 
 Private ProductCodeColumnIndex_ As Integer
 
+Private CheckStateColumnIndex_ As Integer
+Private CheckBoxColumnIndex_ As Integer
+
 Private InputBumonCodeRange_ As String
 Private OutputBumonNameRange_ As String
 Private InputTargetDateRange_ As String
@@ -34,7 +37,10 @@ Private Sub Class_Initialize()
     
     CompleteString_ = "◎"
     
-    ProductCodeColumnIndex_ = 1
+    ProductCodeColumnIndex_ = 2
+    
+    CheckStateColumnIndex_ = 19
+    CheckBoxColumnIndex_ = 1
     
     FilePropertyStartColumnIndex_ = 2
     FilePropertyUserNameRowIndex_ = 4
@@ -49,7 +55,7 @@ Private Sub Class_Initialize()
     Set super = New SheetAccesser
     super.InitStatus DataHeaderRow:=8, _
                      DataStartRow:=9, _
-                     DataStartColumn:=1
+                     DataStartColumn:=2
     
     InitWorkbook
     InitWorkSheet
@@ -65,6 +71,14 @@ End Sub
 
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
+End Property
+
+Property Get CheckStateColumnIndex() As Integer
+    CheckStateColumnIndex = CheckStateColumnIndex_
+End Property
+
+Property Get CheckBoxColumnIndex() As Integer
+    CheckBoxColumnIndex = CheckBoxColumnIndex_
 End Property
 
 Property Get FilePropertyStartColumnIndex() As Integer
@@ -204,6 +218,55 @@ Public Function AllGroupData() As ADODB.Recordset
     Set rs = dataAccessor.ExecuteExcelQuery(FilePath, query)
 
     Set AllGroupData = rs
+End Function
+
+Public Sub AddCheckBox(rowIndex As Long)
+    Dim columnIndex As Integer
+    Dim stateColumnIndex As Integer
+    
+    columnIndex = Me.CheckBoxColumnIndex
+    stateColumnIndex = Me.CheckStateColumnIndex
+    
+    Dim ws As Worksheet
+    Set ws = Me.Worksheet
+    
+    ' フォームコントロールのチェックボックスを追加
+    Dim cb As Shape
+    Set cb = ws.Shapes.AddFormControl(xlCheckBox, _
+                                      Left:=ws.Cells(rowIndex, columnIndex).Left, _
+                                      Top:=ws.Cells(rowIndex, columnIndex).Top, _
+                                      Width:=ws.Cells(rowIndex, columnIndex).Width, _
+                                      Height:=ws.Cells(rowIndex, columnIndex).Height)
+    
+    ' チェックボックスのキャプションを空に設定
+    cb.TextFrame.Characters.Text = ""
+    
+    ' チェックボックスのリンクするセルを設定
+    cb.ControlFormat.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
+End Sub
+
+Public Function GetCheckedProductsCode() As Collection
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Set wb = Me.Workbook
+    Set ws = Me.Worksheet
+    
+    Dim productsColumn As Integer
+    Dim checkedStateColumn As Integer
+    
+    Dim checkedProductsCode As New Collection
+    Dim i As Long
+    
+    productsColumn = Me.ProductCodeColumnIndex
+    checkedStateColumn = Me.CheckStateColumnIndex
+    
+    For i = 1 To ws.Cells(ws.Rows.Count, productsColumn).End(xlUp).row
+        If ws.Cells(i, checkedStateColumn).value = True Then
+            checkedProductsCode.Add ws.Cells(i, productsColumn).value
+        End If
+    Next i
+    
+    Set GetCheckedProductsCode = checkedProductsCode
 End Function
 
 
