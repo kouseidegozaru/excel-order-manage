@@ -1,6 +1,6 @@
-Attribute VB_Name = "SaveOrderedData"
+Attribute VB_Name = "OrderedData"
 '発注済みとしてチェックされた商品コードを保存する
-Sub SaveOrderedProductsCode()
+Sub SaveOrderedData()
     
     Application.ScreenUpdating = False
     
@@ -21,4 +21,22 @@ Sub SaveOrderedProductsCode()
     ordered.CloseWorkBook
     
     Application.ScreenUpdating = True
+End Sub
+Sub LoadOrderedData()
+
+End Sub
+Sub test() 'テスト用
+    '発注確認シートへのアクセサ
+    Dim load As New LoadSheetAccesser
+    '発注済み商品コードへのアクセサ
+    Dim ordered As New OrderedDataSheetAccesser
+    ordered.InitStatus load.bumonCode, load.targetDate
+    ordered.InitOpenWorkBook
+    ordered.InitWorkSheet
+    
+    
+    Dim aa As Variant
+    Set aa = ordered.GetAllData_NoHead
+    
+    ordered.CloseWorkBook
 End Sub
