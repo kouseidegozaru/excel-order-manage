@@ -143,7 +143,7 @@ Property Get ProductsCodeRange() As Range
 End Property
 
 '部門コードの取得
-Property Get BumonCode() As Integer
+Property Get bumonCode() As Integer
     '値の取得
     Dim value As Variant
     value = Me.Worksheet.Range(InputBumonCodeRange_).value
@@ -156,16 +156,16 @@ Property Get BumonCode() As Integer
     '部門コードが存在するか
     Dim DataStorage As New DataBaseAccesser
     If DataStorage.ExistsBumon(CInt(value)) Then
-        BumonCode = value
+        bumonCode = value
     Else
-        BumonCode = 0
+        bumonCode = 0
         MsgBox ("正しい部門コードを入力して下さい")
         End
     End If
 End Property
 
 '対象日付の取得
-Property Get TargetDate() As Date
+Property Get targetDate() As Date
     Dim value As Variant
     value = Me.Worksheet.Range(InputTargetDateRange_).value
     
@@ -174,7 +174,7 @@ Property Get TargetDate() As Date
         End
     End If
     
-    TargetDate = CDate(value)
+    targetDate = CDate(value)
 End Property
 
 Property Get BumonCodeRange() As Range

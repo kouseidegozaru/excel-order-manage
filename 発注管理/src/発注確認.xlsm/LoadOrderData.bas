@@ -22,15 +22,15 @@ Sub LoadFileProperty()
     load.ClearFileProperty
     
     'ファイルの抽出条件文字列の設定
-    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
-    targetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
+    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.bumonCode & fileProperty.BreakIdentifier
+    targetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     '探索するディレクトリの設定
     filter.DirPath = data.SaveDirPath
     
     '部門を指定して従業員コードの取得
     Dim userCodes As Collection
-    Set userCodes = users.GetEmployeeCodes(load.BumonCode)
+    Set userCodes = users.GetEmployeeCodes(load.bumonCode)
     
     
     For Each userCode In userCodes
@@ -75,8 +75,8 @@ Sub LoadData()
     Dim targetDateFilter As String
     
     'ファイルの抽出条件文字列の設定
-    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
-    targetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
+    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.bumonCode & fileProperty.BreakIdentifier
+    targetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     'フィルターの実行
     Dim filePathCollection As Collection
