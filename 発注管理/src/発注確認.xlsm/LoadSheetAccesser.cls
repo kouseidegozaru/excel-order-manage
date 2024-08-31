@@ -130,8 +130,32 @@ Public Sub AddFileProperty(userName As String, IsCompleted As Boolean, updatedTi
     Me.Worksheet.Cells(FilePropertyCompleteRowIndex_, lastColumn) = writeCompleteString
 End Sub
 
+Sub DeleteAllCheckboxes()
+    Dim ws As Worksheet
+    Dim cb As OLEObject
+    Dim shp As Shape
+
+    Set ws = Me.Worksheet
+
+    ' Form Controlsのチェックボックスを削除
+    For Each shp In ws.Shapes
+        If shp.Type = msoFormControl Then
+            If shp.FormControlType = xlCheckBox Then
+                shp.Delete
+            End If
+        End If
+    Next shp
+
+End Sub
+
 Public Sub ClearData()
-    Me.ProductsCodeRange.EntireRow.Delete Shift:=xlToup
+    Dim clearRange As Range
+    Set clearRange = Me.ProductsCodeRange
+    
+    If WorksheetFunction.CountA(clearRange) > 0 Then
+        Me.DeleteAllCheckboxes
+        clearRange.EntireRow.Delete
+    End If
 End Sub
 
 '発注入力にある商品コードの範囲
@@ -143,7 +167,7 @@ Property Get ProductsCodeRange() As Range
 End Property
 
 '部門コードの取得
-Property Get BumonCode() As Integer
+Property Get bumonCode() As Integer
     '値の取得
     Dim value As Variant
     value = Me.Worksheet.Range(InputBumonCodeRange_).value
@@ -156,16 +180,16 @@ Property Get BumonCode() As Integer
     '部門コードが存在するか
     Dim DataStorage As New DataBaseAccesser
     If DataStorage.ExistsBumon(CInt(value)) Then
-        BumonCode = value
+        bumonCode = value
     Else
-        BumonCode = 0
+        bumonCode = 0
         MsgBox ("正しい部門コードを入力して下さい")
         End
     End If
 End Property
 
 '対象日付の取得
-Property Get TargetDate() As Date
+Property Get targetDate() As Date
     Dim value As Variant
     value = Me.Worksheet.Range(InputTargetDateRange_).value
     
@@ -174,7 +198,7 @@ Property Get TargetDate() As Date
         End
     End If
     
-    TargetDate = CDate(value)
+    targetDate = CDate(value)
 End Property
 
 Property Get BumonCodeRange() As Range
@@ -268,7 +292,6 @@ Public Function GetCheckedProductsCode() As Collection
     
     Set GetCheckedProductsCode = checkedProductsCode
 End Function
-
 
 '''継承部分'''
 

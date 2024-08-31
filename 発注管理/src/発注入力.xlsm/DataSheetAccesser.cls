@@ -20,7 +20,7 @@ Private WorkSheetName_ As String
 
 Private Sub Class_Initialize()
 
-    SaveDirPath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data"
+    SaveDirPath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\data"
 
     WorkSheetName_ = "Sheet1"
     

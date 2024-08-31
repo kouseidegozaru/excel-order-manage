@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "DataSheetAccesser"
+Attribute VB_Name = "OrderedDataSheetAccesser"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -18,10 +18,17 @@ Private SaveFileName_ As String
 '保存データ設定
 Private WorkSheetName_ As String
 
+'商品コードのヘッダー名
+Private ProductsHeaderName_ As String
+'商品コードの列番号
+Private ProductCodeColumnIndex_ As Integer
+
 Private Sub Class_Initialize()
 
-    SaveDirPath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\data"
+    SaveDirPath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\ordered"
 
+    ProductsHeaderName_ = "商品コード"
+    
     WorkSheetName_ = "Sheet1"
     
     ProductCodeColumnIndex_ = 1
@@ -33,8 +40,9 @@ Private Sub Class_Initialize()
     
 End Sub
 
-Public Sub InitSaveFileName(fileName As String)
-    SaveFileName_ = fileName
+Public Sub InitNewWorkbook()
+    ' 新規ワークブックの作成
+    super.InitWorkbook Application.Workbooks.Add
 End Sub
 
 Public Sub InitOpenWorkBook()
@@ -43,6 +51,12 @@ End Sub
 
 Public Sub InitWorkSheet()
     super.InitWorkSheet Me.Workbook.Sheets(WorkSheetName_)
+End Sub
+
+Public Sub InitStatus(bumonCode As Integer, targetDate As Date)
+    SaveFileName_ = "b" & bumonCode & "-" & _
+                    "d" & Format(targetDate, "yyyymmdd") & "-" & _
+                    ".xlsx"
 End Sub
 
 '保存ファイル名
@@ -62,8 +76,35 @@ Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
 
-Sub WriteTableData(targetData As Collection)
-    super.WriteMatrixCollection Me.DataHeaderRowIndex, Me.DataStartColumnIndex, targetData
+Property Get ProductsHeaderName() As String
+    ProductsHeaderName = ProductsHeaderName_
+End Property
+'商品コードの入力
+Sub WriteProductsCode(targetData As Collection)
+    'ヘッダー入力
+    Me.Cells(Me.DataHeaderRowIndex, Me.ProductCodeColumnIndex) = Me.ProductsHeaderName
+    '商品コード入力
+    WriteOneColumnCollection Me.DataStartRowIndex, Me.ProductCodeColumnIndex, targetData
+End Sub
+
+Private Sub WriteOneColumnCollection(startRowIndex As Long, startColIndex As Integer, writeData As Collection)
+    Dim item As Variant
+    Dim ws As Worksheet
+    Set ws = Me.Worksheet
+
+    ' writeDataがCollectionか確認
+    If TypeName(writeData) = "Collection" Then
+        ' Collectionの場合
+        rowCount = 0
+        colCount = 0
+        For Each item In writeData
+            ws.Cells(startRowIndex + rowCount, startColIndex + colCount).value = item
+            rowCount = rowCount + 1
+        Next item
+    Else
+        ' エラーハンドリング
+        Err.Raise vbObjectError + 9999, "writeData", "writeDataはCollectionでなければなりません。"
+    End If
 End Sub
 
 Public Sub Save()
@@ -114,7 +155,7 @@ Property Get AllDataRange() As Range
 End Property
 
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
-    Call super.Cells(rowIndex, columnIndex, value)
+    super.Cells(rowIndex, columnIndex) = value
 End Property
 
 ' メソッド
@@ -137,5 +178,7 @@ End Function
 Function GetAllData_NoHead() As Collection
     Set GetAllData_NoHead = super.GetAllData_NoHead
 End Function
+
+
 
 
