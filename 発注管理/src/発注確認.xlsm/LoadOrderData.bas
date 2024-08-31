@@ -99,9 +99,23 @@ Sub LoadData()
         
     Next fileName
     
+    'グループ化と集計をして書き込む
     Dim rs As ADODB.Recordset
     Set rs = load.AllGroupData
     load.ClearData
     load.WriteAllData RecordsetToCollection(rs)
+    
+    'チェックボックスを追加
+    '開始行番号
+    Dim rowIndex As Long
+    rowIndex = load.DataStartRowIndex
+    '終了行番号
+    Dim endRowIndex As Long
+    endRowIndex = load.DataEndRowIndex
+    'チェックボックス
+    Dim i As Long
+    For i = rowIndex To endRowIndex
+        load.AddCheckBox i
+    Next i
     
 End Sub
