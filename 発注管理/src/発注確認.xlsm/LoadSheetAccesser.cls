@@ -244,6 +244,34 @@ Public Function AllGroupData() As ADODB.Recordset
     Set AllGroupData = rs
 End Function
 
+'チェックボックスのステータス変更
+Property Let CheckBoxState(rowIndex As Long, value As Boolean)
+    Me.Cells(rowIndex, Me.CheckStateColumnIndex) = value
+End Property
+
+'対象の商品のチェックボックスをオンにする
+Public Sub OrderedIsTrue(targetProductsCode As Variant)
+    
+    'データの終了行と開始行
+    Dim startRowIndex As Long
+    startRowIndex = Me.DataStartRowIndex
+    Dim endRowIndex As Long
+    endRowIndex = Me.DataEndRowIndex
+    
+    '現在表示されている商品コード
+    Dim displayProductsCode As Variant
+    
+    For i = startRowIndex To endRowIndex
+        '商品コード
+        displayProductsCode = Me.Worksheet.Cells(i, Me.ProductCodeColumnIndex).value
+        '対象の商品コードの場合チェックボックスをオン
+        If targetProductsCode = displayProductsCode Then
+            Me.CheckBoxState(CInt(i)) = True
+        End If
+    Next i
+    
+End Sub
+
 Public Sub AddCheckBox(rowIndex As Long)
     Dim columnIndex As Integer
     Dim stateColumnIndex As Integer
