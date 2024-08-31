@@ -3,6 +3,7 @@ Sub Loads()
     Application.ScreenUpdating = False
     LoadFileProperty
     LoadData
+    LoadOrderedData
     Application.ScreenUpdating = True
 End Sub
 

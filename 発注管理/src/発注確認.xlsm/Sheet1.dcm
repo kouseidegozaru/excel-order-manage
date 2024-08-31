@@ -48,6 +48,15 @@ Private Sub HookCellChange(ByVal target As Range)
             Loads
             
         End If
+        
+'チェックボックスの状態を監視
+        If .IsChanged(load.CheckStateRange) Then
+        
+            '発注済みの商品の保存
+            SaveOrderedData
+        
+        End If
+            
       
               
     End With

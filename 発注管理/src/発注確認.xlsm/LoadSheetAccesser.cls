@@ -166,6 +166,13 @@ Property Get ProductsCodeRange() As Range
                                            Me.ProductCodeColumnIndex)
 End Property
 
+'発注入力にあるチェックボックス状態の範囲
+Property Get CheckStateRange() As Range
+    Set CheckStateRange = super.GetRange(Me.DataStartRowIndex, _
+                                           Me.CheckStateColumnIndex, _
+                                           Me.DataEndRowIndex, _
+                                           Me.CheckStateColumnIndex)
+End Property
 '部門コードの取得
 Property Get bumonCode() As Integer
     '値の取得
