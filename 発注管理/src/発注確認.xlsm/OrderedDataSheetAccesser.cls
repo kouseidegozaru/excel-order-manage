@@ -20,6 +20,8 @@ Private WorkSheetName_ As String
 
 '商品コードのヘッダー名
 Private ProductsHeaderName_ As String
+'商品コードの列番号
+Private ProductCodeColumnIndex_ As Integer
 
 Private Sub Class_Initialize()
 
@@ -80,9 +82,9 @@ End Property
 '商品コードの入力
 Sub WriteProductsCode(targetData As Collection)
     'ヘッダー入力
-    Me.Worksheet.Cells(Me.DataHeaderRowIndex, Me.ProductCodeColumnIndex) = Me.ProductsHeaderName
+    Me.Cells(Me.DataHeaderRowIndex, Me.ProductCodeColumnIndex) = Me.ProductsHeaderName
     '商品コード入力
-    Me.WriteOneColumnCollection Me.DataStartRowIndex, Me.ProductCodeColumnIndex, targetData
+    WriteOneColumnCollection Me.DataStartRowIndex, Me.ProductCodeColumnIndex, targetData
 End Sub
 
 Private Sub WriteOneColumnCollection(startRowIndex As Long, startColIndex As Integer, writeData As Collection)
@@ -153,7 +155,7 @@ Property Get AllDataRange() As Range
 End Property
 
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
-    Call super.Cells(rowIndex, columnIndex, value)
+    super.Cells(rowIndex, columnIndex) = value
 End Property
 
 ' メソッド
