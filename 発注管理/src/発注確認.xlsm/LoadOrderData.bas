@@ -118,4 +118,7 @@ Sub LoadData()
         load.AddCheckBox i
     Next i
     
+    'ğŒ•t‚«‘®‚ğİ’è
+    load.ApplyConditionalFormatting
+    
 End Sub

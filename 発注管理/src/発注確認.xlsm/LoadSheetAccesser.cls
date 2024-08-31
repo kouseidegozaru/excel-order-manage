@@ -321,6 +321,46 @@ Public Function GetCheckedProductsCode() As Collection
     Set GetCheckedProductsCode = checkedProductsCode
 End Function
 
+'条件付き書式を設定
+Sub ApplyConditionalFormatting()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim startRow As Long
+    Dim startCol As Integer
+    Dim endCol As Integer
+    Dim checkCol As Integer
+    Dim rng As Range
+    Dim formatCondition As formatCondition
+    
+    ' 対象のシートを設定
+    Set ws = Me.Worksheet
+    
+    ' 列の指定
+    startCol = Me.DataStartColumnIndex
+    endCol = Me.DataEndColumnIndex
+    checkCol = Me.CheckStateColumnIndex
+    
+    ' 行の指定
+    lastRow = Me.DataEndRowIndex
+    startRow = Me.DataStartRowIndex
+    
+    ' 各行ごとに条件付き書式を設定
+    For i = startRow To lastRow
+        ' S列がTrueの場合、AからS列の範囲に条件付き書式を設定
+        Set rng = ws.Range(ws.Cells(i, startCol), ws.Cells(i, endCol))
+        
+        ' 条件付き書式をクリア（既存の書式を削除）
+        rng.FormatConditions.Delete
+        
+        ' 条件付き書式を追加
+        Set formatCondition = rng.FormatConditions.Add(Type:=xlExpression, Formula1:="=" & ws.Cells(i, checkCol).Address & "=TRUE")
+        
+        ' 背景色を設定（黄色）
+        formatCondition.Interior.Color = RGB(255, 255, 0) ' 黄色
+    Next i
+End Sub
+
 '''継承部分'''
 
 'プロパティ
