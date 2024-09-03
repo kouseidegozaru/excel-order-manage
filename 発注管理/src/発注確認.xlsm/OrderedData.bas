@@ -9,9 +9,9 @@ Sub SaveOrderedData()
     
     '発注済み商品コードへのアクセサ
     Dim ordered As New OrderedDataSheetAccesser
+    ordered.InitStatus load.bumonCode, load.targetDate
     ordered.InitNewWorkbook
     ordered.InitWorkSheet
-    ordered.InitStatus load.bumonCode, load.targetDate
     
     'チェックされた商品コードを入力
     ordered.WriteProductsCode load.GetCheckedProductsCode
@@ -34,13 +34,14 @@ Sub LoadOrderedData()
     '発注済み商品コードへのアクセサ
     Dim ordered As New OrderedDataSheetAccesser
     ordered.InitStatus load.bumonCode, load.targetDate
-    ordered.InitOpenWorkBook
-    ordered.InitWorkSheet
     
     '発注済みデータがない場合は終了
     If Dir(ordered.SaveFilePath) = "" Then
         Exit Sub
     End If
+    
+    ordered.InitOpenWorkBook
+    ordered.InitWorkSheet
     
     '発注済みの商品コードのコレクション
     Dim orderedProductsCodes As Collection
