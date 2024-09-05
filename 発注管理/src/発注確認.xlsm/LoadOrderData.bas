@@ -3,6 +3,7 @@ Sub Loads()
     Application.ScreenUpdating = False
     LoadFileProperty
     LoadData
+    LoadOrderedData
     Application.ScreenUpdating = True
 End Sub
 
@@ -22,15 +23,15 @@ Sub LoadFileProperty()
     load.ClearFileProperty
     
     'ファイルの抽出条件文字列の設定
-    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
-    targetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
+    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.bumonCode & fileProperty.BreakIdentifier
+    targetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     '探索するディレクトリの設定
     filter.DirPath = data.SaveDirPath
     
     '部門を指定して従業員コードの取得
     Dim userCodes As Collection
-    Set userCodes = users.GetEmployeeCodes(load.BumonCode)
+    Set userCodes = users.GetEmployeeCodes(load.bumonCode)
     
     
     For Each userCode In userCodes
@@ -75,8 +76,8 @@ Sub LoadData()
     Dim targetDateFilter As String
     
     'ファイルの抽出条件文字列の設定
-    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.BumonCode & fileProperty.BreakIdentifier
-    targetDateFilter = fileProperty.DateIdentifier & Format(load.TargetDate, "yyyymmdd") & fileProperty.BreakIdentifier
+    bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.bumonCode & fileProperty.BreakIdentifier
+    targetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     'フィルターの実行
     Dim filePathCollection As Collection
@@ -99,9 +100,33 @@ Sub LoadData()
         
     Next fileName
     
+    'グループ化と集計をして書き込む
     Dim rs As ADODB.Recordset
     Set rs = load.AllGroupData
     load.ClearData
     load.WriteAllData RecordsetToCollection(rs)
+    
+    'チェックボックスを追加
+    '開始行番号
+    Dim rowIndex As Long
+    rowIndex = load.DataStartRowIndex
+    '終了行番号
+    Dim endRowIndex As Long
+    endRowIndex = load.DataEndRowIndex
+    
+    '受け取るチェックボックス
+    Dim chkbox As Shape
+    
+    'チェックボックス
+    Dim i As Long
+    For i = rowIndex To endRowIndex
+        'チェックボックスの追加
+        Set chkbox = load.AddCheckBox(i)
+        'チェックボックスにイベントの付与
+        chkbox.OnAction = "SaveOrderedData"
+    Next i
+    
+    '条件付き書式を設定
+    load.ApplyConditionalFormatting
     
 End Sub

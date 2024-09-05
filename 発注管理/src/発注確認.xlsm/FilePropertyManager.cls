@@ -27,8 +27,8 @@ Public Sub InitFilePath(targetFilePath As String)
     fileName_ = GetFileName(FilePath_)
 End Sub
 
-Property Get BumonCode() As Integer
-    BumonCode = CInt(ExtractBetweenCharacters(fileName_, BumonCodeIdentifier_, BreakIdentifier_))
+Property Get bumonCode() As Integer
+    bumonCode = CInt(ExtractBetweenCharacters(fileName_, BumonCodeIdentifier_, BreakIdentifier_))
 End Property
 Property Get BumonCodeIdentifier() As String
     BumonCodeIdentifier = BumonCodeIdentifier_
@@ -41,7 +41,7 @@ Property Get UserCodeIdentifier() As String
     UserCodeIdentifier = UserCodeIdentifier_
 End Property
 
-Property Get TargetDate() As Date
+Property Get targetDate() As Date
     Dim strDate As String
     Dim year As Integer, month As Integer, day As Integer
     
@@ -51,9 +51,9 @@ Property Get TargetDate() As Date
         year = CInt(Left(strDate, 4))
         month = CInt(Mid(strDate, 5, 2))
         day = CInt(Right(strDate, 2))
-        TargetDate = DateSerial(year, month, day)
+        targetDate = DateSerial(year, month, day)
     Else
-        TargetDate = Date ' デフォルト値
+        targetDate = Date ' デフォルト値
     End If
 End Property
 Property Get DateIdentifier() As String

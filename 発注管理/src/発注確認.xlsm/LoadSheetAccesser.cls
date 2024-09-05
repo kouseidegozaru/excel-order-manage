@@ -16,6 +16,9 @@ Private WorkSheetName_ As String
 
 Private ProductCodeColumnIndex_ As Integer
 
+Private CheckStateColumnIndex_ As Integer
+Private CheckBoxColumnIndex_ As Integer
+
 Private InputBumonCodeRange_ As String
 Private OutputBumonNameRange_ As String
 Private InputTargetDateRange_ As String
@@ -34,7 +37,10 @@ Private Sub Class_Initialize()
     
     CompleteString_ = "◎"
     
-    ProductCodeColumnIndex_ = 1
+    ProductCodeColumnIndex_ = 2
+    
+    CheckStateColumnIndex_ = 19
+    CheckBoxColumnIndex_ = 1
     
     FilePropertyStartColumnIndex_ = 2
     FilePropertyUserNameRowIndex_ = 4
@@ -49,7 +55,7 @@ Private Sub Class_Initialize()
     Set super = New SheetAccesser
     super.InitStatus DataHeaderRow:=8, _
                      DataStartRow:=9, _
-                     DataStartColumn:=1
+                     DataStartColumn:=2
     
     InitWorkbook
     InitWorkSheet
@@ -65,6 +71,14 @@ End Sub
 
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
+End Property
+
+Property Get CheckStateColumnIndex() As Integer
+    CheckStateColumnIndex = CheckStateColumnIndex_
+End Property
+
+Property Get CheckBoxColumnIndex() As Integer
+    CheckBoxColumnIndex = CheckBoxColumnIndex_
 End Property
 
 Property Get FilePropertyStartColumnIndex() As Integer
@@ -116,8 +130,32 @@ Public Sub AddFileProperty(userName As String, IsCompleted As Boolean, updatedTi
     Me.Worksheet.Cells(FilePropertyCompleteRowIndex_, lastColumn) = writeCompleteString
 End Sub
 
+Sub DeleteAllCheckboxes()
+    Dim ws As Worksheet
+    Dim cb As OLEObject
+    Dim shp As Shape
+
+    Set ws = Me.Worksheet
+
+    ' Form Controlsのチェックボックスを削除
+    For Each shp In ws.Shapes
+        If shp.Type = msoFormControl Then
+            If shp.FormControlType = xlCheckBox Then
+                shp.Delete
+            End If
+        End If
+    Next shp
+
+End Sub
+
 Public Sub ClearData()
-    Me.ProductsCodeRange.EntireRow.Delete Shift:=xlToup
+    Dim clearRange As Range
+    Set clearRange = Me.ProductsCodeRange
+    
+    If WorksheetFunction.CountA(clearRange) > 0 Then
+        Me.DeleteAllCheckboxes
+        clearRange.EntireRow.Delete
+    End If
 End Sub
 
 '発注入力にある商品コードの範囲
@@ -128,8 +166,15 @@ Property Get ProductsCodeRange() As Range
                                            Me.ProductCodeColumnIndex)
 End Property
 
+'発注入力にあるチェックボックス状態の範囲
+Property Get CheckStateRange() As Range
+    Set CheckStateRange = super.GetRange(Me.DataStartRowIndex, _
+                                           Me.CheckStateColumnIndex, _
+                                           Me.DataEndRowIndex, _
+                                           Me.CheckStateColumnIndex)
+End Property
 '部門コードの取得
-Property Get BumonCode() As Integer
+Property Get bumonCode() As Integer
     '値の取得
     Dim value As Variant
     value = Me.Worksheet.Range(InputBumonCodeRange_).value
@@ -142,16 +187,16 @@ Property Get BumonCode() As Integer
     '部門コードが存在するか
     Dim DataStorage As New DataBaseAccesser
     If DataStorage.ExistsBumon(CInt(value)) Then
-        BumonCode = value
+        bumonCode = value
     Else
-        BumonCode = 0
+        bumonCode = 0
         MsgBox ("正しい部門コードを入力して下さい")
         End
     End If
 End Property
 
 '対象日付の取得
-Property Get TargetDate() As Date
+Property Get targetDate() As Date
     Dim value As Variant
     value = Me.Worksheet.Range(InputTargetDateRange_).value
     
@@ -160,7 +205,7 @@ Property Get TargetDate() As Date
         End
     End If
     
-    TargetDate = CDate(value)
+    targetDate = CDate(value)
 End Property
 
 Property Get BumonCodeRange() As Range
@@ -206,6 +251,124 @@ Public Function AllGroupData() As ADODB.Recordset
     Set AllGroupData = rs
 End Function
 
+'チェックボックスのステータス変更
+Property Let CheckBoxState(rowIndex As Long, value As Boolean)
+    Me.Cells(rowIndex, Me.CheckStateColumnIndex) = value
+End Property
+
+'対象の商品のチェックボックスをオンにする
+Public Sub OrderedIsTrue(targetProductsCode As Variant)
+    
+    'データの終了行と開始行
+    Dim startRowIndex As Long
+    startRowIndex = Me.DataStartRowIndex
+    Dim endRowIndex As Long
+    endRowIndex = Me.DataEndRowIndex
+    
+    '現在表示されている商品コード
+    Dim displayProductsCode As Variant
+    
+    For i = startRowIndex To endRowIndex
+        '商品コード
+        displayProductsCode = Me.Worksheet.Cells(i, Me.ProductCodeColumnIndex).value
+        '対象の商品コードの場合チェックボックスをオン
+        If targetProductsCode = displayProductsCode Then
+            Me.CheckBoxState(CInt(i)) = True
+        End If
+    Next i
+    
+End Sub
+
+Public Function AddCheckBox(rowIndex As Long) As Shape
+    Dim columnIndex As Integer
+    Dim stateColumnIndex As Integer
+    
+    columnIndex = Me.CheckBoxColumnIndex
+    stateColumnIndex = Me.CheckStateColumnIndex
+    
+    Dim ws As Worksheet
+    Set ws = Me.Worksheet
+    
+    ' フォームコントロールのチェックボックスを追加
+    Dim cb As Shape
+    Set cb = ws.Shapes.AddFormControl(xlCheckBox, _
+                                      Left:=ws.Cells(rowIndex, columnIndex).Left, _
+                                      Top:=ws.Cells(rowIndex, columnIndex).Top, _
+                                      Width:=ws.Cells(rowIndex, columnIndex).Width, _
+                                      Height:=ws.Cells(rowIndex, columnIndex).Height)
+    
+    ' チェックボックスのキャプションを空に設定
+    cb.TextFrame.Characters.Text = ""
+    
+    ' チェックボックスのリンクするセルを設定
+    cb.ControlFormat.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
+    
+    Set AddCheckBox = cb
+End Function
+
+Public Function GetCheckedProductsCode() As Collection
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Set wb = Me.Workbook
+    Set ws = Me.Worksheet
+    
+    Dim productsColumn As Integer
+    Dim checkedStateColumn As Integer
+    
+    Dim checkedProductsCode As New Collection
+    Dim i As Long
+    
+    productsColumn = Me.ProductCodeColumnIndex
+    checkedStateColumn = Me.CheckStateColumnIndex
+    
+    For i = 1 To ws.Cells(ws.Rows.Count, productsColumn).End(xlUp).row
+        If ws.Cells(i, checkedStateColumn).value = True Then
+            checkedProductsCode.Add ws.Cells(i, productsColumn).value
+        End If
+    Next i
+    
+    Set GetCheckedProductsCode = checkedProductsCode
+End Function
+
+'条件付き書式を設定
+Sub ApplyConditionalFormatting()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim startRow As Long
+    Dim startCol As Integer
+    Dim endCol As Integer
+    Dim checkCol As Integer
+    Dim rng As Range
+    Dim formatCondition As formatCondition
+    
+    ' 対象のシートを設定
+    Set ws = Me.Worksheet
+    
+    ' 列の指定
+    startCol = Me.DataStartColumnIndex
+    endCol = Me.DataEndColumnIndex
+    checkCol = Me.CheckStateColumnIndex
+    
+    ' 行の指定
+    lastRow = Me.DataEndRowIndex
+    startRow = Me.DataStartRowIndex
+    
+    ' 各行ごとに条件付き書式を設定
+    For i = startRow To lastRow
+        ' S列がTrueの場合、AからS列の範囲に条件付き書式を設定
+        Set rng = ws.Range(ws.Cells(i, startCol), ws.Cells(i, endCol))
+        
+        ' 条件付き書式をクリア（既存の書式を削除）
+        rng.FormatConditions.Delete
+        
+        ' 条件付き書式を追加
+        Set formatCondition = rng.FormatConditions.Add(Type:=xlExpression, Formula1:="=" & ws.Cells(i, checkCol).Address & "=TRUE")
+        
+        ' 背景色を設定（黄色）
+        formatCondition.Interior.Color = RGB(255, 255, 0) ' 黄色
+    Next i
+End Sub
 
 '''継承部分'''
 

@@ -34,7 +34,7 @@ Private Sub HookCellChange(ByVal target As Range)
         If .IsChanged(load.BumonCodeRange) Then
             
             ' 部門名の表示
-            load.BumonName = DataStorage.GetBumonName(load.BumonCode)
+            load.BumonName = DataStorage.GetBumonName(load.bumonCode)
             ' 発注データの読み込み
             Loads
             
@@ -48,7 +48,6 @@ Private Sub HookCellChange(ByVal target As Range)
             Loads
             
         End If
-      
               
     End With
     

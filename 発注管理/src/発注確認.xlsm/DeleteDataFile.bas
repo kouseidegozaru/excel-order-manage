@@ -29,7 +29,7 @@ Sub DeleteDataFiles()
         fileProperty.InitFilePath FilePath
         
         '一か月前の場合ファイル削除
-        If fileProperty.TargetDate < oneMonthAgo Then
+        If fileProperty.targetDate < oneMonthAgo Then
             fs.DeleteFile FilePath
         End If
         

@@ -224,7 +224,7 @@ Public Function GetTableColumn() As ADODB.Recordset
 End Function
 
 ' 部門の担当者コード取得
-Public Function GetUserCodes(BumonCode As Integer) As ADODB.Recordset
+Public Function GetUserCodes(bumonCode As Integer) As ADODB.Recordset
     Dim Executor As SqlExecutor
     Set Executor = New SqlExecutor
     Executor.SetConnection MFRE05ConnectionString
@@ -234,7 +234,7 @@ Public Function GetUserCodes(BumonCode As Integer) As ADODB.Recordset
     
     Dim parameters As Object
     Set parameters = CreateObject("Scripting.Dictionary")
-    parameters.Add "部署コード", BumonCode
+    parameters.Add "部署コード", bumonCode
 
     Dim Result As ADODB.Recordset
     Set Result = Executor.ExecuteSelect(query, parameters)
