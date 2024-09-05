@@ -279,7 +279,7 @@ Public Sub OrderedIsTrue(targetProductsCode As Variant)
     
 End Sub
 
-Public Sub AddCheckBox(rowIndex As Long)
+Public Function AddCheckBox(rowIndex As Long) As Shape
     Dim columnIndex As Integer
     Dim stateColumnIndex As Integer
     
@@ -302,7 +302,9 @@ Public Sub AddCheckBox(rowIndex As Long)
     
     ' チェックボックスのリンクするセルを設定
     cb.ControlFormat.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
-End Sub
+    
+    Set AddCheckBox = cb
+End Function
 
 Public Function GetCheckedProductsCode() As Collection
     Dim wb As Workbook

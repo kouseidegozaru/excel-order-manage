@@ -113,10 +113,17 @@ Sub LoadData()
     '終了行番号
     Dim endRowIndex As Long
     endRowIndex = load.DataEndRowIndex
+    
+    '受け取るチェックボックス
+    Dim chkbox As Shape
+    
     'チェックボックス
     Dim i As Long
     For i = rowIndex To endRowIndex
-        load.AddCheckBox i
+        'チェックボックスの追加
+        Set chkbox = load.AddCheckBox(i)
+        'チェックボックスにイベントの付与
+        chkbox.OnAction = "SaveOrderedData"
     Next i
     
     '条件付き書式を設定
