@@ -166,6 +166,13 @@ Property Get ProductsCodeRange() As Range
                                            Me.ProductCodeColumnIndex)
 End Property
 
+'発注入力にあるチェックボックス状態の範囲
+Property Get CheckStateRange() As Range
+    Set CheckStateRange = super.GetRange(Me.DataStartRowIndex, _
+                                           Me.CheckStateColumnIndex, _
+                                           Me.DataEndRowIndex, _
+                                           Me.CheckStateColumnIndex)
+End Property
 '部門コードの取得
 Property Get bumonCode() As Integer
     '値の取得
@@ -244,7 +251,35 @@ Public Function AllGroupData() As ADODB.Recordset
     Set AllGroupData = rs
 End Function
 
-Public Sub AddCheckBox(rowIndex As Long)
+'チェックボックスのステータス変更
+Property Let CheckBoxState(rowIndex As Long, value As Boolean)
+    Me.Cells(rowIndex, Me.CheckStateColumnIndex) = value
+End Property
+
+'対象の商品のチェックボックスをオンにする
+Public Sub OrderedIsTrue(targetProductsCode As Variant)
+    
+    'データの終了行と開始行
+    Dim startRowIndex As Long
+    startRowIndex = Me.DataStartRowIndex
+    Dim endRowIndex As Long
+    endRowIndex = Me.DataEndRowIndex
+    
+    '現在表示されている商品コード
+    Dim displayProductsCode As Variant
+    
+    For i = startRowIndex To endRowIndex
+        '商品コード
+        displayProductsCode = Me.Worksheet.Cells(i, Me.ProductCodeColumnIndex).value
+        '対象の商品コードの場合チェックボックスをオン
+        If targetProductsCode = displayProductsCode Then
+            Me.CheckBoxState(CInt(i)) = True
+        End If
+    Next i
+    
+End Sub
+
+Public Function AddCheckBox(rowIndex As Long) As Shape
     Dim columnIndex As Integer
     Dim stateColumnIndex As Integer
     
@@ -267,7 +302,9 @@ Public Sub AddCheckBox(rowIndex As Long)
     
     ' チェックボックスのリンクするセルを設定
     cb.ControlFormat.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
-End Sub
+    
+    Set AddCheckBox = cb
+End Function
 
 Public Function GetCheckedProductsCode() As Collection
     Dim wb As Workbook
@@ -292,6 +329,46 @@ Public Function GetCheckedProductsCode() As Collection
     
     Set GetCheckedProductsCode = checkedProductsCode
 End Function
+
+'条件付き書式を設定
+Sub ApplyConditionalFormatting()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim startRow As Long
+    Dim startCol As Integer
+    Dim endCol As Integer
+    Dim checkCol As Integer
+    Dim rng As Range
+    Dim formatCondition As formatCondition
+    
+    ' 対象のシートを設定
+    Set ws = Me.Worksheet
+    
+    ' 列の指定
+    startCol = Me.DataStartColumnIndex
+    endCol = Me.DataEndColumnIndex
+    checkCol = Me.CheckStateColumnIndex
+    
+    ' 行の指定
+    lastRow = Me.DataEndRowIndex
+    startRow = Me.DataStartRowIndex
+    
+    ' 各行ごとに条件付き書式を設定
+    For i = startRow To lastRow
+        ' S列がTrueの場合、AからS列の範囲に条件付き書式を設定
+        Set rng = ws.Range(ws.Cells(i, startCol), ws.Cells(i, endCol))
+        
+        ' 条件付き書式をクリア（既存の書式を削除）
+        rng.FormatConditions.Delete
+        
+        ' 条件付き書式を追加
+        Set formatCondition = rng.FormatConditions.Add(Type:=xlExpression, Formula1:="=" & ws.Cells(i, checkCol).Address & "=TRUE")
+        
+        ' 背景色を設定（黄色）
+        formatCondition.Interior.Color = RGB(255, 255, 0) ' 黄色
+    Next i
+End Sub
 
 '''継承部分'''
 
