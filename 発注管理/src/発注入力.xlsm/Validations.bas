@@ -1,5 +1,6 @@
 Attribute VB_Name = "Validations"
 Sub SetValidations()
+    'セルにバリデーションチェックを設定
     SetBumonCD
     SetUserCD
     SetDate

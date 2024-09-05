@@ -9,6 +9,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 
 Private Sub Workbook_Open()
+    'セルの変更の監視を無視する
     IsIgnoreChangeEvents = True
     
     '共有フォルダのアクセス権チェック
@@ -18,5 +19,6 @@ Private Sub Workbook_Open()
     ' 発注データの読み込み
     LoadData
     
+    'セルの変更の監視を有効化
     IsIgnoreChangeEvents = False
 End Sub

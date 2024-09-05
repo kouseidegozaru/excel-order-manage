@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'発注入力フォームのセル番地の設定
+'発注入力シートのアクセサ
 
 'SheetAccesserクラスを疑似的に継承
 Private super As SheetAccesser
@@ -21,63 +21,82 @@ Private QtyColumnIndex_ As Integer '数量
 Private PriceColumnIndex_ As Integer '単価
 Private AmountColumnIndex_ As Integer '仕入金額
 
-Private InputBumonCodeRange_ As String
-Private OutputBumonNameRange_ As String
-Private InputUserCodeRange_ As String
-Private OutputUserNameRange_ As String
-Private InputTargetDateRange_ As String
+Private InputBumonCodeRange_ As String '部門コードの入力セル
+Private OutputBumonNameRange_ As String '部門名の出力セル
+Private InputUserCodeRange_ As String '担当者コードの入力セル
+Private OutputUserNameRange_ As String '担当者名の出力セル
+Private InputTargetDateRange_ As String '発注日の入力セル
 
 Private Sub Class_Initialize()
+    'シート名
     WorkSheetName_ = "発注入力"
     
+    '商品コードの列
     ProductCodeColumnIndex_ = 1
+    '入数の列
     PiecesColumnIndex_ = 9
+    '合わせ数の列
     MatchColumnIndex_ = 10
+    '数量の列
     QtyColumnIndex_ = 11
+    '単価の列
     PriceColumnIndex_ = 13
+    '合計金額の列
     AmountColumnIndex_ = 14
     
+    '部門コードの入力セル
     InputBumonCodeRange_ = "A2"
+    '部門名の出力セル
     OutputBumonNameRange_ = "B2"
-    
+    '担当者コードの入力セル
     InputUserCodeRange_ = "C2"
+    '担当者名の出力セル
     OutputUserNameRange_ = "D2"
-    
+    '発注日の入力セル
     InputTargetDateRange_ = "E2"
     
     
+    '疑似抽象クラスをインスタンス化
     Set super = New SheetAccesser
+    'データのヘッダー行、開始行、開始列を指定
     super.InitStatus DataHeaderRow:=4, _
                      DataStartRow:=5, _
                      DataStartColumn:=1
-                     
-    
     InitWorkbook
     InitWorkSheet
 End Sub
 
+'ワークブックを設定
 Private Sub InitWorkbook()
     super.InitWorkbook ThisWorkbook
 End Sub
 
+'ワークシートを設定
 Private Sub InitWorkSheet()
     super.InitWorkSheet super.Workbook.Sheets(WorkSheetName_)
 End Sub
+
+'商品コードの列番号
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
-Property Get piecesColumnIndex() As Integer
-    piecesColumnIndex = PiecesColumnIndex_
+'入数の列番号
+Property Get PiecesColumnIndex() As Integer
+    PiecesColumnIndex = PiecesColumnIndex_
 End Property
-Property Get qtyColumnIndex() As Integer
-    qtyColumnIndex = QtyColumnIndex_
+'数量の列番号
+Property Get QtyColumnIndex() As Integer
+    QtyColumnIndex = QtyColumnIndex_
 End Property
+'合計金額の列番号
 Property Get AmountColumnIndex() As Integer
     AmountColumnIndex = AmountColumnIndex_
 End Property
-Property Get priceColumnIndex() As Integer
-    priceColumnIndex = PriceColumnIndex_
+'単価の列番号
+Property Get PriceColumnIndex() As Integer
+    PriceColumnIndex = PriceColumnIndex_
 End Property
+'合わせ数の列番号
 Property Get MatchColumnIndex() As Integer
     MatchColumnIndex = MatchColumnIndex_
 End Property
@@ -101,22 +120,22 @@ End Property
 '発注入力にある商品の数量の範囲
 Property Get QtyRange() As Range
     Set QtyRange = super.GetRange(Me.DataStartRowIndex, _
-                                  Me.qtyColumnIndex, _
+                                  Me.QtyColumnIndex, _
                                   Me.DataEndRowIndex, _
-                                  Me.qtyColumnIndex)
+                                  Me.QtyColumnIndex)
 End Property
 
-'発注入力に既に入力されている商品コードの取得
+'発注入力に入力されている商品コードの取得
 Property Get productsCode() As Collection
     Set productsCode = RangeToOneDimCollection(Me.ProductsCodeRange)
 End Property
 
-'発注入力に既に入力されている合わせ数の取得
+'発注入力に入力されている合わせ数の取得
 Property Get match() As Collection
     Set match = RangeToOneDimCollection(Me.MatchRange)
 End Property
 
-'発注入力に既に入力されている数量の取得
+'発注入力に入力されている数量の取得
 Property Get qty() As Collection
     Set qty = RangeToOneDimCollection(Me.QtyRange)
 End Property
@@ -178,14 +197,15 @@ Property Get targetDate() As Date
     targetDate = CDate(value)
 End Property
 
+'部門コードの範囲
 Property Get BumonCodeRange() As Range
     Set BumonCodeRange = Me.Worksheet.Range(InputBumonCodeRange_)
 End Property
-
+'担当者コードの範囲
 Property Get UserCodeRange() As Range
     Set UserCodeRange = Me.Worksheet.Range(InputUserCodeRange_)
 End Property
-
+'発注日の範囲
 Property Get TargetDateRange() As Range
     Set TargetDateRange = Me.Worksheet.Range(InputTargetDateRange_)
 End Property

@@ -71,6 +71,7 @@ Public Function RangeToOneDimCollection(rng As Range) As Collection
 
     arr = rng.value
     
+    '‹ó‚Ìê‡‹ó‚ÌƒRƒŒƒNƒVƒ‡ƒ“‚ğ•Ô‚·
     If IsEmpty(arr) Then
         Set RangeToOneDimCollection = oneDimCollection
         Exit Function

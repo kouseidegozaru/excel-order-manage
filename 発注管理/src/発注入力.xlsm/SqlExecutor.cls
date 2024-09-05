@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-
+'SQLを実行するための管理クラス
 
 Private connectionString As String
 
@@ -43,6 +43,7 @@ Public Function ExecuteSelect(ByVal query As String, ByVal parameters As Object)
     ' 結果を返す
     Set ExecuteSelect = rs
     
+    'レコードセットが破棄されてしまうので閉じない
 '    ' 接続を閉じる
 '    conn.Close
 '
@@ -50,6 +51,3 @@ Public Function ExecuteSelect(ByVal query As String, ByVal parameters As Object)
 '    Set cmd = Nothing
 '    Set conn = Nothing
 End Function
-
-
-
