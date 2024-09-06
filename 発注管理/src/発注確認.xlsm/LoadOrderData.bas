@@ -92,37 +92,53 @@ Sub LoadData()
     Dim data As New DataSheetAccesser
     Dim fileProperty As New FilePropertyManager
     Dim filter As New FileFilter
+    '従業員コードと部署の紐付けクラスをインスタンス化
+    Dim users As New UserCodeAccesser
     
     load.ClearData
     
 '''発注情報の取得'''
     Dim bumonCodeFilter As String
     Dim targetDateFilter As String
+    Dim userCodeFilter As String
     
     'ファイルの抽出条件文字列の設定
     bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.bumonCode & fileProperty.BreakIdentifier
     targetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
-    'フィルターの実行
-    Dim filePathCollection As Collection
+    '部門を指定して従業員コードの取得
+    Dim userCodes As Collection
+    Set userCodes = users.GetEmployeeCodes(load.bumonCode)
+    
+    'フィルターの準備
     filter.DirPath = data.SaveDirPath
-    Set filePathCollection = filter.AndFilter(bumonCodeFilter, targetDateFilter)
     
+    For Each userCode In userCodes
     
-    For Each fileName In filePathCollection
+        '担当者コードの条件文字列の作成
+        userCodeFilter = fileProperty.UserCodeIdentifier & userCode & fileProperty.BreakIdentifier
         
-        'データの取得準備
-        data.InitSaveFileName CStr(fileName)
-        data.InitOpenWorkBook
-        data.InitWorkSheet
-        'ファイル情報の取得準備
-        fileProperty.InitFilePath data.SaveFilePath
-        '商品情報を入力
-        load.WriteAllData data.GetAllData_NoHead
-        'データワークブックを閉じる
-        data.CloseWorkBook
+        'フィルターの実行
+        Dim filePathCollection As Collection
+        '部門コード、発注日、担当者コードを指定
+        Set filePathCollection = filter.AndFilter(bumonCodeFilter, targetDateFilter, userCodeFilter)
         
-    Next fileName
+        'フィルターの結果が存在する場合
+        If filePathCollection.Count > 0 Then
+    
+            'データの取得準備
+            data.InitSaveFileName filePathCollection(1)
+            data.InitOpenWorkBook
+            data.InitWorkSheet
+            
+            '商品情報を入力
+            load.WriteAllData data.GetAllData_NoHead
+            'データワークブックを閉じる
+            data.CloseWorkBook
+            
+        End If
+        
+    Next
     
     'グループ化と集計をして書き込む
     Dim rs As ADODB.Recordset
@@ -152,5 +168,5 @@ Sub LoadData()
     
     '条件付き書式を設定
     load.ApplyConditionalFormatting
-    
+
 End Sub

@@ -274,7 +274,7 @@ Public Function AllGroupData() As ADODB.Recordset
     
     ' Excelファイルにクエリを実行
     Set rs = dataAccessor.ExecuteExcelQuery(FilePath, query)
-
+    
     Set AllGroupData = rs
 End Function
 

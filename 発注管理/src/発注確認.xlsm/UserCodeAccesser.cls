@@ -30,7 +30,7 @@ Private Sub Class_Initialize()
     FilePath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\従業員コード.csv"
     
     Set Data_ = New Collection
-    Me.LoadData
+    LoadData
 End Sub
 
 '部門コードから従業員コードを取得
