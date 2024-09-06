@@ -30,7 +30,7 @@ Private Sub HookCellChange(ByVal target As Range)
         
       
       
-'部門コードの変更を監視
+        '部門コードの変更を監視
         If .IsChanged(load.BumonCodeRange) Then
             
             ' 部門名の表示
@@ -41,7 +41,7 @@ Private Sub HookCellChange(ByVal target As Range)
         End If
         
 
-'日付の変更を監視
+        '日付の変更を監視
         If .IsChanged(load.TargetDateRange) Then
             
             ' 発注データの読み込み

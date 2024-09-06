@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'発注入力フォームのセル番地の設定
+'発注済みとしてチェックされた商品コードデータシートへのアクセサ
 
 'SheetAccesserクラスを疑似的に継承
 Private super As SheetAccesser
@@ -25,34 +25,44 @@ Private ProductCodeColumnIndex_ As Integer
 
 Private Sub Class_Initialize()
 
+    '保存ディレクトリパス
     SaveDirPath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\ordered"
 
+    'ヘッダー名
     ProductsHeaderName_ = "商品コード"
     
+    'シート名
     WorkSheetName_ = "Sheet1"
     
+    '商品コード列
     ProductCodeColumnIndex_ = 1
     
+    '疑似抽象クラスをインスタンス化
     Set super = New SheetAccesser
+    'データのヘッダー行、開始行、開始列を指定
     super.InitStatus DataHeaderRow:=1, _
                      DataStartRow:=2, _
                      DataStartColumn:=1
     
 End Sub
 
+'ワークブックを設定
 Public Sub InitNewWorkbook()
     ' 新規ワークブックの作成
     super.InitWorkbook Application.Workbooks.Add
 End Sub
-
+'ワークブックを設定
 Public Sub InitOpenWorkBook()
+    ' 既存のワークブックを開く
     super.InitWorkbook Workbooks.Open(SaveFilePath)
 End Sub
 
+'ワークシートを設定
 Public Sub InitWorkSheet()
     super.InitWorkSheet Me.Workbook.Sheets(WorkSheetName_)
 End Sub
 
+'ファイル情報を設定
 Public Sub InitStatus(bumonCode As Integer, targetDate As Date)
     SaveFileName_ = "b" & bumonCode & "-" & _
                     "d" & Format(targetDate, "yyyymmdd") & "-" & _
@@ -72,10 +82,11 @@ Property Get SaveFilePath() As String
     SaveFilePath = Me.SaveDirPath & "\" & Me.SaveFileName
 End Property
 
+'商品コード列番号
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
-
+'商品コードヘッダー名
 Property Get ProductsHeaderName() As String
     ProductsHeaderName = ProductsHeaderName_
 End Property
@@ -87,6 +98,7 @@ Sub WriteProductsCode(targetData As Collection)
     WriteOneColumnCollection Me.DataStartRowIndex, Me.ProductCodeColumnIndex, targetData
 End Sub
 
+'コレクションを一列に書き込み
 Private Sub WriteOneColumnCollection(startRowIndex As Long, startColIndex As Integer, writeData As Collection)
     Dim item As Variant
     Dim ws As Worksheet
@@ -107,6 +119,7 @@ Private Sub WriteOneColumnCollection(startRowIndex As Long, startColIndex As Int
     End If
 End Sub
 
+'ワークブックを保存
 Public Sub Save()
     ' 上書き保存のために警告メッセージをオフにする
     Application.DisplayAlerts = False
@@ -118,6 +131,7 @@ Public Sub Save()
     Application.DisplayAlerts = True
 End Sub
 
+'ワークブックを閉じる
 Public Sub CloseWorkBook()
     Me.Workbook.Close SaveChanges:=False
 End Sub

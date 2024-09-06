@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'発注入力フォームのセル番地の設定
+'発注確認シートへのアクセサ
 
 'SheetAccesserクラスを疑似的に継承
 Private super As SheetAccesser
@@ -22,8 +22,6 @@ Private CheckBoxColumnIndex_ As Integer
 Private InputBumonCodeRange_ As String
 Private OutputBumonNameRange_ As String
 Private InputTargetDateRange_ As String
-Private InputUserCodeRange_ As String
-Private OutputUserNameRange_ As String
 
 Private FilePropertyStartColumnIndex_ As Integer
 Private FilePropertyUserNameRowIndex_ As Long
@@ -33,26 +31,40 @@ Private FilePropertyUpdateTimeRowIndex_ As Long
 Private CompleteString_ As String
 
 Private Sub Class_Initialize()
+
+    'シート名
     WorkSheetName_ = "発注確認"
     
+    '発注データを入力済みの表示するユーザーフラグ
     CompleteString_ = "◎"
     
+    '商品コードの列番号
     ProductCodeColumnIndex_ = 2
-    
+    'チェックボックスの状態の列番号
     CheckStateColumnIndex_ = 19
+    'チェックボックスの列番号
     CheckBoxColumnIndex_ = 1
     
+    'ファイル情報
+    '開始列
     FilePropertyStartColumnIndex_ = 2
+    '担当者名表示行
     FilePropertyUserNameRowIndex_ = 4
+    '発注入力フラグ表示行
     FilePropertyCompleteRowIndex_ = 5
+    '最終更新日表示行
     FilePropertyUpdateTimeRowIndex_ = 6
     
+    '部門コード入力セル
     InputBumonCodeRange_ = "A2"
+    '部門名表示セル
     OutputBumonNameRange_ = "B2"
-    
+    '発注日表示セル
     InputTargetDateRange_ = "C2"
     
+    '疑似抽象クラスをインスタンス化
     Set super = New SheetAccesser
+    'データのヘッダー行、開始行、開始列を指定
     super.InitStatus DataHeaderRow:=8, _
                      DataStartRow:=9, _
                      DataStartColumn:=2
@@ -61,26 +73,29 @@ Private Sub Class_Initialize()
     InitWorkSheet
 End Sub
 
+'ワークブックを設定
 Private Sub InitWorkbook()
     super.InitWorkbook ThisWorkbook
 End Sub
 
+'ワークシートを設定
 Private Sub InitWorkSheet()
     super.InitWorkSheet super.Workbook.Sheets(WorkSheetName_)
 End Sub
 
+'商品コードの列番号
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
-
+'チェックボックスの状態の列番号
 Property Get CheckStateColumnIndex() As Integer
     CheckStateColumnIndex = CheckStateColumnIndex_
 End Property
-
+'チェックボックスの列番号
 Property Get CheckBoxColumnIndex() As Integer
     CheckBoxColumnIndex = CheckBoxColumnIndex_
 End Property
-
+'ファイル情報の開始列
 Property Get FilePropertyStartColumnIndex() As Integer
     FilePropertyStartColumnIndex = FilePropertyStartColumnIndex_
 End Property
@@ -109,16 +124,23 @@ Property Get FilePropertyRange() As Range
                                            Me.FilePropertyEndColumnIndex)
 End Property
 
+'ファイル情報をクリア
 Public Sub ClearFileProperty()
     Me.FilePropertyRange.Delete Shift:=xlToLeft
 End Sub
 
+'ファイル情報を追加
 Public Sub AddFileProperty(userName As String, IsCompleted As Boolean, updatedTime As Date)
+    
+    '入力対象列
     Dim lastColumn As Integer
     lastColumn = FilePropertyNextColumnIndex
     
+    '発注入力フラグ文字列
     Dim writeCompleteString As String
     writeCompleteString = ""
+    
+    '発注入力をした担当者の場合
     If IsCompleted Then
         writeCompleteString = CompleteString_
         
@@ -126,10 +148,13 @@ Public Sub AddFileProperty(userName As String, IsCompleted As Boolean, updatedTi
         Me.Worksheet.Cells(FilePropertyUpdateTimeRowIndex_, lastColumn) = updatedTime
     End If
     
+    '担当者名表示
     Me.Worksheet.Cells(FilePropertyUserNameRowIndex_, lastColumn) = userName
+    '発注入力フラグ表示
     Me.Worksheet.Cells(FilePropertyCompleteRowIndex_, lastColumn) = writeCompleteString
 End Sub
 
+'全てのチェックボックスの削除
 Sub DeleteAllCheckboxes()
     Dim ws As Worksheet
     Dim cb As OLEObject
@@ -140,7 +165,9 @@ Sub DeleteAllCheckboxes()
     ' Form Controlsのチェックボックスを削除
     For Each shp In ws.Shapes
         If shp.Type = msoFormControl Then
+            'コントロールがチェックボックスの場合
             If shp.FormControlType = xlCheckBox Then
+                '削除
                 shp.Delete
             End If
         End If
@@ -148,12 +175,15 @@ Sub DeleteAllCheckboxes()
 
 End Sub
 
+'表示されている発注データの削除
 Public Sub ClearData()
     Dim clearRange As Range
     Set clearRange = Me.ProductsCodeRange
-    
+    '行が存在する場合
     If WorksheetFunction.CountA(clearRange) > 0 Then
+        'チェックボックスの削除
         Me.DeleteAllCheckboxes
+        '商品情報の削除
         clearRange.EntireRow.Delete
     End If
 End Sub
@@ -208,17 +238,13 @@ Property Get targetDate() As Date
     targetDate = CDate(value)
 End Property
 
+'部門コードの入力セル
 Property Get BumonCodeRange() As Range
     Set BumonCodeRange = Me.Worksheet.Range(InputBumonCodeRange_)
 End Property
-
+'発注日の入力セル
 Property Get TargetDateRange() As Range
     Set TargetDateRange = Me.Worksheet.Range(InputTargetDateRange_)
-End Property
-
-'担当者名の表示
-Property Let userName(name As String)
-    Me.Worksheet.Range(OutputUserNameRange_).value = name
 End Property
 
 '部門名の表示
@@ -226,6 +252,7 @@ Property Let BumonName(name As String)
     Me.Worksheet.Range(OutputBumonNameRange_).value = name
 End Property
 
+'シートに入力されている各項目ごとにグループ化して数量と仕入金額を合算
 Public Function AllGroupData() As ADODB.Recordset
     Dim dataAccessor As New SqlExecutor
     Dim rs As ADODB.Recordset
@@ -251,7 +278,7 @@ Public Function AllGroupData() As ADODB.Recordset
     Set AllGroupData = rs
 End Function
 
-'チェックボックスのステータス変更
+'対象の行のチェックボックスのステータス変更
 Property Let CheckBoxState(rowIndex As Long, value As Boolean)
     Me.Cells(rowIndex, Me.CheckStateColumnIndex) = value
 End Property
@@ -279,11 +306,14 @@ Public Sub OrderedIsTrue(targetProductsCode As Variant)
     
 End Sub
 
+'行を指定してチェックボックスを追加
 Public Function AddCheckBox(rowIndex As Long) As Shape
     Dim columnIndex As Integer
     Dim stateColumnIndex As Integer
     
+    'チェックボックスの列
     columnIndex = Me.CheckBoxColumnIndex
+    'チェックボックスの状態の列
     stateColumnIndex = Me.CheckStateColumnIndex
     
     Dim ws As Worksheet
@@ -303,26 +333,34 @@ Public Function AddCheckBox(rowIndex As Long) As Shape
     ' チェックボックスのリンクするセルを設定
     cb.ControlFormat.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
     
+    '追加したチェックボックスオブジェクトを返却
     Set AddCheckBox = cb
 End Function
 
+'チェックされた商品コードの取得
 Public Function GetCheckedProductsCode() As Collection
     Dim wb As Workbook
     Dim ws As Worksheet
     Set wb = Me.Workbook
     Set ws = Me.Worksheet
     
+    '商品コード列
     Dim productsColumn As Integer
+    'チェックボックスの状態の列
     Dim checkedStateColumn As Integer
     
+    'チェックされた商品コードの格納用
     Dim checkedProductsCode As New Collection
     Dim i As Long
     
     productsColumn = Me.ProductCodeColumnIndex
     checkedStateColumn = Me.CheckStateColumnIndex
     
+    '商品コードが存在する行番号でループ
     For i = 1 To ws.Cells(ws.Rows.Count, productsColumn).End(xlUp).row
+        'チェックされていた場合
         If ws.Cells(i, checkedStateColumn).value = True Then
+            '商品コードを追加
             checkedProductsCode.Add ws.Cells(i, productsColumn).value
         End If
     Next i

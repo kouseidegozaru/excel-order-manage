@@ -16,42 +16,51 @@ Private DataHeaderRowIndex_ As Long
 Private DataStartRowIndex_ As Long
 Private DataStartColumnIndex_ As Integer
 
+'必要な情報を指定
 Public Sub InitStatus(Optional DataHeaderRow As Long = 1, Optional DataStartRow As Long = 1, Optional DataStartColumn As Integer = 1)
     DataHeaderRowIndex_ = DataHeaderRow
     DataStartRowIndex_ = DataStartRow
     DataStartColumnIndex_ = DataStartColumn
 End Sub
+
+'ワークブックを設定
 Public Sub InitWorkbook(wb As Workbook)
     Set WorkBook_ = wb
 End Sub
 
+'ワークシートを設定
 Public Sub InitWorkSheet(ws As Worksheet)
     Set WorkSheet_ = ws
 End Sub
 
+'ワークブックを参照
 Property Get Workbook() As Workbook
     Set Workbook = WorkBook_
 End Property
 
+'ワークシートを参照
 Property Get Worksheet() As Worksheet
     Set Worksheet = WorkSheet_
 End Property
 
+'ヘッダー行
 Property Get DataHeaderRowIndex() As Long
     DataHeaderRowIndex = DataHeaderRowIndex_
 End Property
-
+'データ開始行
 Property Get DataStartRowIndex() As Long
     DataStartRowIndex = DataStartRowIndex_
 End Property
-
+'データ開始列
 Property Get DataStartColumnIndex() As Integer
     DataStartColumnIndex = DataStartColumnIndex_
 End Property
+
 '商品情報が記載されているの最後の列番号
 Property Get DataEndColumnIndex() As Integer
     DataEndColumnIndex = Me.Worksheet.Cells(Me.DataHeaderRowIndex, Me.Worksheet.Columns.Count).End(xlToLeft).Column
 End Property
+
 '次に入力する商品情報が空白の行番号
 Property Get DataNextRowIndex() As Long
     DataNextRowIndex = Me.Worksheet.Cells(Me.Worksheet.Rows.Count, Me.DataStartColumnIndex).End(xlUp).row + 1
@@ -68,34 +77,42 @@ Property Get DataEndRowIndex() As Long
     DataEndRowIndex = lastRow
 End Property
 
+'単一セルに書き込み
 Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     Me.Worksheet.Cells(rowIndex, columnIndex).value = value
 End Property
 
-Public Sub WriteAllData(targetData As Collection) '二次元配列を受け取る
+'二次元のコレクションを次のデータ行から書き込む
+Public Sub WriteAllData(targetData As Collection) '二次元のコレクションを受け取る
     WriteMatrixCollection Me.DataNextRowIndex, Me.DataStartColumnIndex, targetData
 End Sub
 
+'ヘッダー込みのデータの範囲
 Property Get AllDataRange() As Range
     Set AllDataRange = GetRange(Me.DataHeaderRowIndex, Me.DataStartColumnIndex, Me.DataEndRowIndex, Me.DataEndColumnIndex)
 End Property
 
+'ヘッダー込みのデータを二次元のコレクションで取得
 Public Function GetAllData() As Collection
     Set GetAllData = ArrayToCollection(Me.AllDataRange.value)
 End Function
 
+'ヘッダーなしのデータを二次元のコレクションで取得
 Public Function GetAllData_NoHead() As Collection
     Set GetAllData_NoHead = RemoveFirstRow(Me.GetAllData)
 End Function
 
+
 '''汎用メソッド'''
+
+'列と行の番号からrangeを作成
 Public Function GetRange(startRow As Long, startCol As Long, endRow As Long, endCol As Long) As Range
     Dim ws As Worksheet
     Set ws = Me.Worksheet
     Set GetRange = ws.Range(ws.Cells(startRow, startCol), ws.Cells(endRow, endCol))
 End Function
 
-' データをシートに書き込む
+' 二次元のコレクションををシートに書き込む
 Public Sub WriteMatrixCollection(startRowIndex As Long, startColIndex As Integer, writeData As Collection)
     Dim i As Long, j As Long
     Dim item As Variant

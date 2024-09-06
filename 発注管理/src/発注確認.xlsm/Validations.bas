@@ -1,4 +1,5 @@
 Attribute VB_Name = "Validations"
+'セルにバリデーションチェックを設定
 Sub SetValidations()
     SetBumonCD
     SetDate
@@ -22,7 +23,6 @@ Private Sub SetBumonCD()
         .ShowError = True ' エラーメッセージを表示
     End With
 End Sub
-
 
 Private Sub SetDate()
     Dim load As New LoadSheetAccesser
