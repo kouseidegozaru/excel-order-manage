@@ -1,16 +1,21 @@
 Attribute VB_Name = "DeleteDataFile"
+'一か月前の発注日の発注データファイルを削除
 Sub DeleteDataFiles()
     
+    '発注データシートアクセサのインスタンス化
     Dim data As New DataSheetAccesser
+    'データファイルの属性情報取得クラスをインスタンス化
     Dim fileProperty As New FilePropertyManager
+    'データファイルをファイルごとにフィルターするクラスをインスタンス化
     Dim filter As New FileFilter
+    
     Dim FilePath As String
     Dim fs As New Scripting.FileSystemObject
     
     '対象ディレクトリを設定
     filter.DirPath = data.SaveDirPath
     
-    'ファイル名の取得
+    '全てのファイル名の取得
     Dim fileNames As Collection
     Set fileNames = filter.AndFilter()
     

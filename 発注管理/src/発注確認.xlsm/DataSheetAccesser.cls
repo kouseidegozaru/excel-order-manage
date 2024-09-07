@@ -20,63 +20,63 @@ Private WorkSheetName_ As String
 
 Private Sub Class_Initialize()
 
+    '発注データの保存ディレクトリパス
     SaveDirPath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\data"
 
+    'シート名
     WorkSheetName_ = "Sheet1"
     
+    '商品コードの列番号
     ProductCodeColumnIndex_ = 1
     
+    '疑似抽象クラスをインスタンス化
     Set super = New SheetAccesser
+    'データのヘッダー行、開始行、開始列を指定
     super.InitStatus DataHeaderRow:=1, _
                      DataStartRow:=2, _
                      DataStartColumn:=1
     
 End Sub
 
+'ファイル名を設定
 Public Sub InitSaveFileName(fileName As String)
     SaveFileName_ = fileName
 End Sub
 
+'ワークブックを設定
 Public Sub InitOpenWorkBook()
     super.InitWorkbook Workbooks.Open(SaveFilePath)
 End Sub
 
+'ワークシートを設定
 Public Sub InitWorkSheet()
     super.InitWorkSheet Me.Workbook.Sheets(WorkSheetName_)
 End Sub
 
-'保存ファイル名
+'保存ファイル名の参照
 Property Get SaveFileName() As String
     SaveFileName = SaveFileName_
 End Property
-'保存ファイル名
+'保存ディレクトリパスの参照
 Property Get SaveDirPath() As String
     SaveDirPath = SaveDirPath_
 End Property
-'保存ファイルパス
+'保存ファイルパスの参照
 Property Get SaveFilePath() As String
     SaveFilePath = Me.SaveDirPath & "\" & Me.SaveFileName
 End Property
 
+'商品コードの列番号
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
 
+'二次元のコレクションをヘッダーごと書き込む
 Sub WriteTableData(targetData As Collection)
     super.WriteMatrixCollection Me.DataHeaderRowIndex, Me.DataStartColumnIndex, targetData
 End Sub
 
-Public Sub Save()
-    ' 上書き保存のために警告メッセージをオフにする
-    Application.DisplayAlerts = False
-    
-    ' ワークブックを保存（既存のファイルがあれば上書き保存）
-    Me.Workbook.SaveAs fileName:=Me.SaveFilePath, FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
-    
-    ' 警告メッセージを再度有効にする
-    Application.DisplayAlerts = True
-End Sub
-
+'ワークブックを閉じる
 Public Sub CloseWorkBook()
     Me.Workbook.Close SaveChanges:=False
 End Sub

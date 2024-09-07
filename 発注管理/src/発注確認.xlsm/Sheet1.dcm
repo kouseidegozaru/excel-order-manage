@@ -17,7 +17,7 @@ End Sub
 Private Sub HookCellChange(ByVal target As Range)
 
     'データアクセス
-    Dim DataStorage As New DataBaseAccesser
+    Dim dataStorage As New DataBaseAccesser
 
     Dim load As New LoadSheetAccesser
 
@@ -30,18 +30,18 @@ Private Sub HookCellChange(ByVal target As Range)
         
       
       
-'部門コードの変更を監視
+        '部門コードの変更を監視
         If .IsChanged(load.BumonCodeRange) Then
             
             ' 部門名の表示
-            load.BumonName = DataStorage.GetBumonName(load.bumonCode)
+            load.BumonName = dataStorage.GetBumonName(load.bumonCode)
             ' 発注データの読み込み
             Loads
             
         End If
         
 
-'日付の変更を監視
+        '日付の変更を監視
         If .IsChanged(load.TargetDateRange) Then
             
             ' 発注データの読み込み

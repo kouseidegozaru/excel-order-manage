@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'発注入力フォームのセル番地の設定
+'発注データを保存するシートへのアクセサ
 
 'SheetAccesserクラスを疑似的に継承
 Private super As SheetAccesser
@@ -20,17 +20,22 @@ Private WorkSheetName_ As String
 
 Private Sub Class_Initialize()
 
+    '発注データの保存ディレクトリパス
     SaveDirPath_ = "\\mfh008-mfre\FS事業部\新）発注ノート\発注ノートシステム\data\data"
 
+    'シート名
     WorkSheetName_ = "Sheet1"
     
+    '疑似抽象クラスをインスタンス化
     Set super = New SheetAccesser
+    'データのヘッダー行、開始行、開始列を指定
     super.InitStatus DataHeaderRow:=1, _
                      DataStartRow:=2, _
                      DataStartColumn:=1
     
 End Sub
 
+'必要な情報を指定
 Public Sub InitStatus(bumonCode As Integer, userCode As Integer, targetDate As Date)
     SaveFileName_ = "b" & bumonCode & "-" & _
                     "u" & userCode & "-" & _
@@ -38,15 +43,17 @@ Public Sub InitStatus(bumonCode As Integer, userCode As Integer, targetDate As D
                     ".xlsx"
 End Sub
 
+' 新規ワークブックの作成
 Public Sub InitNewWorkbook()
-    ' 新規ワークブックの作成
     super.InitWorkbook Application.Workbooks.Add
 End Sub
 
+'既存ワークブックを開く
 Public Sub InitOpenWorkBook()
     super.InitWorkbook Workbooks.Open(SaveFilePath)
 End Sub
 
+'ワークシートをセット
 Public Sub InitWorkSheet()
     super.InitWorkSheet Me.Workbook.Sheets(WorkSheetName_)
 End Sub
@@ -55,19 +62,23 @@ End Sub
 Property Get SaveFileName() As String
     SaveFileName = SaveFileName_
 End Property
+
 '保存ファイル名
 Property Get SaveDirPath() As String
     SaveDirPath = SaveDirPath_
 End Property
+
 '保存ファイルパス
 Property Get SaveFilePath() As String
     SaveFilePath = Me.SaveDirPath & "\" & Me.SaveFileName
 End Property
 
+'二次元コレクションの書き込み
 Sub WriteTableData(targetData As Collection)
     super.WriteMatrixCollection Me.DataHeaderRowIndex, Me.DataStartColumnIndex, targetData
 End Sub
 
+'ブックの保存
 Public Sub Save()
     ' 上書き保存のために警告メッセージをオフにする
     Application.DisplayAlerts = False
@@ -79,6 +90,7 @@ Public Sub Save()
     Application.DisplayAlerts = True
 End Sub
 
+'ブックを閉じる
 Public Sub CloseWorkBook()
     Me.Workbook.Close SaveChanges:=False
 End Sub

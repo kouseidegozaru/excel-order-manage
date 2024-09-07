@@ -1,29 +1,49 @@
 Attribute VB_Name = "LoadOrderData"
+'データの読み込み
 Sub Loads()
+    '画面の更新を無効化
     Application.ScreenUpdating = False
+    
+    'ファイル情報の表示
     LoadFileProperty
+    '発注データの表示
     LoadData
+    '発注済みデータの表示
     LoadOrderedData
+    
+    '画面の更新を有効化
     Application.ScreenUpdating = True
 End Sub
 
+'ファイル情報の読み込み
 Sub LoadFileProperty()
+
+    '発注確認シートアクセサのインスタンス化
     Dim load As New LoadSheetAccesser
+    '発注データシートアクセサのインスタンス化
     Dim data As New DataSheetAccesser
-    Dim DataStorage As New DataBaseAccesser
+    'クエリ発行クラスをインスタンス化
+    Dim dataStorage As New DataBaseAccesser
+    'ファイル情報取得クラスをインスタンス化
     Dim fileProperty As New FilePropertyManager
+    'ファイルフィルタークラスをインスタンス化
     Dim filter As New FileFilter
+    '従業員コードと部署の紐付けクラスをインスタンス化
     Dim users As New UserCodeAccesser
     
     Dim bumonCodeFilter As String
     Dim userCodeFilter As String
     Dim targetDateFilter As String
     
-    'プロパティをクリア
+    '発注確認のファイル情報をクリア
     load.ClearFileProperty
     
+    
     'ファイルの抽出条件文字列の設定
+    
+    '部門コードの条件文字列の作成
     bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.bumonCode & fileProperty.BreakIdentifier
+    '発注日の条件文字列の作成
     targetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
     '探索するディレクトリの設定
@@ -38,14 +58,16 @@ Sub LoadFileProperty()
     
         '従業員名の取得
         Dim userName As String
-        userName = DataStorage.GetUserName(userCode)
+        userName = dataStorage.GetUserName(userCode)
         
-        'ファイルの抽出条件文字列の設定
+        '担当者コードの条件文字列の作成
         userCodeFilter = fileProperty.UserCodeIdentifier & userCode & fileProperty.BreakIdentifier
         
         'フィルターの実行
         Dim filePathCollection As Collection
+        '部門コード、発注日、担当者コードを指定
         Set filePathCollection = filter.AndFilter(bumonCodeFilter, targetDateFilter, userCodeFilter)
+        
         
         'フィルターの結果が存在する場合
         If filePathCollection.Count > 0 Then
@@ -53,6 +75,7 @@ Sub LoadFileProperty()
             fileProperty.InitFilePath data.SaveDirPath & "\" & filePathCollection(1)
             'ファイルプロパティの表示
             load.AddFileProperty userName, True, fileProperty.UpdatedDate
+            
         Else
             'ファイルプロパティの表示
             load.AddFileProperty userName, False, Date
@@ -63,42 +86,59 @@ Sub LoadFileProperty()
     
 End Sub
 
+'発注データの読み込み
 Sub LoadData()
     Dim load As New LoadSheetAccesser
     Dim data As New DataSheetAccesser
     Dim fileProperty As New FilePropertyManager
     Dim filter As New FileFilter
+    '従業員コードと部署の紐付けクラスをインスタンス化
+    Dim users As New UserCodeAccesser
     
     load.ClearData
     
 '''発注情報の取得'''
     Dim bumonCodeFilter As String
     Dim targetDateFilter As String
+    Dim userCodeFilter As String
     
     'ファイルの抽出条件文字列の設定
     bumonCodeFilter = fileProperty.BumonCodeIdentifier & load.bumonCode & fileProperty.BreakIdentifier
     targetDateFilter = fileProperty.DateIdentifier & Format(load.targetDate, "yyyymmdd") & fileProperty.BreakIdentifier
     
-    'フィルターの実行
-    Dim filePathCollection As Collection
+    '部門を指定して従業員コードの取得
+    Dim userCodes As Collection
+    Set userCodes = users.GetEmployeeCodes(load.bumonCode)
+    
+    'フィルターの準備
     filter.DirPath = data.SaveDirPath
-    Set filePathCollection = filter.AndFilter(bumonCodeFilter, targetDateFilter)
     
+    For Each userCode In userCodes
     
-    For Each fileName In filePathCollection
+        '担当者コードの条件文字列の作成
+        userCodeFilter = fileProperty.UserCodeIdentifier & userCode & fileProperty.BreakIdentifier
         
-        'データの取得準備
-        data.InitSaveFileName CStr(fileName)
-        data.InitOpenWorkBook
-        data.InitWorkSheet
-        'ファイル情報の取得準備
-        fileProperty.InitFilePath data.SaveFilePath
-        '商品情報を入力
-        load.WriteAllData data.GetAllData_NoHead
-        'データワークブックを閉じる
-        data.CloseWorkBook
+        'フィルターの実行
+        Dim filePathCollection As Collection
+        '部門コード、発注日、担当者コードを指定
+        Set filePathCollection = filter.AndFilter(bumonCodeFilter, targetDateFilter, userCodeFilter)
         
-    Next fileName
+        'フィルターの結果が存在する場合
+        If filePathCollection.Count > 0 Then
+    
+            'データの取得準備
+            data.InitSaveFileName filePathCollection(1)
+            data.InitOpenWorkBook
+            data.InitWorkSheet
+            
+            '商品情報を入力
+            load.WriteAllData data.GetAllData_NoHead
+            'データワークブックを閉じる
+            data.CloseWorkBook
+            
+        End If
+        
+    Next
     
     'グループ化と集計をして書き込む
     Dim rs As ADODB.Recordset
@@ -128,5 +168,5 @@ Sub LoadData()
     
     '条件付き書式を設定
     load.ApplyConditionalFormatting
-    
+
 End Sub

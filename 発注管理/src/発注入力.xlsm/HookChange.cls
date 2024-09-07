@@ -9,7 +9,9 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-'セルの変更を検知するための汎用クラス
+'セルの変更を検知するためのクラス
+
+'isIgnoreがtrueの場合は変更があっても無視する
 
 Private targetRange As Range
 Private isIgnore As Boolean
@@ -32,6 +34,7 @@ Public Function IsChanged(rng As Range) As Boolean
         Exit Function
     End If
     
+    '変更された範囲に指定の範囲が含まれているか
     If Not Intersect(targetRange, rng) Is Nothing Then
         IsChanged = True
     End If

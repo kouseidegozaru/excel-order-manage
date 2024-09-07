@@ -21,9 +21,9 @@ Private Sub HookCellChange(ByVal target As Range)
     'IsIgnoreChangeEventsはシートの変更を検知するかどうかの状態を設定
     'events.Ignoreはシートの変更があっても無視する
 
-    'データアクセス
+    'クエリ実行クラスをインスタンス化
     Dim dataStorage As New DataBaseAccesser
-
+    '発注入力シートアクセサをインスタンス化
     Dim order As New OrderSheetAccesser
 
     ' セルの変更を監視
@@ -36,15 +36,14 @@ Private Sub HookCellChange(ByVal target As Range)
         .Ignore IsIgnoreChangeEvents
         
         
-        
-'行の削除を監視
+        ' 行の削除を監視
         If .IsDeleted(lastUpdatedRowCnt, order.DataNextRowIndex) Then
 
         End If
         
           
           
-' 担当者コードの変更を監視
+        ' 担当者コードの変更を監視
         If .IsChanged(order.UserCodeRange) Then
             IsIgnoreChangeEvents = True
              
@@ -58,7 +57,7 @@ Private Sub HookCellChange(ByVal target As Range)
         
       
       
-'部門コードの変更を監視
+        ' 部門コードの変更を監視
         If .IsChanged(order.BumonCodeRange) Then
             IsIgnoreChangeEvents = True
             
@@ -72,7 +71,7 @@ Private Sub HookCellChange(ByVal target As Range)
         
         
       
-'商品コードの変更を監視
+        ' 商品コードの変更を監視
         If .IsChanged(order.ProductsCodeRange) Then
             IsIgnoreChangeEvents = True
             
@@ -84,14 +83,14 @@ Private Sub HookCellChange(ByVal target As Range)
         
         
     
-'数量の変更を監視
+        ' 数量の変更を監視
         If .IsChanged(order.QtyRange) Then
 
         End If
         
         
 
-'日付の変更を監視
+        ' 日付の変更を監視
         If .IsChanged(order.TargetDateRange) Then
             IsIgnoreChangeEvents = True
             
@@ -106,4 +105,5 @@ Private Sub HookCellChange(ByVal target As Range)
     
     '最終行数を更新
     lastUpdatedRowCnt = order.DataNextRowIndex
+    
 End Sub

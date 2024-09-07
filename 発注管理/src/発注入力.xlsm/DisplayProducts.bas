@@ -3,7 +3,9 @@ Attribute VB_Name = "DisplayProducts"
 
 Sub DisplayProductsInfo(targetRng As Range)
 
+    'クエリ実行クラス
     Dim dataStorage As New DataBaseAccesser
+    '発注入力シート
     Dim order As New OrderSheetAccesser
 
     ' 処理する部門の指定
@@ -11,9 +13,9 @@ Sub DisplayProductsInfo(targetRng As Range)
     '商品CDの列の指定
     Dim targetColumn As Integer: targetColumn = order.ProductCodeColumnIndex
     '数量の列の指定
-    Dim qtyColumn As Integer: qtyColumn = order.qtyColumnIndex
+    Dim qtyColumn As Integer: qtyColumn = order.QtyColumnIndex
     '仕入単価の列の指定
-    Dim priceColumn As Integer: priceColumn = order.priceColumnIndex
+    Dim priceColumn As Integer: priceColumn = order.PriceColumnIndex
     '仕入金額の列の指定
     Dim amountColumn As Integer: amountColumn = order.AmountColumnIndex
     
@@ -25,12 +27,14 @@ Sub DisplayProductsInfo(targetRng As Range)
         If cell.value <> "" Then
             '商品が存在する場合
             If dataStorage.ExistsProducts(bumonCD, cell.value) Then
-            
+                
+                '普通のセルのデザインを適用
                 DefaultCellDesign cell
+                '行の処理
                 Call WriteRow(cell, bumonCD, qtyColumn, priceColumn, amountColumn)
                 
             Else
-            
+                'エラーセルのデザインを適用
                 ErrorCellDesign cell
                 
             End If
@@ -41,10 +45,14 @@ Sub DisplayProductsInfo(targetRng As Range)
     ApplyAmountCalcFormulaToRange
     
 End Sub
+
+'行ごとの処理を定義
 Private Sub WriteRow(cell As Object, bumonCD As Integer, qtyColumn As Integer, priceColumn As Integer, amountColumn As Integer)
 
+    'クエリ実行クラス
     Dim dataStorage As New DataBaseAccesser
     
+    '商品コードから商品情報を取得
     Dim rs As ADODB.Recordset
     Set rs = dataStorage.GetProduct(bumonCD, cell.value)
     
@@ -68,14 +76,18 @@ Private Sub WriteRow(cell As Object, bumonCD As Integer, qtyColumn As Integer, p
     Set rs = Nothing
     
 End Sub
+
+'商品コードにエラーがあるセルのデザイン
 Private Sub ErrorCellDesign(cell As Object)
     Call ChangeBackColor(cell, 255, 0, 0)
 End Sub
+'普通のセルのデザイン
 Private Sub DefaultCellDesign(cell As Object)
     Call ChangeBackColor(cell, 255, 255, 255)
 End Sub
+
 Private Sub ChangeBackColor(cell As Object, r As Integer, g As Integer, b As Integer)
-        ' 背景色を赤に設定
+        ' 背景色を設定
         cell.Interior.color = RGB(r, g, b)
         
         ' 既存の罫線を保持
@@ -91,39 +103,48 @@ End Sub
 Public Sub ApplyAmountCalcFormulaToRange()
     Dim order As New OrderSheetAccesser
     
-    
-    Dim piecesColumnIndex As Integer
-    Dim qtyColumnIndex As Integer
-    Dim priceColumnIndex As Integer
-    piecesColumnIndex = order.piecesColumnIndex
-    qtyColumnIndex = order.qtyColumnIndex
-    priceColumnIndex = order.priceColumnIndex
-    
+    '入数の列番号
+    Dim piecesColumn As Integer
+    piecesColumn = order.PiecesColumnIndex
+    '数量の列番号
+    Dim qtyColumn As Integer
+    qtyColumn = order.QtyColumnIndex
+    '単価の列番号
+    Dim priceColumn As Integer
+    priceColumn = order.PriceColumnIndex
+
+    '開始行
     Dim startRow As Long
-    Dim endRow As Long
-    Dim targetColumnIndex As Integer
     startRow = order.DataStartRowIndex
+    '終了行
+    Dim endRow As Long
     endRow = order.DataEndRowIndex
-    targetColumnIndex = order.AmountColumnIndex
+    '計算式の入力列
+    Dim targetColumn As Integer
+    targetColumn = order.AmountColumnIndex
     
     Dim row As Long
+    '式
     Dim formula As String
     
     For row = startRow To endRow
-        formula = GetAmountCalcFormula(row, piecesColumnIndex, qtyColumnIndex, priceColumnIndex)
-        Cells(row, targetColumnIndex).formula = formula
+        '式の取得
+        formula = GetAmountCalcFormula(row, piecesColumn, qtyColumn, priceColumn)
+        '式の入力
+        Cells(row, targetColumn).formula = formula
     Next row
 End Sub
 '仕入金額の計算式を返す
-Private Function GetAmountCalcFormula(rowIndex As Long, piecesColumnIndex As Integer, qtyColumnIndex As Integer, priceColumnIndex As Integer) As String
+Private Function GetAmountCalcFormula(row As Long, piecesColumn As Integer, qtyColumn As Integer, priceColumn As Integer) As String
+    '入数*数量*単価
     GetAmountCalcFormula = "=IFERROR(" & _
-                            IndexToLetter(piecesColumnIndex) & _
-                            rowIndex & _
+                            IndexToLetter(PiecesColumnIndex) & _
+                            row & _
                             "*" & _
-                            IndexToLetter(qtyColumnIndex) & _
-                            rowIndex & _
+                            IndexToLetter(QtyColumnIndex) & _
+                            row & _
                             "*" & _
-                            IndexToLetter(priceColumnIndex) & _
-                            rowIndex & _
+                            IndexToLetter(PriceColumnIndex) & _
+                            row & _
                             ",0)"
 End Function
