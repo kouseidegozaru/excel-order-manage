@@ -23,22 +23,27 @@ Sub DisplayProductsInfo(targetRng As Range)
     
     ' 範囲内の指定した列の各行を処理
     For Each cell In targetRng.Columns(targetColumn).Cells
-        ' 空白でないセルを処理
+    
+        ' 空白でないセル
         If cell.value <> "" Then
-            '商品が存在する場合
-            If dataStorage.ExistsProducts(bumonCD, cell.value) Then
-                
-                '普通のセルのデザインを適用
-                DefaultCellDesign cell
-                '行の処理
-                Call WriteRow(cell, bumonCD, qtyColumn, priceColumn, amountColumn)
-                
-            Else
-                'エラーセルのデザインを適用
-                ErrorCellDesign cell
-                
-            End If
+            '次のループ
+            GoTo ContinueLoop
         End If
+        
+        '商品が存在しない場合
+        If Not dataStorage.ExistsProducts(bumonCD, cell.value) Then
+            'エラーセルのデザインを適用
+            ErrorCellDesign cell
+            '次のループ
+            GoTo ContinueLoop
+        End If
+        
+        '普通のセルのデザインを適用
+        DefaultCellDesign cell
+        '行の処理
+        Call WriteRow(cell, bumonCD, qtyColumn, priceColumn, amountColumn)
+        
+ContinueLoop:
     Next cell
     
     '仕入金額計算式の入力
@@ -56,21 +61,12 @@ Private Sub WriteRow(cell As Object, bumonCD As Integer, qtyColumn As Integer, p
     Dim rs As ADODB.Recordset
     Set rs = dataStorage.GetProduct(bumonCD, cell.value)
     
-    ' レコードセットをセルに貼り付ける
+    'レコードがある場合
     If Not rs.EOF Then
-        Dim i As Integer
-        
-        Do Until rs.EOF
-        
-            ' レコードセットをワークシートに貼り付け
-            For i = 0 To rs.Fields.count - 1
-                cell.Offset(0, i + 1).value = rs.Fields(i).value
-            Next i
-            
-            rs.MoveNext
-        Loop
+        ' レコードセットをセルに貼り付ける
+        cell.CopyFromRecordset rs
     End If
-    
+
     ' レコードセットを閉じる
     rs.Close
     Set rs = Nothing
@@ -148,3 +144,5 @@ Private Function GetAmountCalcFormula(row As Long, piecesColumn As Integer, qtyC
                             row & _
                             ",0)"
 End Function
+
+
