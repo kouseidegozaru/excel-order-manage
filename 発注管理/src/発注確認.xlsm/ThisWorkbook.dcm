@@ -10,8 +10,10 @@ Attribute VB_Exposed = True
 Private Sub Workbook_Open()
     '共有フォルダのアクセス権チェック
     CheckDirPermission
-    '一か月前のファイルを削除
+    '一か月前のデータファイル
     DeleteDataFiles
+    '一か月前の発注済み商品コードデータファイル削除
+    DeleteOrderedDataFiles
     'バリデーションチェックを設定
     SetValidations
     'データの読み込み
