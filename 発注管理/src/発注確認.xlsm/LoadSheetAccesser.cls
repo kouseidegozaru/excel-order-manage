@@ -203,37 +203,28 @@ Property Get CheckStateRange() As Range
                                            Me.DataEndRowIndex, _
                                            Me.CheckStateColumnIndex)
 End Property
+
 '部門コードの取得
 Property Get bumonCode() As Integer
     '値の取得
     Dim value As Variant
     value = Me.Worksheet.Range(InputBumonCodeRange_).value
     
-    '空の場合終了
-    If IsEmpty(value) Then
-        End
-    End If
+    'バリデーションチェックを行い失敗したら終了
+    CheckExistsBumon value
     
-    '部門コードが存在するか
-    Dim DataStorage As New DataBaseAccesser
-    If DataStorage.ExistsBumon(CInt(value)) Then
-        bumonCode = value
-    Else
-        bumonCode = 0
-        MsgBox ("正しい部門コードを入力して下さい")
-        End
-    End If
+    bumonCode = CInt(value)
+
 End Property
 
 '対象日付の取得
 Property Get targetDate() As Date
+    '値の取得
     Dim value As Variant
     value = Me.Worksheet.Range(InputTargetDateRange_).value
     
-    '空の場合終了
-    If IsEmpty(value) Then
-        End
-    End If
+    'バリデーションチェックを行い失敗したら終了
+    CheckDateFormat value
     
     targetDate = CDate(value)
 End Property

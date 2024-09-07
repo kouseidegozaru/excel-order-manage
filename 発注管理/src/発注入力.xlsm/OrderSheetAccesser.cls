@@ -146,20 +146,11 @@ Property Get bumonCode() As Integer
     Dim value As Variant
     value = Me.Worksheet.Range(InputBumonCodeRange_).value
     
-    '未入力の場合終了
-    If IsEmpty(value) Then
-        End
-    End If
+    'バリデーションチェックを行い失敗したら終了
+    CheckExistsBumon value
     
-    '部門コードが存在するか
-    Dim dataStorage As New DataBaseAccesser
-    If dataStorage.ExistsBumon(CInt(value)) Then
-        bumonCode = CInt(value)
-    Else
-        bumonCode = 0
-        MsgBox ("正しい部門コードを入力して下さい")
-        End
-    End If
+    bumonCode = CInt(value)
+
 End Property
 
 '担当者コードの取得
@@ -167,32 +158,22 @@ Property Get userCode() As Integer
     '値の取得
     Dim value As Variant
     value = Me.Worksheet.Range(InputUserCodeRange_).value
+
+    'バリデーションチェックを行い失敗したら終了
+    CheckExistsUser value
     
-    '未入力の場合終了
-    If IsEmpty(value) Then
-        End
-    End If
-    
-    '担当者コードが存在するか
-    Dim dataStorage As New DataBaseAccesser
-    If dataStorage.ExistsUser(CInt(value)) Then
-        userCode = CInt(value)
-    Else
-        userCode = 0
-        MsgBox ("正しい担当者コードを入力して下さい")
-        End
-    End If
+    userCode = CInt(value)
+
 End Property
 
 '対象日付の取得
 Property Get targetDate() As Date
+    '値の取得
     Dim value As Variant
     value = Me.Worksheet.Range(InputTargetDateRange_).value
     
-    '未入力の場合終了
-    If IsEmpty(value) Then
-        End
-    End If
+    'バリデーションチェックを行い失敗したら終了
+    CheckDateFormat value
     
     targetDate = CDate(value)
 End Property

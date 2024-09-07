@@ -51,3 +51,45 @@ Public Sub CheckDirPermission()
         End
     End If
 End Sub
+
+
+'入力値の動的なバリデーションチェック
+
+'部門コードの入力値をチェック
+Public Sub CheckExistsBumon(bumonCode As Variant)
+    
+    '空の場合
+    If IsEmpty(bumonCode) Then
+        End
+    End If
+    
+    '数値でない場合
+    If Not IsNumeric(bumonCode) Then
+        MsgBox ("数値を入力して下さい")
+        End
+    End If
+
+    '部門コードが存在するか
+    Dim dataStorage As New DataBaseAccesser
+    If Not dataStorage.ExistsBumon(bumonCode) Then
+        MsgBox ("正しい部門コードを入力して下さい")
+        End
+    End If
+    
+End Sub
+
+'発注日の入力値をチェック
+Public Sub CheckDateFormat(targetDate As Variant)
+    
+    '空の場合
+    If IsEmpty(targetDate) Then
+        End
+    End If
+    
+    '日付でない場合
+    If Not IsDate(targetDate) Then
+        MsgBox ("日付を入力して下さい")
+        End
+    End If
+    
+End Sub

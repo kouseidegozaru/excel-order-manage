@@ -23,7 +23,7 @@ Sub LoadFileProperty()
     '発注データシートアクセサのインスタンス化
     Dim data As New DataSheetAccesser
     'クエリ発行クラスをインスタンス化
-    Dim DataStorage As New DataBaseAccesser
+    Dim dataStorage As New DataBaseAccesser
     'ファイル情報取得クラスをインスタンス化
     Dim fileProperty As New FilePropertyManager
     'ファイルフィルタークラスをインスタンス化
@@ -58,7 +58,7 @@ Sub LoadFileProperty()
     
         '従業員名の取得
         Dim userName As String
-        userName = DataStorage.GetUserName(userCode)
+        userName = dataStorage.GetUserName(userCode)
         
         '担当者コードの条件文字列の作成
         userCodeFilter = fileProperty.UserCodeIdentifier & userCode & fileProperty.BreakIdentifier
