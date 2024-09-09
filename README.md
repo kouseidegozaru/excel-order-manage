@@ -1,92 +1,12 @@
-# excel-order-manage
+# Excel Order Manage
 エクセルで発注データの管理を行うアプリケーション
 
-## 命名規則
+## 使用技術
 
-### 変数意味
-`User`
-    - 従業員
+- Excel
+- vba
+- ADODB
 
-`Product`
-    - 商品
+## 詳細
 
-`Bumon`
-    - 部門
-
-`Qty`
-    - 数量
-
-`Pieces`
-    - 入数
-
-`Match`
-    - 合わせ数
-
-`Price`
-    - 単価
-
-`Amount`
-    - 仕入金額
-    
-### 命名規則
-
- - キャメルケース
-    - 変数名
-
- - パスカルケース
-    - クラス名、メソッド名、プロパティ名、メンバ変数
-
-## 各クラスの仕様
-
-### `SheetAccesser`
-
- - 各シートごとのデータの読み書きの機能を提供
-
- - 基本的にシートへのデータの読み書きはこのクラスを通して行う
-
- - 全ての機能を使用可能にするには、メソッドの先頭が`Init`で始まるものを実行する
-    - `InitWorkBook`や`InitWorkSheet`など
-      
- - メンバ変数は末尾に`_`がつく
-
-### `DataBaseAccesser`
-
- - データベースへのクエリの発行を提供
-
- - クエリの実行には`SqlExecutor`クラスを使用している
-
-### `SqlExecutor`
-
- - データベースへのアクセスとSQLを実行する汎用的なクラス
-
-### `HookChange`
-
- - シートの変更範囲を検知するためのクラス
-
- - `IsChanged`で指定された範囲が変更された場合`True`を返す
-
- - `Ignore`を`True`にした場合、変更が生じても`IsChanged`は`False`を返すようになる
-
-## 主要なモジュールの仕様
-
-### `DisplayProducts`
-
- - 商品の情報を表示する
-
- - 商品コードが記載された`Range`を受け取る
-
- - この関数が適用された商品の数量は空になる
-
-### `RockEvents`
-
- - シートの変更を無視するかどうかのステータスを管理する
-
- - クラス`HookChange`の`Ignore`メソッドと組み合わせて使用
-    - 変更がさらに変更を呼ぶ連鎖を防ぐため
-
- - このステータスは全てのスコープから参照、変更が可能
-
-### `Validations`
-
- - シートの入力値のバリデーションを行う
- 
+[Wiki](https://github.com/kouseidegozaru/excel-order-manage/wiki)
