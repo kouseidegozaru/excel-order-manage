@@ -7,6 +7,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
+'プロジェクト概要
+'https://github.com/kouseidegozaru/excel-order-manage
+
 Private Sub Workbook_Open()
     '共有フォルダのアクセス権チェック
     CheckDirPermission
