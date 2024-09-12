@@ -159,4 +159,13 @@ Public Sub CheckDateFormat(targetDate As Variant)
         End
     End If
     
+    '現在の時刻が9時を過ぎている場合
+    If Time >= #9:00:00 AM# Then
+        '発注日が今日の日付の場合
+        If DateValue(targetDate) = Date Then
+            MsgBox ("現在の時刻が9時を過ぎているため、今日の日付の発注はできません。")
+            End
+        End If
+    End If
+    
 End Sub
