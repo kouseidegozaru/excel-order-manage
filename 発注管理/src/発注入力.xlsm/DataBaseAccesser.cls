@@ -241,6 +241,7 @@ Public Function GetProduct(ByVal bumonCD As Integer, ProductsCD As Long) As ADOD
     
     Dim query As String
     query = "SELECT " & _
+           "dbo.HM商品.品CD, " & _
            "dbo.HM商品.入荷時間帯, " & _
            "dbo.M仕入先.仕入先名 AS 仕入先名, " & _
            "M発注先.仕入先名 AS 発注先名, " & _
@@ -261,8 +262,7 @@ Public Function GetProduct(ByVal bumonCD As Integer, ProductsCD As Long) As ADOD
            "INNER JOIN dbo.M仕入先 ON dbo.HM商品.仕入先CD = dbo.M仕入先.仕入先CD " & _
            "INNER JOIN dbo.M仕入先 AS Mメーカー ON dbo.HM商品.[メーカーCD] = Mメーカー.仕入先CD " & _
            "INNER JOIN dbo.M仕入先 AS M発注先 ON dbo.HM商品.[発注先CD] = M発注先.仕入先CD " & _
-           "WHERE " & _
-           "dbo.HM商品.部門CD = ? " & _
+           "WHERE dbo.HM商品.部門CD = ? " & _
            "AND dbo.HM商品.品CD = ? " & _
            "AND dbo.HM商品.廃盤日付 IS NULL;"
     

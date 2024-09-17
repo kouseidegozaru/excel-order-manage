@@ -25,7 +25,7 @@ Sub DisplayProductsInfo(targetRng As Range)
     For Each cell In targetRng.Columns(targetColumn).Cells
     
         ' ‹ó”’‚Å‚È‚¢ƒZƒ‹
-        If cell.value <> "" Then
+        If cell.value = "" Then
             'Ÿ‚Ìƒ‹[ƒv
             GoTo ContinueLoop
         End If
