@@ -134,13 +134,13 @@ End Sub
 Private Function GetAmountCalcFormula(row As Long, piecesColumn As Integer, qtyColumn As Integer, priceColumn As Integer) As String
     'ì¸êî*êîó *íPâø
     GetAmountCalcFormula = "=IFERROR(" & _
-                            IndexToLetter(PiecesColumnIndex) & _
+                            IndexToLetter(piecesColumn) & _
                             row & _
                             "*" & _
-                            IndexToLetter(QtyColumnIndex) & _
+                            IndexToLetter(qtyColumn) & _
                             row & _
                             "*" & _
-                            IndexToLetter(PriceColumnIndex) & _
+                            IndexToLetter(priceColumn) & _
                             row & _
                             ",0)"
 End Function
