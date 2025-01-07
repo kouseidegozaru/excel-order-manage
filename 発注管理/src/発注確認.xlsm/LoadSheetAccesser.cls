@@ -15,6 +15,10 @@ Private super As SheetAccesser
 Private WorkSheetName_ As String
 
 Private ProductCodeColumnIndex_ As Integer
+Private PiecesColumnIndex_ As Integer
+Private QtyColumnIndex_ As Integer
+Private PriceColumnIndex_ As Integer
+Private AmountColumnIndex_ As Integer
 
 Private CheckStateColumnIndex_ As Integer
 Private CheckBoxColumnIndex_ As Integer
@@ -40,6 +44,15 @@ Private Sub Class_Initialize()
     
     '商品コードの列番号
     ProductCodeColumnIndex_ = 2
+    '入数の列番号
+    PiecesColumnIndex_ = 10
+    '数量の列番号
+    QtyColumnIndex_ = 12
+    '単価の列番号
+    PriceColumnIndex_ = 14
+    '仕入金額合計の列番号
+    AmountColumnIndex_ = 15
+    
     'チェックボックスの状態の列番号
     CheckStateColumnIndex_ = 19
     'チェックボックスの列番号
@@ -87,6 +100,23 @@ End Sub
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
+'入数の列番号
+Property Get PiecesColumnIndex() As Integer
+    PiecesColumnIndex = PiecesColumnIndex_
+End Property
+'数量の列番号
+Property Get QtyColumnIndex() As Integer
+    QtyColumnIndex = QtyColumnIndex_
+End Property
+'単価の列番号
+Property Get PriceColumnIndex() As Integer
+    PriceColumnIndex = PriceColumnIndex_
+End Property
+'仕入金額の列番号
+Property Get AmountColumnIndex() As Integer
+    AmountColumnIndex = AmountColumnIndex_
+End Property
+
 'チェックボックスの状態の列番号
 Property Get CheckStateColumnIndex() As Integer
     CheckStateColumnIndex = CheckStateColumnIndex_
@@ -396,6 +426,51 @@ Sub ApplyConditionalFormatting()
         
         ' 背景色を設定（黄色）
         formatCondition.Interior.Color = RGB(255, 255, 0) ' 黄色
+    Next i
+End Sub
+
+'仕入金額の計算式を設定
+Sub ApplyAmountCalc()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim startRow As Long
+    Dim piecesCol As Integer
+    Dim qtyCol As Integer
+    Dim priceCol As Integer
+    Dim amountCol As Integer
+    Dim rng As Range
+    Dim formatCondition As formatCondition
+    
+    ' 対象のシートを設定
+    Set ws = Me.Worksheet
+    
+    ' 列の指定
+    checkCol = Me.CheckStateColumnIndex
+    piecesCol = Me.PiecesColumnIndex
+    qtyCol = Me.QtyColumnIndex
+    priceCol = Me.PriceColumnIndex
+    amountCol = Me.AmountColumnIndex
+    
+    ' 行の指定
+    lastRow = Me.DataEndRowIndex
+    startRow = Me.DataStartRowIndex
+    
+    ' 各行ごとにを設定
+    For i = startRow To lastRow
+        
+        ' 仕入金額の計算式の設定
+        Set rng = ws.Range(ws.Cells(i, amountCol), ws.Cells(i, amountCol))
+        rng.Formula = "=IFERROR(" & _
+                            IndexToLetter(piecesCol) & _
+                            i & _
+                            "*" & _
+                            IndexToLetter(qtyCol) & _
+                            i & _
+                            "*" & _
+                            IndexToLetter(priceCol) & _
+                            i & _
+                            ",0)"
     Next i
 End Sub
 
