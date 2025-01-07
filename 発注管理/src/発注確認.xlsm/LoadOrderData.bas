@@ -168,5 +168,8 @@ Sub LoadData()
     
     'ğŒ•t‚«‘®‚ğİ’è
     load.ApplyConditionalFormatting
+    
+    'd“ü‹àŠz‚ÌŒvZ®‚ğİ’è
+    load.ApplyAmountCalc
 
 End Sub
