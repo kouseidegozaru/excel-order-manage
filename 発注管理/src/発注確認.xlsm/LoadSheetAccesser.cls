@@ -43,18 +43,18 @@ Private Sub Class_Initialize()
     CompleteString_ = "◎"
     
     '商品コードの列番号
-    ProductCodeColumnIndex_ = 2
+    ProductCodeColumnIndex_ = 3
     '入数の列番号
-    PiecesColumnIndex_ = 10
+    PiecesColumnIndex_ = 11
     '数量の列番号
-    QtyColumnIndex_ = 12
+    QtyColumnIndex_ = 13
     '単価の列番号
-    PriceColumnIndex_ = 14
+    PriceColumnIndex_ = 15
     '仕入金額合計の列番号
-    AmountColumnIndex_ = 15
+    AmountColumnIndex_ = 16
     
     'チェックボックスの状態の列番号
-    CheckStateColumnIndex_ = 19
+    CheckStateColumnIndex_ = 20
     'チェックボックスの列番号
     CheckBoxColumnIndex_ = 1
     
@@ -80,7 +80,7 @@ Private Sub Class_Initialize()
     'データのヘッダー行、開始行、開始列を指定
     super.InitStatus DataHeaderRow:=8, _
                      DataStartRow:=9, _
-                     DataStartColumn:=2
+                     DataStartColumn:=3
     
     InitWorkbook
     InitWorkSheet
