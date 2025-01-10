@@ -1,39 +1,39 @@
 Attribute VB_Name = "DeleteDataFile"
-'3ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ì”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœ
+'3‚©ŒŽ‘O‚Ì”­’“ú‚Ì”­’ƒf[ƒ^ƒtƒ@ƒCƒ‹‚ðíœ
 Sub DeleteDataFiles()
     
-    'ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Vï¿½[ï¿½gï¿½Aï¿½Nï¿½Zï¿½Tï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
+    '”­’ƒf[ƒ^ƒV[ƒgƒAƒNƒZƒT‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
     Dim data As New DataSheetAccesser
-    'ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
+    'ƒf[ƒ^ƒtƒ@ƒCƒ‹‚Ì‘®«î•ñŽæ“¾ƒNƒ‰ƒX‚ðƒCƒ“ƒXƒ^ƒ“ƒX‰»
     Dim fileProperty As New FilePropertyManager
-    'ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Æ‚Éƒtï¿½Bï¿½ï¿½ï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
+    'ƒf[ƒ^ƒtƒ@ƒCƒ‹‚ðƒtƒ@ƒCƒ‹‚²‚Æ‚ÉƒtƒBƒ‹ƒ^[‚·‚éƒNƒ‰ƒX‚ðƒCƒ“ƒXƒ^ƒ“ƒX‰»
     Dim filter As New FileFilter
     
     Dim FilePath As String
     Dim fs As New Scripting.FileSystemObject
     
-    'ï¿½ÎÛƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½Ý’ï¿½
+    '‘ÎÛƒfƒBƒŒƒNƒgƒŠ‚ðÝ’è
     filter.DirPath = data.SaveDirPath
     
-    'ï¿½Sï¿½Ä‚Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ÌŽæ“¾
+    '‘S‚Ä‚Ìƒtƒ@ƒCƒ‹–¼‚ÌŽæ“¾
     Dim fileNames As Collection
     Set fileNames = filter.AndFilter()
     
-    ' ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½tï¿½ï¿½ï¿½æ“¾
+    ' ¡“ú‚Ì“ú•t‚ðŽæ“¾
     Dim today As Date
     today = Date
 
-    ' 3ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ì“ï¿½ï¿½tï¿½ï¿½ï¿½vï¿½Z
+    ' 3‚©ŒŽ‘O‚Ì“ú•t‚ðŒvŽZ
     Dim threeMonthAgo As Date
     threeMonthAgo = DateAdd("m", -3, today)
     
     For Each fileName In fileNames
     
-        'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
+        'ƒtƒ@ƒCƒ‹î•ñŽæ“¾€”õ
         FilePath = data.SaveDirPath & "\" & fileName
         fileProperty.InitFilePath FilePath
         
-        'ï¿½ê‚©ï¿½ï¿½ï¿½Oï¿½Ìê‡ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½íœ
+        'ˆê‚©ŒŽ‘O‚Ìê‡ƒtƒ@ƒCƒ‹íœ
         If fileProperty.targetDate < threeMonthAgo Then
             fs.DeleteFile FilePath
         End If
@@ -41,42 +41,42 @@ Sub DeleteDataFiles()
     Next fileName
         
 End Sub
-'ï¿½ê‚©ï¿½ï¿½ï¿½Oï¿½Ì”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½ï¿½Ï‚Ýï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœ
+'3‚©ŒŽ‘O‚Ì”­’“ú‚Ì”­’Ï‚Ý¤•iƒR[ƒhƒf[ƒ^ƒtƒ@ƒCƒ‹‚ðíœ
 Sub DeleteOrderedDataFiles()
     
-    'ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Vï¿½[ï¿½gï¿½Aï¿½Nï¿½Zï¿½Tï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
+    '”­’ƒf[ƒ^ƒV[ƒgƒAƒNƒZƒT‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
     Dim ordered As New OrderedDataSheetAccesser
-    'ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
+    'ƒf[ƒ^ƒtƒ@ƒCƒ‹‚Ì‘®«î•ñŽæ“¾ƒNƒ‰ƒX‚ðƒCƒ“ƒXƒ^ƒ“ƒX‰»
     Dim fileProperty As New FilePropertyManager
-    'ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Æ‚Éƒtï¿½Bï¿½ï¿½ï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
+    'ƒf[ƒ^ƒtƒ@ƒCƒ‹‚ðƒtƒ@ƒCƒ‹‚²‚Æ‚ÉƒtƒBƒ‹ƒ^[‚·‚éƒNƒ‰ƒX‚ðƒCƒ“ƒXƒ^ƒ“ƒX‰»
     Dim filter As New FileFilter
     
     Dim FilePath As String
     Dim fs As New Scripting.FileSystemObject
     
-    'ï¿½ÎÛƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½Ý’ï¿½
+    '‘ÎÛƒfƒBƒŒƒNƒgƒŠ‚ðÝ’è
     filter.DirPath = ordered.SaveDirPath
     
-    'ï¿½Sï¿½Ä‚Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ÌŽæ“¾
+    '‘S‚Ä‚Ìƒtƒ@ƒCƒ‹–¼‚ÌŽæ“¾
     Dim fileNames As Collection
     Set fileNames = filter.AndFilter()
     
-    ' ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½tï¿½ï¿½ï¿½æ“¾
+    ' ¡“ú‚Ì“ú•t‚ðŽæ“¾
     Dim today As Date
     today = Date
 
-    ' 1ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ì“ï¿½ï¿½tï¿½ï¿½ï¿½vï¿½Z
-    Dim oneMonthAgo As Date
-    oneMonthAgo = DateAdd("m", -1, today)
+    ' 3‚©ŒŽ‘O‚Ì“ú•t‚ðŒvŽZ
+    Dim threeMonthAgo As Date
+    threeMonthAgo = DateAdd("m", -3, today)
     
     For Each fileName In fileNames
     
-        'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
+        'ƒtƒ@ƒCƒ‹î•ñŽæ“¾€”õ
         FilePath = ordered.SaveDirPath & "\" & fileName
         fileProperty.InitFilePath FilePath
         
-        'ï¿½ê‚©ï¿½ï¿½ï¿½Oï¿½Ìê‡ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½íœ
-        If fileProperty.targetDate < oneMonthAgo Then
+        'ˆê‚©ŒŽ‘O‚Ìê‡ƒtƒ@ƒCƒ‹íœ
+        If fileProperty.targetDate < threeMonthAgo Then
             fs.DeleteFile FilePath
         End If
         
