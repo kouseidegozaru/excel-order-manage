@@ -15,6 +15,10 @@ Private super As SheetAccesser
 Private WorkSheetName_ As String
 
 Private ProductCodeColumnIndex_ As Integer
+Private PiecesColumnIndex_ As Integer
+Private QtyColumnIndex_ As Integer
+Private PriceColumnIndex_ As Integer
+Private AmountColumnIndex_ As Integer
 
 Private CheckStateColumnIndex_ As Integer
 Private CheckBoxColumnIndex_ As Integer
@@ -39,9 +43,18 @@ Private Sub Class_Initialize()
     CompleteString_ = "◎"
     
     '商品コードの列番号
-    ProductCodeColumnIndex_ = 2
+    ProductCodeColumnIndex_ = 3
+    '入数の列番号
+    PiecesColumnIndex_ = 11
+    '数量の列番号
+    QtyColumnIndex_ = 13
+    '単価の列番号
+    PriceColumnIndex_ = 15
+    '仕入金額合計の列番号
+    AmountColumnIndex_ = 16
+    
     'チェックボックスの状態の列番号
-    CheckStateColumnIndex_ = 19
+    CheckStateColumnIndex_ = 20
     'チェックボックスの列番号
     CheckBoxColumnIndex_ = 1
     
@@ -67,7 +80,7 @@ Private Sub Class_Initialize()
     'データのヘッダー行、開始行、開始列を指定
     super.InitStatus DataHeaderRow:=8, _
                      DataStartRow:=9, _
-                     DataStartColumn:=2
+                     DataStartColumn:=3
     
     InitWorkbook
     InitWorkSheet
@@ -87,6 +100,23 @@ End Sub
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
+'入数の列番号
+Property Get PiecesColumnIndex() As Integer
+    PiecesColumnIndex = PiecesColumnIndex_
+End Property
+'数量の列番号
+Property Get QtyColumnIndex() As Integer
+    QtyColumnIndex = QtyColumnIndex_
+End Property
+'単価の列番号
+Property Get PriceColumnIndex() As Integer
+    PriceColumnIndex = PriceColumnIndex_
+End Property
+'仕入金額の列番号
+Property Get AmountColumnIndex() As Integer
+    AmountColumnIndex = AmountColumnIndex_
+End Property
+
 'チェックボックスの状態の列番号
 Property Get CheckStateColumnIndex() As Integer
     CheckStateColumnIndex = CheckStateColumnIndex_
@@ -310,6 +340,9 @@ Public Function AddCheckBox(rowIndex As Long) As Shape
     Dim ws As Worksheet
     Set ws = Me.Worksheet
     
+    'セルの高さを変更(チェックボックスの高さを調節するため)
+    ws.Cells(rowIndex, columnIndex).RowHeight = 21
+    
     ' フォームコントロールのチェックボックスを追加
     Dim cb As Shape
     Set cb = ws.Shapes.AddFormControl(xlCheckBox, _
@@ -327,6 +360,35 @@ Public Function AddCheckBox(rowIndex As Long) As Shape
     '追加したチェックボックスオブジェクトを返却
     Set AddCheckBox = cb
 End Function
+
+'チェックボックスの状態を記録しているセル番地を更新する(並べ替えの際にリンクのセル番地は更新されないため)
+Public Sub ReloadCheckboxLinkCellsAddress()
+    Dim ws As Worksheet
+    Dim cb As OLEObject
+    Dim shp As Shape
+    Dim pastCheckBoxState As Boolean
+    Dim pastCheckboxStateRange As Range
+
+    Set ws = Me.Worksheet
+
+    ' Form Controlsのチェックボックス
+    For Each shp In ws.Shapes
+        If shp.Type = msoFormControl Then
+            'コントロールがチェックボックスの場合
+            If shp.FormControlType = xlCheckBox Then
+                '設定されていたチェックボックスの状態セル
+                Set pastCheckboxStateRange = ws.Cells(shp.TopLeftCell.row, Me.CheckStateColumnIndex)
+                '状態を変数に保持(リンクを更新すると状態がリセットされるため)
+                pastCheckBoxState = pastCheckboxStateRange.value
+                'チェックボックスのリンクのセル番地を更新
+                shp.ControlFormat.LinkedCell = pastCheckboxStateRange.Address
+                '状態を戻す
+                pastCheckboxStateRange.value = pastCheckBoxState
+            End If
+        End If
+    Next shp
+
+End Sub
 
 'チェックされた商品コードの取得
 Public Function GetCheckedProductsCode() As Collection
@@ -396,6 +458,51 @@ Sub ApplyConditionalFormatting()
         
         ' 背景色を設定（黄色）
         formatCondition.Interior.Color = RGB(255, 255, 0) ' 黄色
+    Next i
+End Sub
+
+'仕入金額の計算式を設定
+Sub ApplyAmountCalc()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim startRow As Long
+    Dim piecesCol As Integer
+    Dim qtyCol As Integer
+    Dim priceCol As Integer
+    Dim amountCol As Integer
+    Dim rng As Range
+    Dim formatCondition As formatCondition
+    
+    ' 対象のシートを設定
+    Set ws = Me.Worksheet
+    
+    ' 列の指定
+    checkCol = Me.CheckStateColumnIndex
+    piecesCol = Me.PiecesColumnIndex
+    qtyCol = Me.QtyColumnIndex
+    priceCol = Me.PriceColumnIndex
+    amountCol = Me.AmountColumnIndex
+    
+    ' 行の指定
+    lastRow = Me.DataEndRowIndex
+    startRow = Me.DataStartRowIndex
+    
+    ' 各行ごとにを設定
+    For i = startRow To lastRow
+        
+        ' 仕入金額の計算式の設定
+        Set rng = ws.Range(ws.Cells(i, amountCol), ws.Cells(i, amountCol))
+        rng.Formula = "=IFERROR(" & _
+                            IndexToLetter(piecesCol) & _
+                            i & _
+                            "*" & _
+                            IndexToLetter(qtyCol) & _
+                            i & _
+                            "*" & _
+                            IndexToLetter(priceCol) & _
+                            i & _
+                            ",0)"
     Next i
 End Sub
 
