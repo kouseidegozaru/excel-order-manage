@@ -340,6 +340,9 @@ Public Function AddCheckBox(rowIndex As Long) As Shape
     Dim ws As Worksheet
     Set ws = Me.Worksheet
     
+    'セルの高さを変更(チェックボックスの高さを調節するため)
+    ws.Cells(rowIndex, columnIndex).RowHeight = 21
+    
     ' フォームコントロールのチェックボックスを追加
     Dim cb As Shape
     Set cb = ws.Shapes.AddFormControl(xlCheckBox, _
@@ -357,6 +360,35 @@ Public Function AddCheckBox(rowIndex As Long) As Shape
     '追加したチェックボックスオブジェクトを返却
     Set AddCheckBox = cb
 End Function
+
+'チェックボックスの状態を記録しているセル番地を更新する(並べ替えの際にリンクのセル番地は更新されないため)
+Public Sub ReloadCheckboxLinkCellsAddress()
+    Dim ws As Worksheet
+    Dim cb As OLEObject
+    Dim shp As Shape
+    Dim pastCheckBoxState As Boolean
+    Dim pastCheckboxStateRange As Range
+
+    Set ws = Me.Worksheet
+
+    ' Form Controlsのチェックボックス
+    For Each shp In ws.Shapes
+        If shp.Type = msoFormControl Then
+            'コントロールがチェックボックスの場合
+            If shp.FormControlType = xlCheckBox Then
+                '設定されていたチェックボックスの状態セル
+                Set pastCheckboxStateRange = ws.Cells(shp.TopLeftCell.row, Me.CheckStateColumnIndex)
+                '状態を変数に保持(リンクを更新すると状態がリセットされるため)
+                pastCheckBoxState = pastCheckboxStateRange.value
+                'チェックボックスのリンクのセル番地を更新
+                shp.ControlFormat.LinkedCell = pastCheckboxStateRange.Address
+                '状態を戻す
+                pastCheckboxStateRange.value = pastCheckBoxState
+            End If
+        End If
+    Next shp
+
+End Sub
 
 'チェックされた商品コードの取得
 Public Function GetCheckedProductsCode() As Collection

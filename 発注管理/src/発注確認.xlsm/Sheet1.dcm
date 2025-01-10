@@ -7,6 +7,13 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
+Private Sub Worksheet_SelectionChange(ByVal target As Range)
+    ' 並べ替えをした際にチェックボックスの状態を記録するセルのリンクは
+    ' 並び替えされないのでここで更新をする
+    Dim load As New LoadSheetAccesser
+    load.ReloadCheckboxLinkCellsAddress
+End Sub
+
 Private Sub Worksheet_Change(ByVal target As Range)
 
     'セルの変更をフック
