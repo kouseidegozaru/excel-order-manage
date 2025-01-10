@@ -1,5 +1,5 @@
 Attribute VB_Name = "DeleteDataFile"
-'一か月前の発注日の発注データファイルを削除
+'3か月前の発注日の発注データファイルを削除
 Sub DeleteDataFiles()
     
     '発注データシートアクセサのインスタンス化
@@ -23,9 +23,9 @@ Sub DeleteDataFiles()
     Dim today As Date
     today = Date
 
-    ' 1か月前の日付を計算
-    Dim oneMonthAgo As Date
-    oneMonthAgo = DateAdd("m", -1, today)
+    ' 3か月前の日付を計算
+    Dim threeMonthAgo As Date
+    threeMonthAgo = DateAdd("m", -3, today)
     
     For Each fileName In fileNames
     
@@ -34,14 +34,14 @@ Sub DeleteDataFiles()
         fileProperty.InitFilePath FilePath
         
         '一か月前の場合ファイル削除
-        If fileProperty.targetDate < oneMonthAgo Then
+        If fileProperty.targetDate < threeMonthAgo Then
             fs.DeleteFile FilePath
         End If
         
     Next fileName
         
 End Sub
-'一か月前の発注日の発注済み商品コードデータファイルを削除
+'3か月前の発注日の発注済み商品コードデータファイルを削除
 Sub DeleteOrderedDataFiles()
     
     '発注データシートアクセサのインスタンス化
@@ -65,9 +65,9 @@ Sub DeleteOrderedDataFiles()
     Dim today As Date
     today = Date
 
-    ' 1か月前の日付を計算
-    Dim oneMonthAgo As Date
-    oneMonthAgo = DateAdd("m", -1, today)
+    ' 3か月前の日付を計算
+    Dim threeMonthAgo As Date
+    threeMonthAgo = DateAdd("m", -3, today)
     
     For Each fileName In fileNames
     
@@ -76,7 +76,7 @@ Sub DeleteOrderedDataFiles()
         fileProperty.InitFilePath FilePath
         
         '一か月前の場合ファイル削除
-        If fileProperty.targetDate < oneMonthAgo Then
+        If fileProperty.targetDate < threeMonthAgo Then
             fs.DeleteFile FilePath
         End If
         
