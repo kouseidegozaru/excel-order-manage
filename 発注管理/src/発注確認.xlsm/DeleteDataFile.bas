@@ -1,81 +1,81 @@
 Attribute VB_Name = "DeleteDataFile"
-'ˆê‚©Œ‘O‚Ì”­’“ú‚Ì”­’ƒf[ƒ^ƒtƒ@ƒCƒ‹‚ğíœ
+'3ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ì”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœ
 Sub DeleteDataFiles()
     
-    '”­’ƒf[ƒ^ƒV[ƒgƒAƒNƒZƒT‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+    'ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Vï¿½[ï¿½gï¿½Aï¿½Nï¿½Zï¿½Tï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
     Dim data As New DataSheetAccesser
-    'ƒf[ƒ^ƒtƒ@ƒCƒ‹‚Ì‘®«î•ñæ“¾ƒNƒ‰ƒX‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»
+    'ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
     Dim fileProperty As New FilePropertyManager
-    'ƒf[ƒ^ƒtƒ@ƒCƒ‹‚ğƒtƒ@ƒCƒ‹‚²‚Æ‚ÉƒtƒBƒ‹ƒ^[‚·‚éƒNƒ‰ƒX‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»
+    'ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Æ‚Éƒtï¿½Bï¿½ï¿½ï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
     Dim filter As New FileFilter
     
     Dim FilePath As String
     Dim fs As New Scripting.FileSystemObject
     
-    '‘ÎÛƒfƒBƒŒƒNƒgƒŠ‚ğİ’è
+    'ï¿½ÎÛƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½İ’ï¿½
     filter.DirPath = data.SaveDirPath
     
-    '‘S‚Ä‚Ìƒtƒ@ƒCƒ‹–¼‚Ìæ“¾
+    'ï¿½Sï¿½Ä‚Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Ìæ“¾
     Dim fileNames As Collection
     Set fileNames = filter.AndFilter()
     
-    ' ¡“ú‚Ì“ú•t‚ğæ“¾
+    ' ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½tï¿½ï¿½ï¿½æ“¾
     Dim today As Date
     today = Date
 
-    ' 1‚©Œ‘O‚Ì“ú•t‚ğŒvZ
-    Dim oneMonthAgo As Date
-    oneMonthAgo = DateAdd("m", -1, today)
+    ' 3ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ì“ï¿½ï¿½tï¿½ï¿½ï¿½vï¿½Z
+    Dim threeMonthAgo As Date
+    threeMonthAgo = DateAdd("m", -3, today)
     
     For Each fileName In fileNames
     
-        'ƒtƒ@ƒCƒ‹î•ñæ“¾€”õ
+        'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
         FilePath = data.SaveDirPath & "\" & fileName
         fileProperty.InitFilePath FilePath
         
-        'ˆê‚©Œ‘O‚Ìê‡ƒtƒ@ƒCƒ‹íœ
-        If fileProperty.targetDate < oneMonthAgo Then
+        'ï¿½ê‚©ï¿½ï¿½ï¿½Oï¿½Ìê‡ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½íœ
+        If fileProperty.targetDate < threeMonthAgo Then
             fs.DeleteFile FilePath
         End If
         
     Next fileName
         
 End Sub
-'ˆê‚©Œ‘O‚Ì”­’“ú‚Ì”­’Ï‚İ¤•iƒR[ƒhƒf[ƒ^ƒtƒ@ƒCƒ‹‚ğíœ
+'ï¿½ê‚©ï¿½ï¿½ï¿½Oï¿½Ì”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½ï¿½Ï‚İï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœ
 Sub DeleteOrderedDataFiles()
     
-    '”­’ƒf[ƒ^ƒV[ƒgƒAƒNƒZƒT‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+    'ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Vï¿½[ï¿½gï¿½Aï¿½Nï¿½Zï¿½Tï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
     Dim ordered As New OrderedDataSheetAccesser
-    'ƒf[ƒ^ƒtƒ@ƒCƒ‹‚Ì‘®«î•ñæ“¾ƒNƒ‰ƒX‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»
+    'ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
     Dim fileProperty As New FilePropertyManager
-    'ƒf[ƒ^ƒtƒ@ƒCƒ‹‚ğƒtƒ@ƒCƒ‹‚²‚Æ‚ÉƒtƒBƒ‹ƒ^[‚·‚éƒNƒ‰ƒX‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»
+    'ï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Æ‚Éƒtï¿½Bï¿½ï¿½ï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
     Dim filter As New FileFilter
     
     Dim FilePath As String
     Dim fs As New Scripting.FileSystemObject
     
-    '‘ÎÛƒfƒBƒŒƒNƒgƒŠ‚ğİ’è
+    'ï¿½ÎÛƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½İ’ï¿½
     filter.DirPath = ordered.SaveDirPath
     
-    '‘S‚Ä‚Ìƒtƒ@ƒCƒ‹–¼‚Ìæ“¾
+    'ï¿½Sï¿½Ä‚Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Ìæ“¾
     Dim fileNames As Collection
     Set fileNames = filter.AndFilter()
     
-    ' ¡“ú‚Ì“ú•t‚ğæ“¾
+    ' ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½tï¿½ï¿½ï¿½æ“¾
     Dim today As Date
     today = Date
 
-    ' 1‚©Œ‘O‚Ì“ú•t‚ğŒvZ
+    ' 1ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ì“ï¿½ï¿½tï¿½ï¿½ï¿½vï¿½Z
     Dim oneMonthAgo As Date
     oneMonthAgo = DateAdd("m", -1, today)
     
     For Each fileName In fileNames
     
-        'ƒtƒ@ƒCƒ‹î•ñæ“¾€”õ
+        'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
         FilePath = ordered.SaveDirPath & "\" & fileName
         fileProperty.InitFilePath FilePath
         
-        'ˆê‚©Œ‘O‚Ìê‡ƒtƒ@ƒCƒ‹íœ
+        'ï¿½ê‚©ï¿½ï¿½ï¿½Oï¿½Ìê‡ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½íœ
         If fileProperty.targetDate < oneMonthAgo Then
             fs.DeleteFile FilePath
         End If
