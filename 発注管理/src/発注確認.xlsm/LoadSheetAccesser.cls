@@ -7,9 +7,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'”­’Šm”FƒV[ƒg‚Ö‚ÌƒAƒNƒZƒT
+'ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½Vï¿½[ï¿½gï¿½Ö‚ÌƒAï¿½Nï¿½Zï¿½T
 
-'SheetAccesserƒNƒ‰ƒX‚ğ‹^—“I‚ÉŒp³
+'SheetAccesserï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Iï¿½ÉŒpï¿½ï¿½
 Private super As SheetAccesser
 
 Private WorkSheetName_ As String
@@ -36,48 +36,48 @@ Private CompleteString_ As String
 
 Private Sub Class_Initialize()
 
-    'ƒV[ƒg–¼
-    WorkSheetName_ = "”­’Šm”F"
+    'ï¿½Vï¿½[ï¿½gï¿½ï¿½
+    WorkSheetName_ = "ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½F"
     
-    '”­’ƒf[ƒ^‚ğ“ü—ÍÏ‚İ‚Ì•\¦‚·‚éƒ†[ƒU[ƒtƒ‰ƒO
-    CompleteString_ = ""
+    'ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ÍÏ‚İ‚Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½éƒ†ï¿½[ï¿½Uï¿½[ï¿½tï¿½ï¿½ï¿½O
+    CompleteString_ = "ï¿½ï¿½"
     
-    '¤•iƒR[ƒh‚Ì—ñ”Ô†
+    'ï¿½ï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½Ì—ï¿½Ôï¿½
     ProductCodeColumnIndex_ = 3
-    '“ü”‚Ì—ñ”Ô†
+    'ï¿½ï¿½ï¿½ï¿½ï¿½Ì—ï¿½Ôï¿½
     PiecesColumnIndex_ = 11
-    '”—Ê‚Ì—ñ”Ô†
+    'ï¿½ï¿½ï¿½Ê‚Ì—ï¿½Ôï¿½
     QtyColumnIndex_ = 13
-    '’P‰¿‚Ì—ñ”Ô†
+    'ï¿½Pï¿½ï¿½ï¿½Ì—ï¿½Ôï¿½
     PriceColumnIndex_ = 15
-    'd“ü‹àŠz‡Œv‚Ì—ñ”Ô†
+    'ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½ï¿½vï¿½Ì—ï¿½Ôï¿½
     AmountColumnIndex_ = 16
     
-    'ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìó‘Ô‚Ì—ñ”Ô†
+    'ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìï¿½Ô‚Ì—ï¿½Ôï¿½
     CheckStateColumnIndex_ = 20
-    'ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ì—ñ”Ô†
+    'ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ì—ï¿½Ôï¿½
     CheckBoxColumnIndex_ = 1
     
-    'ƒtƒ@ƒCƒ‹î•ñ
-    'ŠJn—ñ
+    'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½
+    'ï¿½Jï¿½nï¿½ï¿½
     FilePropertyStartColumnIndex_ = 2
-    '’S“–Ò–¼•\¦s
+    'ï¿½Sï¿½ï¿½ï¿½Ò–ï¿½ï¿½\ï¿½ï¿½ï¿½s
     FilePropertyUserNameRowIndex_ = 4
-    '”­’“ü—Íƒtƒ‰ƒO•\¦s
+    'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Íƒtï¿½ï¿½ï¿½Oï¿½\ï¿½ï¿½ï¿½s
     FilePropertyCompleteRowIndex_ = 5
-    'ÅIXV“ú•\¦s
+    'ï¿½ÅIï¿½Xï¿½Vï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½s
     FilePropertyUpdateTimeRowIndex_ = 6
     
-    '•”–åƒR[ƒh“ü—ÍƒZƒ‹
+    'ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½ÍƒZï¿½ï¿½
     InputBumonCodeRange_ = "A2"
-    '•”–å–¼•\¦ƒZƒ‹
+    'ï¿½ï¿½ï¿½å–¼ï¿½\ï¿½ï¿½ï¿½Zï¿½ï¿½
     OutputBumonNameRange_ = "B2"
-    '”­’“ú•\¦ƒZƒ‹
+    'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Zï¿½ï¿½
     InputTargetDateRange_ = "C2"
     
-    '‹^—’ŠÛƒNƒ‰ƒX‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»
+    'ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ÛƒNï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
     Set super = New SheetAccesser
-    'ƒf[ƒ^‚Ìƒwƒbƒ_[sAŠJnsAŠJn—ñ‚ğw’è
+    'ï¿½fï¿½[ï¿½^ï¿½Ìƒwï¿½bï¿½_ï¿½[ï¿½sï¿½Aï¿½Jï¿½nï¿½sï¿½Aï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½wï¿½ï¿½
     super.InitStatus DataHeaderRow:=8, _
                      DataStartRow:=9, _
                      DataStartColumn:=3
@@ -86,59 +86,59 @@ Private Sub Class_Initialize()
     InitWorkSheet
 End Sub
 
-'ƒ[ƒNƒuƒbƒN‚ğİ’è
+'ï¿½ï¿½ï¿½[ï¿½Nï¿½uï¿½bï¿½Nï¿½ï¿½İ’ï¿½
 Private Sub InitWorkbook()
     super.InitWorkbook ThisWorkbook
 End Sub
 
-'ƒ[ƒNƒV[ƒg‚ğİ’è
+'ï¿½ï¿½ï¿½[ï¿½Nï¿½Vï¿½[ï¿½gï¿½ï¿½İ’ï¿½
 Private Sub InitWorkSheet()
     super.InitWorkSheet super.Workbook.Sheets(WorkSheetName_)
 End Sub
 
-'¤•iƒR[ƒh‚Ì—ñ”Ô†
+'ï¿½ï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½Ì—ï¿½Ôï¿½
 Property Get ProductCodeColumnIndex() As Integer
     ProductCodeColumnIndex = ProductCodeColumnIndex_
 End Property
-'“ü”‚Ì—ñ”Ô†
+'ï¿½ï¿½ï¿½ï¿½ï¿½Ì—ï¿½Ôï¿½
 Property Get PiecesColumnIndex() As Integer
     PiecesColumnIndex = PiecesColumnIndex_
 End Property
-'”—Ê‚Ì—ñ”Ô†
+'ï¿½ï¿½ï¿½Ê‚Ì—ï¿½Ôï¿½
 Property Get QtyColumnIndex() As Integer
     QtyColumnIndex = QtyColumnIndex_
 End Property
-'’P‰¿‚Ì—ñ”Ô†
+'ï¿½Pï¿½ï¿½ï¿½Ì—ï¿½Ôï¿½
 Property Get PriceColumnIndex() As Integer
     PriceColumnIndex = PriceColumnIndex_
 End Property
-'d“ü‹àŠz‚Ì—ñ”Ô†
+'ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½zï¿½Ì—ï¿½Ôï¿½
 Property Get AmountColumnIndex() As Integer
     AmountColumnIndex = AmountColumnIndex_
 End Property
 
-'ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìó‘Ô‚Ì—ñ”Ô†
+'ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìï¿½Ô‚Ì—ï¿½Ôï¿½
 Property Get CheckStateColumnIndex() As Integer
     CheckStateColumnIndex = CheckStateColumnIndex_
 End Property
-'ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ì—ñ”Ô†
+'ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ì—ï¿½Ôï¿½
 Property Get CheckBoxColumnIndex() As Integer
     CheckBoxColumnIndex = CheckBoxColumnIndex_
 End Property
-'ƒtƒ@ƒCƒ‹î•ñ‚ÌŠJn—ñ
+'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ÌŠJï¿½nï¿½ï¿½
 Property Get FilePropertyStartColumnIndex() As Integer
     FilePropertyStartColumnIndex = FilePropertyStartColumnIndex_
 End Property
 
-'Ÿ‚É“ü—Í‚·‚éƒtƒ@ƒCƒ‹î•ñ‚ª‹ó”’‚Ì—ñ”Ô†
+'ï¿½ï¿½ï¿½É“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ñ‚ª‹ó”’‚Ì—ï¿½Ôï¿½
 Public Function FilePropertyNextColumnIndex() As Integer
     FilePropertyNextColumnIndex = Me.Worksheet.Cells(FilePropertyUserNameRowIndex_, Me.Worksheet.Columns.Count).End(xlToLeft).Column + 1
 End Function
 
-'ƒtƒ@ƒCƒ‹î•ñ‚ª‹LÚ‚³‚ê‚Ä‚¢‚éÅŒã‚Ì—ñ”Ô†
+'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ñ‚ª‹Lï¿½Ú‚ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ÅŒï¿½Ì—ï¿½Ôï¿½
 Property Get FilePropertyEndColumnIndex() As Long
     Dim lastColumn As Long
-    'ƒtƒ@ƒCƒ‹î•ñ‚Éƒf[ƒ^‚ª‚È‚¢ê‡—ñ”ÍˆÍ‚ğ‚¸‚ç‚·(–³‚¢‚Æ”ÍˆÍ‚Éƒwƒbƒ_[—ñ‚àŠÜ‚Ü‚ê‚Ä‚µ‚Ü‚¤)
+    'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Éƒfï¿½[ï¿½^ï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ï¿½ÍˆÍ‚ï¿½ï¿½ï¿½ï¿½ç‚·(ï¿½ï¿½ï¿½ï¿½ï¿½Æ”ÍˆÍ‚Éƒwï¿½bï¿½_ï¿½[ï¿½ï¿½ï¿½ï¿½Ü‚Ü‚ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½)
     lastColumn = Me.FilePropertyNextColumnIndex - 1
     If lastColumn < Me.FilePropertyStartColumnIndex Then
         lastColumn = Me.FilePropertyStartColumnIndex
@@ -146,7 +146,7 @@ Property Get FilePropertyEndColumnIndex() As Long
     FilePropertyEndColumnIndex = lastColumn
 End Property
 
-'ƒtƒ@ƒCƒ‹î•ñ‚Ì”ÍˆÍ
+'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Ì”Íˆï¿½
 Property Get FilePropertyRange() As Range
     Set FilePropertyRange = super.GetRange(FilePropertyUserNameRowIndex_, _
                                            Me.FilePropertyStartColumnIndex, _
@@ -154,37 +154,37 @@ Property Get FilePropertyRange() As Range
                                            Me.FilePropertyEndColumnIndex)
 End Property
 
-'ƒtƒ@ƒCƒ‹î•ñ‚ğƒNƒŠƒA
+'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
 Public Sub ClearFileProperty()
     Me.FilePropertyRange.Delete Shift:=xlToLeft
 End Sub
 
-'ƒtƒ@ƒCƒ‹î•ñ‚ğ’Ç‰Á
+'ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‰ï¿½
 Public Sub AddFileProperty(userName As String, IsCompleted As Boolean, updatedTime As Date)
     
-    '“ü—Í‘ÎÛ—ñ
+    'ï¿½ï¿½ï¿½Í‘ÎÛ—ï¿½
     Dim lastColumn As Integer
     lastColumn = FilePropertyNextColumnIndex
     
-    '”­’“ü—Íƒtƒ‰ƒO•¶š—ñ
+    'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Íƒtï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     Dim writeCompleteString As String
     writeCompleteString = ""
     
-    '”­’“ü—Í‚ğ‚µ‚½’S“–Ò‚Ìê‡
+    'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½Ò‚Ìê‡
     If IsCompleted Then
         writeCompleteString = CompleteString_
         
-        'XV“ú‘‚«‚İ
+        'ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Me.Worksheet.Cells(FilePropertyUpdateTimeRowIndex_, lastColumn) = updatedTime
     End If
     
-    '’S“–Ò–¼•\¦
+    'ï¿½Sï¿½ï¿½ï¿½Ò–ï¿½ï¿½\ï¿½ï¿½
     Me.Worksheet.Cells(FilePropertyUserNameRowIndex_, lastColumn) = userName
-    '”­’“ü—Íƒtƒ‰ƒO•\¦
+    'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Íƒtï¿½ï¿½ï¿½Oï¿½\ï¿½ï¿½
     Me.Worksheet.Cells(FilePropertyCompleteRowIndex_, lastColumn) = writeCompleteString
 End Sub
 
-'‘S‚Ä‚Ìƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìíœ
+'ï¿½Sï¿½Ä‚Ìƒ`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìíœ
 Sub DeleteAllCheckboxes()
     Dim ws As Worksheet
     Dim cb As OLEObject
@@ -192,12 +192,12 @@ Sub DeleteAllCheckboxes()
 
     Set ws = Me.Worksheet
 
-    ' Form Controls‚Ìƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ğíœ
+    ' Form Controlsï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½íœ
     For Each shp In ws.Shapes
         If shp.Type = msoFormControl Then
-            'ƒRƒ“ƒgƒ[ƒ‹‚ªƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìê‡
+            'ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìê‡
             If shp.FormControlType = xlCheckBox Then
-                'íœ
+                'ï¿½íœ
                 shp.Delete
             End If
         End If
@@ -205,20 +205,20 @@ Sub DeleteAllCheckboxes()
 
 End Sub
 
-'•\¦‚³‚ê‚Ä‚¢‚é”­’ƒf[ƒ^‚Ìíœ
+'ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é”­ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Ìíœ
 Public Sub ClearData()
     Dim clearRange As Range
     Set clearRange = Me.ProductsCodeRange
-    's‚ª‘¶İ‚·‚éê‡
+    'ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ê‡
     If WorksheetFunction.CountA(clearRange) > 0 Then
-        'ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìíœ
+        'ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìíœ
         Me.DeleteAllCheckboxes
-        '¤•iî•ñ‚Ìíœ
+        'ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½Ìíœ
         clearRange.EntireRow.Delete
     End If
 End Sub
 
-'”­’“ü—Í‚É‚ ‚é¤•iƒR[ƒh‚Ì”ÍˆÍ
+'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚É‚ï¿½ï¿½é¤ï¿½iï¿½Rï¿½[ï¿½hï¿½Ì”Íˆï¿½
 Property Get ProductsCodeRange() As Range
     Set ProductsCodeRange = super.GetRange(Me.DataStartRowIndex, _
                                            Me.ProductCodeColumnIndex, _
@@ -226,7 +226,7 @@ Property Get ProductsCodeRange() As Range
                                            Me.ProductCodeColumnIndex)
 End Property
 
-'”­’“ü—Í‚É‚ ‚éƒ`ƒFƒbƒNƒ{ƒbƒNƒXó‘Ô‚Ì”ÍˆÍ
+'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚É‚ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½ï¿½Ô‚Ì”Íˆï¿½
 Property Get CheckStateRange() As Range
     Set CheckStateRange = super.GetRange(Me.DataStartRowIndex, _
                                            Me.CheckStateColumnIndex, _
@@ -234,46 +234,46 @@ Property Get CheckStateRange() As Range
                                            Me.CheckStateColumnIndex)
 End Property
 
-'•”–åƒR[ƒh‚Ìæ“¾
+'ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½Ìæ“¾
 Property Get bumonCode() As Integer
-    '’l‚Ìæ“¾
+    'ï¿½lï¿½Ìæ“¾
     Dim value As Variant
     value = Me.Worksheet.Range(InputBumonCodeRange_).value
     
-    'ƒoƒŠƒf[ƒVƒ‡ƒ“ƒ`ƒFƒbƒN‚ğs‚¢¸”s‚µ‚½‚çI—¹
+    'ï¿½oï¿½ï¿½ï¿½fï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
     CheckExistsBumon value
     
     bumonCode = CInt(value)
 
 End Property
 
-'‘ÎÛ“ú•t‚Ìæ“¾
+'ï¿½ÎÛ“ï¿½ï¿½tï¿½Ìæ“¾
 Property Get targetDate() As Date
-    '’l‚Ìæ“¾
+    'ï¿½lï¿½Ìæ“¾
     Dim value As Variant
     value = Me.Worksheet.Range(InputTargetDateRange_).value
     
-    'ƒoƒŠƒf[ƒVƒ‡ƒ“ƒ`ƒFƒbƒN‚ğs‚¢¸”s‚µ‚½‚çI—¹
+    'ï¿½oï¿½ï¿½ï¿½fï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
     CheckDateFormat value
     
     targetDate = CDate(value)
 End Property
 
-'•”–åƒR[ƒh‚Ì“ü—ÍƒZƒ‹
+'ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½Ì“ï¿½ï¿½ÍƒZï¿½ï¿½
 Property Get BumonCodeRange() As Range
     Set BumonCodeRange = Me.Worksheet.Range(InputBumonCodeRange_)
 End Property
-'”­’“ú‚Ì“ü—ÍƒZƒ‹
+'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½ÍƒZï¿½ï¿½
 Property Get TargetDateRange() As Range
     Set TargetDateRange = Me.Worksheet.Range(InputTargetDateRange_)
 End Property
 
-'•”–å–¼‚Ì•\¦
+'ï¿½ï¿½ï¿½å–¼ï¿½Ì•\ï¿½ï¿½
 Property Let BumonName(name As String)
     Me.Worksheet.Range(OutputBumonNameRange_).value = name
 End Property
 
-'ƒV[ƒg‚É“ü—Í‚³‚ê‚Ä‚¢‚éŠe€–Ú‚²‚Æ‚ÉƒOƒ‹[ƒv‰»‚µ‚Ä”—Ê‚Æd“ü‹àŠz‚ğ‡Z
+'ï¿½Vï¿½[ï¿½gï¿½É“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Æ‚ÉƒOï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½Ê‚Ædï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½ï¿½ï¿½ï¿½Z
 Public Function AllGroupData() As ADODB.Recordset
     Dim dataAccessor As New SqlExecutor
     Dim rs As ADODB.Recordset
@@ -282,44 +282,44 @@ Public Function AllGroupData() As ADODB.Recordset
     Dim rangeName As String
     Dim query As String
     
-    ' Excelî•ñ
+    ' Excelï¿½ï¿½ï¿½
     FilePath = Me.Workbook.FullName
     sheetName = Me.Worksheet.name
     rangeName = Replace(Me.AllDataRange.Address(False, False), "$", "")
     
     
-    ' Às‚·‚éƒNƒGƒŠ
-    query = "SELECT •iCD, “ü‰×ŠÔ‘Ñ, d“üæ–¼, ”­’æ–¼, ƒ[ƒJ[–¼, •i–¼, ‹KŠi, Œv‹æ, “ü”, ‡‚í‚¹”, SUM(”—Ê) AS ‡Œv”—Ê, ‰×p, d“ü’P‰¿, SUM(d“ü‹àŠz) AS ‡Œvd“ü‹àŠz, LT, ¤•i”õl, ƒ[ƒJ[“Ç‚İ " & _
+    ' ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Nï¿½Gï¿½ï¿½
+    query = "SELECT ï¿½iCD, ï¿½ï¿½ï¿½×ï¿½ï¿½Ô‘ï¿½, ï¿½dï¿½ï¿½ï¿½æ–¼, ï¿½ï¿½ï¿½ï¿½ï¿½æ–¼, ï¿½ï¿½ï¿½[ï¿½Jï¿½[ï¿½ï¿½, ï¿½iï¿½ï¿½, ï¿½Kï¿½i, ï¿½vï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½í‚¹ï¿½ï¿½, SUM(ï¿½ï¿½ï¿½ï¿½) AS ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½, ï¿½×p, ï¿½dï¿½ï¿½ï¿½Pï¿½ï¿½, SUM(ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½z) AS ï¿½ï¿½ï¿½vï¿½dï¿½ï¿½ï¿½ï¿½ï¿½z, LT, ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½l, ï¿½ï¿½ï¿½[ï¿½Jï¿½[ï¿½Ç‚ï¿½ " & _
            "FROM [" & sheetName & "$" & rangeName & "] " & _
-           "GROUP BY •iCD, “ü‰×ŠÔ‘Ñ, d“üæ–¼, ”­’æ–¼, ƒ[ƒJ[–¼, •i–¼, ‹KŠi, Œv‹æ, “ü”, ‡‚í‚¹”, ‰×p, d“ü’P‰¿, LT, ¤•i”õl, ƒ[ƒJ[“Ç‚İ"
+           "GROUP BY ï¿½iCD, ï¿½ï¿½ï¿½×ï¿½ï¿½Ô‘ï¿½, ï¿½dï¿½ï¿½ï¿½æ–¼, ï¿½ï¿½ï¿½ï¿½ï¿½æ–¼, ï¿½ï¿½ï¿½[ï¿½Jï¿½[ï¿½ï¿½, ï¿½iï¿½ï¿½, ï¿½Kï¿½i, ï¿½vï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½í‚¹ï¿½ï¿½, ï¿½×p, ï¿½dï¿½ï¿½ï¿½Pï¿½ï¿½, LT, ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½l, ï¿½ï¿½ï¿½[ï¿½Jï¿½[ï¿½Ç‚ï¿½"
     
-    ' Excelƒtƒ@ƒCƒ‹‚ÉƒNƒGƒŠ‚ğÀs
+    ' Excelï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÉƒNï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½s
     Set rs = dataAccessor.ExecuteExcelQuery(FilePath, query)
     
     Set AllGroupData = rs
 End Function
 
-'‘ÎÛ‚Ìs‚Ìƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ÌƒXƒe[ƒ^ƒX•ÏX
+'ï¿½ÎÛ‚Ìsï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½ÌƒXï¿½eï¿½[ï¿½^ï¿½Xï¿½ÏX
 Property Let CheckBoxState(rowIndex As Long, value As Boolean)
     Me.Cells(rowIndex, Me.CheckStateColumnIndex) = value
 End Property
 
-'‘ÎÛ‚Ì¤•i‚Ìƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ğƒIƒ“‚É‚·‚é
+'ï¿½ÎÛ‚Ìï¿½ï¿½iï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½
 Public Sub OrderedIsTrue(targetProductsCode As Variant)
     
-    'ƒf[ƒ^‚ÌI—¹s‚ÆŠJns
+    'ï¿½fï¿½[ï¿½^ï¿½ÌIï¿½ï¿½ï¿½sï¿½ÆŠJï¿½nï¿½s
     Dim startRowIndex As Long
     startRowIndex = Me.DataStartRowIndex
     Dim endRowIndex As Long
     endRowIndex = Me.DataEndRowIndex
     
-    'Œ»İ•\¦‚³‚ê‚Ä‚¢‚é¤•iƒR[ƒh
+    'ï¿½ï¿½ï¿½İ•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é¤ï¿½iï¿½Rï¿½[ï¿½h
     Dim displayProductsCode As Variant
     
     For i = startRowIndex To endRowIndex
-        '¤•iƒR[ƒh
+        'ï¿½ï¿½ï¿½iï¿½Rï¿½[ï¿½h
         displayProductsCode = Me.Worksheet.Cells(i, Me.ProductCodeColumnIndex).value
-        '‘ÎÛ‚Ì¤•iƒR[ƒh‚Ìê‡ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ğƒIƒ“
+        'ï¿½ÎÛ‚Ìï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½Ìê‡ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½Iï¿½ï¿½
         If targetProductsCode = displayProductsCode Then
             Me.CheckBoxState(CInt(i)) = True
         End If
@@ -327,20 +327,23 @@ Public Sub OrderedIsTrue(targetProductsCode As Variant)
     
 End Sub
 
-'s‚ğw’è‚µ‚Äƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ğ’Ç‰Á
+'ï¿½sï¿½ï¿½ï¿½wï¿½è‚µï¿½Äƒ`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½ï¿½Ç‰ï¿½
 Public Function AddCheckBox(rowIndex As Long) As Shape
     Dim columnIndex As Integer
     Dim stateColumnIndex As Integer
     
-    'ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ì—ñ
+    'ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ì—ï¿½
     columnIndex = Me.CheckBoxColumnIndex
-    'ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìó‘Ô‚Ì—ñ
+    'ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìï¿½Ô‚Ì—ï¿½
     stateColumnIndex = Me.CheckStateColumnIndex
     
     Dim ws As Worksheet
     Set ws = Me.Worksheet
     
-    ' ƒtƒH[ƒ€ƒRƒ“ƒgƒ[ƒ‹‚Ìƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ğ’Ç‰Á
+    'ï¿½Zï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ÏX(ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìï¿½ï¿½ï¿½ï¿½ğ’²ß‚ï¿½ï¿½é‚½ï¿½ï¿½)
+    ws.Cells(rowIndex, columnIndex).RowHeight = 21
+    
+    ' ï¿½tï¿½Hï¿½[ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½ï¿½Ç‰ï¿½
     Dim cb As Shape
     Set cb = ws.Shapes.AddFormControl(xlCheckBox, _
                                       Left:=ws.Cells(rowIndex, columnIndex).Left, _
@@ -348,40 +351,40 @@ Public Function AddCheckBox(rowIndex As Long) As Shape
                                       Width:=ws.Cells(rowIndex, columnIndex).Width, _
                                       Height:=ws.Cells(rowIndex, columnIndex).Height)
     
-    ' ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ÌƒLƒƒƒvƒVƒ‡ƒ“‚ğ‹ó‚Éİ’è
+    ' ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½ÌƒLï¿½ï¿½ï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éİ’ï¿½
     cb.TextFrame.Characters.Text = ""
     
-    ' ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚ÌƒŠƒ“ƒN‚·‚éƒZƒ‹‚ğİ’è
+    ' ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìƒï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½İ’ï¿½
     cb.ControlFormat.LinkedCell = ws.Cells(rowIndex, stateColumnIndex).Address
     
-    '’Ç‰Á‚µ‚½ƒ`ƒFƒbƒNƒ{ƒbƒNƒXƒIƒuƒWƒFƒNƒg‚ğ•Ô‹p
+    'ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½Ô‹p
     Set AddCheckBox = cb
 End Function
 
-'ƒ`ƒFƒbƒN‚³‚ê‚½¤•iƒR[ƒh‚Ìæ“¾
+'ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½Ìæ“¾
 Public Function GetCheckedProductsCode() As Collection
     Dim wb As Workbook
     Dim ws As Worksheet
     Set wb = Me.Workbook
     Set ws = Me.Worksheet
     
-    '¤•iƒR[ƒh—ñ
+    'ï¿½ï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½ï¿½
     Dim productsColumn As Integer
-    'ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìó‘Ô‚Ì—ñ
+    'ï¿½`ï¿½Fï¿½bï¿½Nï¿½{ï¿½bï¿½Nï¿½Xï¿½Ìï¿½Ô‚Ì—ï¿½
     Dim checkedStateColumn As Integer
     
-    'ƒ`ƒFƒbƒN‚³‚ê‚½¤•iƒR[ƒh‚ÌŠi”[—p
+    'ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½ÌŠiï¿½[ï¿½p
     Dim checkedProductsCode As New Collection
     Dim i As Long
     
     productsColumn = Me.ProductCodeColumnIndex
     checkedStateColumn = Me.CheckStateColumnIndex
     
-    '¤•iƒR[ƒh‚ª‘¶İ‚·‚és”Ô†‚Åƒ‹[ƒv
+    'ï¿½ï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½sï¿½Ôï¿½ï¿½Åƒï¿½ï¿½[ï¿½v
     For i = 1 To ws.Cells(ws.Rows.Count, productsColumn).End(xlUp).row
-        'ƒ`ƒFƒbƒN‚³‚ê‚Ä‚¢‚½ê‡
+        'ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ê‡
         If ws.Cells(i, checkedStateColumn).value = True Then
-            '¤•iƒR[ƒh‚ğ’Ç‰Á
+            'ï¿½ï¿½ï¿½iï¿½Rï¿½[ï¿½hï¿½ï¿½Ç‰ï¿½
             checkedProductsCode.Add ws.Cells(i, productsColumn).value
         End If
     Next i
@@ -389,7 +392,7 @@ Public Function GetCheckedProductsCode() As Collection
     Set GetCheckedProductsCode = checkedProductsCode
 End Function
 
-'ğŒ•t‚«‘®‚ğİ’è
+'ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 Sub ApplyConditionalFormatting()
     Dim ws As Worksheet
     Dim lastRow As Long
@@ -401,35 +404,35 @@ Sub ApplyConditionalFormatting()
     Dim rng As Range
     Dim formatCondition As formatCondition
     
-    ' ‘ÎÛ‚ÌƒV[ƒg‚ğİ’è
+    ' ï¿½ÎÛ‚ÌƒVï¿½[ï¿½gï¿½ï¿½İ’ï¿½
     Set ws = Me.Worksheet
     
-    ' —ñ‚Ìw’è
+    ' ï¿½ï¿½Ìwï¿½ï¿½
     startCol = Me.DataStartColumnIndex
     endCol = Me.DataEndColumnIndex
     checkCol = Me.CheckStateColumnIndex
     
-    ' s‚Ìw’è
+    ' ï¿½sï¿½Ìwï¿½ï¿½
     lastRow = Me.DataEndRowIndex
     startRow = Me.DataStartRowIndex
     
-    ' Šes‚²‚Æ‚ÉğŒ•t‚«‘®‚ğİ’è
+    ' ï¿½eï¿½sï¿½ï¿½ï¿½Æ‚Éï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
     For i = startRow To lastRow
-        ' S—ñ‚ªTrue‚Ìê‡AA‚©‚çS—ñ‚Ì”ÍˆÍ‚ÉğŒ•t‚«‘®‚ğİ’è
+        ' Sï¿½ï¿½Trueï¿½Ìê‡ï¿½AAï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½Ì”ÍˆÍ‚Éï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
         Set rng = ws.Range(ws.Cells(i, startCol), ws.Cells(i, endCol))
         
-        ' ğŒ•t‚«‘®‚ğƒNƒŠƒAiŠù‘¶‚Ì‘®‚ğíœj
+        ' ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½j
         rng.FormatConditions.Delete
         
-        ' ğŒ•t‚«‘®‚ğ’Ç‰Á
+        ' ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‰ï¿½
         Set formatCondition = rng.FormatConditions.Add(Type:=xlExpression, Formula1:="=" & ws.Cells(i, checkCol).Address & "=TRUE")
         
-        ' ”wŒiF‚ğİ’èi‰©Fj
-        formatCondition.Interior.Color = RGB(255, 255, 0) ' ‰©F
+        ' ï¿½wï¿½iï¿½Fï¿½ï¿½İ’ï¿½iï¿½ï¿½ï¿½Fï¿½j
+        formatCondition.Interior.Color = RGB(255, 255, 0) ' ï¿½ï¿½ï¿½F
     Next i
 End Sub
 
-'d“ü‹àŠz‚ÌŒvZ®‚ğİ’è
+'ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ÌŒvï¿½Zï¿½ï¿½ï¿½ï¿½İ’ï¿½
 Sub ApplyAmountCalc()
     Dim ws As Worksheet
     Dim lastRow As Long
@@ -442,24 +445,24 @@ Sub ApplyAmountCalc()
     Dim rng As Range
     Dim formatCondition As formatCondition
     
-    ' ‘ÎÛ‚ÌƒV[ƒg‚ğİ’è
+    ' ï¿½ÎÛ‚ÌƒVï¿½[ï¿½gï¿½ï¿½İ’ï¿½
     Set ws = Me.Worksheet
     
-    ' —ñ‚Ìw’è
+    ' ï¿½ï¿½Ìwï¿½ï¿½
     checkCol = Me.CheckStateColumnIndex
     piecesCol = Me.PiecesColumnIndex
     qtyCol = Me.QtyColumnIndex
     priceCol = Me.PriceColumnIndex
     amountCol = Me.AmountColumnIndex
     
-    ' s‚Ìw’è
+    ' ï¿½sï¿½Ìwï¿½ï¿½
     lastRow = Me.DataEndRowIndex
     startRow = Me.DataStartRowIndex
     
-    ' Šes‚²‚Æ‚É‚ğİ’è
+    ' ï¿½eï¿½sï¿½ï¿½ï¿½Æ‚É‚ï¿½İ’ï¿½
     For i = startRow To lastRow
         
-        ' d“ü‹àŠz‚ÌŒvZ®‚Ìİ’è
+        ' ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ÌŒvï¿½Zï¿½ï¿½ï¿½Ìİ’ï¿½
         Set rng = ws.Range(ws.Cells(i, amountCol), ws.Cells(i, amountCol))
         rng.Formula = "=IFERROR(" & _
                             IndexToLetter(piecesCol) & _
@@ -474,9 +477,9 @@ Sub ApplyAmountCalc()
     Next i
 End Sub
 
-'''Œp³•”•ª'''
+'''ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½'''
 
-'ƒvƒƒpƒeƒB
+'ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B
 Property Get Workbook() As Workbook
     Set Workbook = super.Workbook
 End Property
@@ -509,7 +512,7 @@ Property Let Cells(rowIndex As Long, columnIndex As Integer, value As Variant)
     super.Cells(rowIndex, columnIndex) = value
 End Property
 
-' ƒƒ\ƒbƒh
+' ï¿½ï¿½ï¿½\ï¿½bï¿½h
 Function DataEndColumnIndex() As Integer
     DataEndColumnIndex = super.DataEndColumnIndex
 End Function
